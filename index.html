@@ -1,0 +1,387 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<meta charset="utf-8">
+
+<!-- Copyright (c) 2015 Robert Kooima
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE. -->
+
+<html>
+<head>
+<style>
+/* Page and form styles. */
+
+body {
+    font-family: Calibri, sans-serif;
+    margin: 3em;
+}
+td {
+    text-align: right;
+}
+select {
+    width:100%;
+}
+figure {
+    display: inline-table;
+    margin: 1em 1em;
+}
+figcaption {
+    display: table-caption;
+    text-align: center;
+}
+fieldset {
+    border-radius: 4px;
+    border: 2px solid #CCC;
+    padding: 0.5em;
+}
+p.author {
+    font-size: 60%;
+    color: #CCC;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Remove the GUI elements for printing. */
+
+@media screen {
+    fieldset#configure {display: inline-block; }
+    span.close       {color: #BBB; margin: 0em 0.5em 0em 0em; cursor: pointer; }
+    span.close:hover {color: #F00; }
+}
+@media print {
+    fieldset#configure { display: none; }
+    span.close         { display: none; }
+}
+
+/* Fretboard style */
+
+text.note      {
+    dominant-baseline: middle;
+    text-anchor:       middle;
+    font-size: 60%;
+}
+rect.string { fill: #CCC; stroke: none; }
+rect.fret   { fill: #EEE; stroke: none; }
+rect.neck   { fill: #AAA; stroke: none; }
+rect.nut    { fill: #888; stroke: none; }
+circle.pip  { fill: #BBB; stroke: none; }
+circle.note { fill: #FFF; stroke: #000; stroke-width: 0.5;}
+circle.root { fill: #FFF; stroke: #000; stroke-width: 2.0;}
+
+</style>
+</head>
+<body>
+<form>
+    <fieldset id="configure">
+        <legend>Fretboard Diagram Generator</legend>
+
+        <table>
+            <tr>
+                <td><label>Instrument:</label></td>
+                <td><select id="instrument">
+                    <option>Guitar</option>
+                    <option>Bass Guitar</option>
+                    <option>Ukulele</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>Key:</label></td>
+                <td><select id="key">
+                    <option value="1">C</option>
+                    <option value="2">C&#x266f; / D&#x266d;</option>
+                    <option value="3">D</option>
+                    <option value="4">D&#x266f; / E&#x266d;</option>
+                    <option value="5">E</option>
+                    <option value="6">F</option>
+                    <option value="7">F&#x266f; / G&#x266d;</option>
+                    <option value="8">G</option>
+                    <option value="9">G&#x266f; / A&#x266d;</option>
+                    <option value="10">A</option>
+                    <option value="11">A&#x266f; / B&#x266d;</option>
+                    <option value="12">B</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>Scale:</label></td>
+                <td><select id="scale">
+                    <option>Major Scale</option>
+                    <option>Minor Scale</option>
+                    <option>Major Pentatonic Scale</option>
+                    <option>Minor Pentatonic Scale</option>
+                    <option>Major Chord</option>
+                    <option>Minor Chord</option>
+                    <option>Ionian Mode</option>
+                    <option>Dorian Mode</option>
+                    <option>Phrygian Mode</option>
+                    <option>Lydian Mode</option>
+                    <option>Mixolydian Mode</option>
+                    <option>Aeolian Mode</option>
+                    <option>Locrian Mode</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button type="button" onclick="createFigure()">Create</button></td>
+            </tr>
+        </table>
+        <p class="author">Copyright &copy; 2015 <a href="http://kooima.net">Robert Kooima</a></p>
+    </fieldset>
+</form>
+<script>
+
+// Return a new SVG element with the given tag and attributes.
+
+function newSVGElement(tag) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Array.prototype.slice.call(arguments, 1).map(function (a) {
+        e.setAttribute.apply(e, a);
+    });
+    return e;
+}
+
+// Return a new SVG group with the given child elements.
+
+function newSVGGroup() {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    Array.prototype.slice.call(arguments, 0).map(function (e) {
+        g.appendChild(e);
+    });
+    return g;
+}
+
+// Add a text node to the given element and return the element.
+
+function addTextNode(element, text) {
+    element.appendChild(document.createTextNode(text));
+    return element;
+}
+
+//------------------------------------------------------------------------------
+
+// Instrument name, fret count, and tuning (which implies string count).
+
+var instruments = {
+    'Guitar':      { 'length': 17, 'tuning': [  5, 10,  3,  8,  12,  5 ]},
+    'Bass Guitar': { 'length': 17, 'tuning': [  5, 10,  3,  8 ]},
+    'Ukulele':     { 'length': 12, 'tuning': [  8,  1,  5, 10 ]},
+}
+
+var scales = {
+    //                        [ C  C# D  Eb E  F  F# G  Ab A   Bb  B  ]
+    'Major Scale':            [ 1,    3,    5, 6,    8,    10,     12 ],
+    'Minor Scale':            [ 1,    3, 4,    6,    8, 9,     11     ],
+    'Major Pentatonic Scale': [ 1,    3,    5,       8,    10,        ],
+    'Minor Pentatonic Scale': [ 1,       4,    6,    8,        11     ],
+    'Major Chord':            [ 1,          5,       8                ],
+    'Minor Chord':            [ 1,       4,          8                ],
+    'Ionian Mode':            [ 1,    3,    5, 6,    8,    10,     12 ],
+    'Dorian Mode':            [ 1,    3, 4,    6,    8,    10, 11,    ],
+    'Phrygian Mode':          [ 1, 2,    4,    6,    8, 9,     11,    ],
+    'Lydian Mode':            [ 1,    3,    5,    7, 8,    10,     12 ],
+    'Mixolydian Mode':        [ 1,    3,    5, 6,    8,    10, 11,    ],
+    'Aeolian Mode':           [ 1,    3, 4,    6,    8, 9,     11,    ],
+    'Locrian Mode':           [ 1, 2,    4,    6, 7,    9,     11,    ],
+    'Chromatic Scale':        [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+}
+
+var labels = [
+    'C',
+    'C\u266f',
+    'D',
+    'D\u266f',
+    'E',
+    'F',
+    'F\u266f',
+    'G',
+    'G\u266f',
+    'A',
+    'A\u266f',
+    'B'
+]
+
+// Fretboard diagram parameters.
+
+var fretHeight  = 4;
+var fretScale   = 1000;
+var stringWidth = 2;
+var stringSpace = 20;
+var nutHeight   = 10;
+
+// Sum two note values giving a result in the range 1 to 12.
+
+function transpose(key, note) {
+    return (key + note - 2) % 12 + 1;
+}
+
+// Compute the X position of a given string.
+
+function stringX(s) {
+    return (s + 0.5) * stringSpace;
+}
+
+// Compute the Y position of a given fret.
+
+function fretY(f) {
+    return nutHeight + fretScale - fretScale / Math.pow(2, f / 12);
+}
+
+//------------------------------------------------------------------------------
+
+function newFret(fret, strings) {
+    return newSVGElement('rect', ['class', 'fret'],
+                                 ['x',      0],
+                                 ['y',      fretY(fret) - fretHeight / 2],
+                                 ['width',  strings * stringSpace],
+                                 ['height', fretHeight]);
+}
+
+function newString(string, frets) {
+    return newSVGElement('rect', ['class', 'string'],
+                                 ['x',      stringX(string) - stringWidth / 2],
+                                 ['y',      0],
+                                 ['width',  stringWidth],
+                                 ['height', fretY(frets)]);
+}
+
+function newNeck(frets, strings) {
+    return newSVGElement('rect', ['class', 'neck'],
+                                 ['x',      0],
+                                 ['y',      nutHeight],
+                                 ['width',  strings * stringSpace],
+                                 ['height', fretY(frets)]);
+}
+
+function newNut(strings) {
+    return newSVGElement('rect', ['class', 'nut'],
+                                 ['x',      0],
+                                 ['y',      0],
+                                 ['width',  strings * stringSpace],
+                                 ['height', nutHeight]);
+}
+
+function newDot(fret, string) {
+    return newSVGElement('circle', ['class', 'pip'],
+                                   ['cx',     stringX(string)],
+                                   ['cy',     fretY(fret)],
+                                   ['r',      stringSpace / 4]);
+
+}
+
+function newPosition(fret, string, root) {
+    return newSVGElement('circle', ['class', root ? 'root' : 'note'],
+                                   ['cx',    stringX(string)],
+                                   ['cy',    fretY(fret)],
+                                   ['r',     stringSpace / 2]);
+}
+
+function newLabel(fret, string, name) {
+    return addTextNode(newSVGElement('text', ['class', 'note'],
+                                             ['x', stringX(string)],
+                                             ['y', fretY(fret)]), name);
+}
+
+//------------------------------------------------------------------------------
+
+function newFretboard(frets, strings, label) {
+    var x = (strings - 1) / 2;
+
+    return newSVGGroup(newNeck(frets, strings),
+                       newNut(strings),
+                       newDot( 2.5, x),
+                       newDot( 4.5, x),
+                       newDot( 6.5, x),
+                       newDot( 8.5, x),
+                       newDot(11.5, x - 1),
+                       newDot(11.5, x + 1),
+                       newDot(14.5, x));
+}
+
+function newNote(fret, string, name, root) {
+    return newSVGGroup(newPosition(fret, string, root),
+                          newLabel(fret, string, name));
+}
+
+function newFigure(image, text) {
+    var figure  = document.createElement('figure');
+    var caption = document.createElement('figcaption');
+    var button  = document.createElement('span');
+
+    figure .appendChild(image)
+    figure .appendChild(caption);
+    caption.appendChild(button);
+    caption.appendChild(document.createTextNode(text));
+    button .appendChild(document.createTextNode('\u2716'));
+
+    button.addEventListener('click', function() { figure.remove(); });
+    button.setAttribute('class', 'close');
+
+    return figure;
+}
+
+//------------------------------------------------------------------------------
+
+function createFigure() {
+
+    // Determine the fretboard configuration.
+
+    var instrument = instruments[document.getElementById('instrument').value];
+    var scale      =      scales[document.getElementById('scale'     ).value];
+    var key        =    parseInt(document.getElementById('key'       ).value);
+    var label  = labels[parseInt(document.getElementById('key').value) - 1]
+                         + ' ' + document.getElementById('scale').value ;
+
+    scale = scale.map(function(note) { return transpose(key, note); });
+
+    var notes   = scale.length;
+    var frets   = instrument.length;
+    var strings = instrument.tuning.length;
+
+    // Generate an SVG of the fretboard.
+
+    var svg = newSVGElement('svg', ['width', strings * stringSpace],
+                                   ['height', fretY(frets)]);
+
+    svg.appendChild(newFretboard(frets, strings));
+
+    for (var f = 1; f < frets; f++) {
+        svg.appendChild(newFret(f, strings));
+    }
+    for (var s = 0; s < strings; s++) {
+        svg.appendChild(newString(s, frets));
+    }
+
+    for (var f = 0; f < frets; f++) {
+        for (var s = 0; s < strings; s++) {
+            var i = transpose(instrument.tuning[s], f + 1);
+
+            for (var n = 0; n < notes; n++) {
+                if (i == scale[n]) {
+                    svg.appendChild(newNote(f, s, labels[scale[n] - 1], (n == 0)));
+                }
+            }
+        }
+    }
+
+    // Add the fretboard to the page.
+
+    document.body.appendChild(newFigure(svg, label));
+}
+
+</script>
+</body>
+</html>

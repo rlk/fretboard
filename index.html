@@ -203,14 +203,14 @@ var labels = [
     'C',
     'C\u266f',
     'D',
-    'D\u266f',
+    'E\u266d',
     'E',
     'F',
     'F\u266f',
     'G',
-    'G\u266f',
+    'A\u266d',
     'A',
-    'A\u266f',
+    'B\u266d',
     'B'
 ]
 
@@ -238,6 +238,15 @@ function stringX(s) {
 
 function fretY(f) {
     return nutHeight + fretScale - fretScale / Math.pow(2, f / 12);
+}
+
+// Computer the Y position of the finger at a given fret.
+
+function fingerY(f) {
+    if (f == 0)
+        return fretY(f);
+    else
+        return Math.max(fretY(f - 0.5), fretY(f) - fretHeight - stringSpace / 2);
 }
 
 //------------------------------------------------------------------------------
@@ -285,14 +294,14 @@ function newDot(fret, string) {
 function newPosition(fret, string, root) {
     return newSVGElement('circle', ['class', root ? 'root' : 'note'],
                                    ['cx',    stringX(string)],
-                                   ['cy',    fretY(fret)],
+                                   ['cy',    fingerY(fret)],
                                    ['r',     stringSpace / 2]);
 }
 
 function newLabel(fret, string, name) {
     return addTextNode(newSVGElement('text', ['class', 'note'],
                                              ['x', stringX(string)],
-                                             ['y', fretY(fret)]), name);
+                                             ['y', fingerY(fret)]), name);
 }
 
 //------------------------------------------------------------------------------

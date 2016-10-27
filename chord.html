@@ -1,0 +1,416 @@
+<html>
+	<head>
+		<style>
+			.center {
+				margin: 0 auto;
+			}
+			body {
+				margin: 3em;
+			}
+			h2 {
+				text-align:center;
+			}
+			table.equal {
+				table-layout: fixed;
+				width: 100%;
+			}
+			table.equal td {
+				border: 1px solid black;
+				width: 2%;
+				text-align: left;
+				vertical-align: top;
+			}
+			table.equal input {
+				vertical-align: middle;
+			}
+			table.equal img {
+				vertical-align: middle;
+			}
+			table.fretboard {
+				border-collapse: collapse;
+				background-image: linear-gradient(to bottom, #CBA 0%, #A98 100%);
+			}
+			table.fretboard td {
+				border: none;
+				text-align: right;
+			}
+			table.fretboard th {
+				background-image: linear-gradient(to bottom, white, white);
+			}
+			table.fretboard td.s0 { background-image: linear-gradient(to bottom, transparent, transparent 47%, #FFF 47%, #EEE 50%, #777 53%, transparent 53%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.s1 { background-image: linear-gradient(to bottom, transparent, transparent 46%, #FFF 46%, #EEE 50%, #777 54%, transparent 54%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.s2 { background-image: linear-gradient(to bottom, transparent, transparent 45%, #FFF 45%, #EEE 50%, #777 55%, transparent 55%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.s3 { background-image: linear-gradient(to bottom, transparent, transparent 44%, #FFF 44%, #EEE 50%, #777 56%, transparent 56%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.s4 { background-image: linear-gradient(to bottom, transparent, transparent 43%, #FFF 43%, #EEE 50%, #777 57%, transparent 57%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.s5 { background-image: linear-gradient(to bottom, transparent, transparent 42%, #FFF 42%, #EEE 50%, #777 58%, transparent 58%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
+			table.fretboard td.f00 { width: 0.5%; background-color: #DDD; background-image: none; }
+			table.fretboard td.f01 { width: 4.7193% }
+			table.fretboard td.f02 { width: 4.4544% }
+			table.fretboard td.f03 { width: 4.2044% }
+			table.fretboard td.f04 { width: 3.9685% }
+			table.fretboard td.f05 { width: 3.7457% }
+			table.fretboard td.f06 { width: 3.5355% }
+			table.fretboard td.f07 { width: 3.3370% }
+			table.fretboard td.f08 { width: 3.1498% }
+			table.fretboard td.f09 { width: 2.9730% }
+			table.fretboard td.f10 { width: 2.8061% }
+			table.fretboard td.f11 { width: 2.6486% }
+			table.fretboard td.f12 { width: 2.5000% }
+			table.fretboard td.f13 { width: 2.3596% }
+			table.fretboard td.f14 { width: 2.2272% }
+			table.fretboard td.f15 { width: 2.1022% }
+			table.fretboard div {
+				float: right;
+				min-width:  20pt;
+				min-height: 20pt;
+				text-align: center;
+				vertical-align: center;
+			}
+			table.fretboard div.one:after           { content: url("img/one.svg"); }
+			table.fretboard div.flattwo:after       { content: url("img/flattwo.svg"); }
+			table.fretboard div.flatnine:after      { content: url("img/flatnine.svg"); }
+			table.fretboard div.two:after           { content: url("img/two.svg"); }
+			table.fretboard div.nine:after          { content: url("img/nine.svg"); }
+			table.fretboard div.flatthree:after     { content: url("img/flatthree.svg"); }
+			table.fretboard div.sharpnine:after     { content: url("img/sharpnine.svg"); }
+			table.fretboard div.three:after         { content: url("img/three.svg"); }
+			table.fretboard div.flateleven:after    { content: url("img/flateleven.svg"); }
+			table.fretboard div.four:after          { content: url("img/four.svg"); }
+			table.fretboard div.eleven:after        { content: url("img/eleven.svg"); }
+			table.fretboard div.flatfive:after      { content: url("img/flatfive.svg"); }
+			table.fretboard div.sharpeleven:after   { content: url("img/sharpeleven.svg"); }
+			table.fretboard div.five:after          { content: url("img/five.svg"); }
+			table.fretboard div.sharpfive:after     { content: url("img/sharpfive.svg"); }
+			table.fretboard div.flatsix:after       { content: url("img/flatsix.svg"); }
+			table.fretboard div.flatthirteen:after  { content: url("img/flatthirteen.svg"); }
+			table.fretboard div.six:after           { content: url("img/six.svg"); }
+			table.fretboard div.flatflatseven:after { content: url("img/flatflatseven.svg"); }
+			table.fretboard div.thirteen:after      { content: url("img/thirteen.svg"); }
+			table.fretboard div.flatseven:after     { content: url("img/flatseven.svg"); }
+			table.fretboard div.seven:after         { content: url("img/seven.svg"); }
+		</style>
+	</head>
+	<body onload="init()">
+		<h2>Root Tone</h2>
+		<table class="equal center">
+			<tr>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="0"  checked>C</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="1"  >C&sharp; / D&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="2"  >D</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="3"  >D&sharp; / E&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="4"  >E</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="5"  >F</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="6"  >F&sharp; / G&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="7"  >G</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="8"  >G&sharp; / A&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="9"  >A</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="10" >A&sharp; / B&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="11" >B</td>
+			</tr>
+		</table>
+
+		<h2>Chord Tones</h2>
+		<table class="equal center">
+			<tr>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0">        <img src="img/none.svg"></div>
+					<div id="one">          <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0" checked><img src="img/one.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1" checked><img src="img/none.svg"></div>
+					<div id="flattwo">      <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">        <img src="img/flattwo.svg"></div>
+					<div id="flatnine">     <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">        <img src="img/flatnine.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2" checked><img src="img/none.svg"></div>
+					<div id="two">          <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">        <img src="img/two.svg"></div>
+					<div id="nine">         <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">        <img src="img/nine.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3" checked><img src="img/none.svg"></div>
+					<div id="flatthree">    <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/flatthree.svg"></div>
+					<div id="sharpnine">    <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/sharpnine.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">        <img src="img/none.svg"></div>
+					<div id="three">        <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4" checked><img src="img/three.svg"></div>
+					<div id="flateleven">   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">        <img src="img/flateleven.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5" checked><img src="img/none.svg"></div>
+					<div id="four">         <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">        <img src="img/four.svg"></div>
+					<div id="eleven">       <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">        <img src="img/eleven.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6" checked><img src="img/none.svg"></div>
+					<div id="flatfive">     <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">        <img src="img/flatfive.svg"></div>
+					<div id="sharpeleven">  <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">        <img src="img/sharpeleven.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7">        <img src="img/none.svg"></div>
+					<div id="five">         <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7" checked><img src="img/five.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8" checked><img src="img/none.svg"></div>
+					<div id="sharpfive">    <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">        <img src="img/sharpfive.svg"></div>
+					<div id="flatsix">      <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">        <img src="img/flatsix.svg"></div>
+					<div id="flatthirteen"> <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">        <img src="img/flatthirteen.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9" checked><img src="img/none.svg"></div>
+					<div id="six">          <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">        <img src="img/six.svg"></div>
+					<div id="flatflatseven"><input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">        <img src="img/flatflatseven.svg"></div>
+					<div id="thirteen">     <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">        <img src="img/thirteen.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10" checked><img src="img/none.svg"></div>
+					<div id="flatseven">    <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10">        <img src="img/flatseven.svg"></div>
+				</td>
+				<td>
+					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11" checked><img src="img/none.svg"></div>
+					<div id="seven">        <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11">        <img src="img/seven.svg"></div>
+				</td>
+		</table>
+
+		<h2>Fretboard</h2>
+		<table class="fretboard">
+			<tr>
+				<th>0</th>
+				<th>1</th>
+				<th>2</th>
+				<th>3</th>
+				<th>4</th>
+				<th>5</th>
+				<th>6</th>
+				<th>7</th>
+				<th>8</th>
+				<th>9</th>
+				<th>10</th>
+				<th>11</th>
+				<th>12</th>
+				<th>13</th>
+				<th>14</th>
+				<th>15</th>
+			</tr>
+			<tr>
+				<td class="s0 f00"><div id="s0f00"></div></td>
+				<td class="s0 f01"><div id="s0f01"></div></td>
+				<td class="s0 f02"><div id="s0f02"></div></td>
+				<td class="s0 f03"><div id="s0f03"></div></td>
+				<td class="s0 f04"><div id="s0f04"></div></td>
+				<td class="s0 f05"><div id="s0f05"></div></td>
+				<td class="s0 f06"><div id="s0f06"></div></td>
+				<td class="s0 f07"><div id="s0f07"></div></td>
+				<td class="s0 f08"><div id="s0f08"></div></td>
+				<td class="s0 f09"><div id="s0f09"></div></td>
+				<td class="s0 f10"><div id="s0f10"></div></td>
+				<td class="s0 f11"><div id="s0f11"></div></td>
+				<td class="s0 f12"><div id="s0f12"></div></td>
+				<td class="s0 f13"><div id="s0f13"></div></td>
+				<td class="s0 f14"><div id="s0f14"></div></td>
+				<td class="s0 f15"><div id="s0f15"></div></td>
+			</tr>
+			<tr>
+				<td class="s1 f00"><div id="s1f00"></div></td>
+				<td class="s1 f01"><div id="s1f01"></div></td>
+				<td class="s1 f02"><div id="s1f02"></div></td>
+				<td class="s1 f03"><div id="s1f03"></div></td>
+				<td class="s1 f04"><div id="s1f04"></div></td>
+				<td class="s1 f05"><div id="s1f05"></div></td>
+				<td class="s1 f06"><div id="s1f06"></div></td>
+				<td class="s1 f07"><div id="s1f07"></div></td>
+				<td class="s1 f08"><div id="s1f08"></div></td>
+				<td class="s1 f09"><div id="s1f09"></div></td>
+				<td class="s1 f10"><div id="s1f10"></div></td>
+				<td class="s1 f11"><div id="s1f11"></div></td>
+				<td class="s1 f12"><div id="s1f12"></div></td>
+				<td class="s1 f13"><div id="s1f13"></div></td>
+				<td class="s1 f14"><div id="s1f14"></div></td>
+				<td class="s1 f15"><div id="s1f15"></div></td>
+			</tr>
+			<tr>
+				<td class="s2 f00"><div id="s2f00"></div></td>
+				<td class="s2 f01"><div id="s2f01"></div></td>
+				<td class="s2 f02"><div id="s2f02"></div></td>
+				<td class="s2 f03"><div id="s2f03"></div></td>
+				<td class="s2 f04"><div id="s2f04"></div></td>
+				<td class="s2 f05"><div id="s2f05"></div></td>
+				<td class="s2 f06"><div id="s2f06"></div></td>
+				<td class="s2 f07"><div id="s2f07"></div></td>
+				<td class="s2 f08"><div id="s2f08"></div></td>
+				<td class="s2 f09"><div id="s2f09"></div></td>
+				<td class="s2 f10"><div id="s2f10"></div></td>
+				<td class="s2 f11"><div id="s2f11"></div></td>
+				<td class="s2 f12"><div id="s2f12"></div></td>
+				<td class="s2 f13"><div id="s2f13"></div></td>
+				<td class="s2 f14"><div id="s2f14"></div></td>
+				<td class="s2 f15"><div id="s2f15"></div></td>
+			</tr>
+			<tr>
+				<td class="s3 f00"><div id="s3f00"></div></td>
+				<td class="s3 f01"><div id="s3f01"></div></td>
+				<td class="s3 f02"><div id="s3f02"></div></td>
+				<td class="s3 f03"><div id="s3f03"></div></td>
+				<td class="s3 f04"><div id="s3f04"></div></td>
+				<td class="s3 f05"><div id="s3f05"></div></td>
+				<td class="s3 f06"><div id="s3f06"></div></td>
+				<td class="s3 f07"><div id="s3f07"></div></td>
+				<td class="s3 f08"><div id="s3f08"></div></td>
+				<td class="s3 f09"><div id="s3f09"></div></td>
+				<td class="s3 f10"><div id="s3f10"></div></td>
+				<td class="s3 f11"><div id="s3f11"></div></td>
+				<td class="s3 f12"><div id="s3f12"></div></td>
+				<td class="s3 f13"><div id="s3f13"></div></td>
+				<td class="s3 f14"><div id="s3f14"></div></td>
+				<td class="s3 f15"><div id="s3f15"></div></td>
+			</tr>
+			<tr>
+				<td class="s4 f00"><div id="s4f00"></div></td>
+				<td class="s4 f01"><div id="s4f01"></div></td>
+				<td class="s4 f02"><div id="s4f02"></div></td>
+				<td class="s4 f03"><div id="s4f03"></div></td>
+				<td class="s4 f04"><div id="s4f04"></div></td>
+				<td class="s4 f05"><div id="s4f05"></div></td>
+				<td class="s4 f06"><div id="s4f06"></div></td>
+				<td class="s4 f07"><div id="s4f07"></div></td>
+				<td class="s4 f08"><div id="s4f08"></div></td>
+				<td class="s4 f09"><div id="s4f09"></div></td>
+				<td class="s4 f10"><div id="s4f10"></div></td>
+				<td class="s4 f11"><div id="s4f11"></div></td>
+				<td class="s4 f12"><div id="s4f12"></div></td>
+				<td class="s4 f13"><div id="s4f13"></div></td>
+				<td class="s4 f14"><div id="s4f14"></div></td>
+				<td class="s4 f15"><div id="s4f15"></div></td>
+			</tr>
+			<tr>
+				<td class="s5 f00"><div id="s5f00"></div></td>
+				<td class="s5 f01"><div id="s5f01"></div></td>
+				<td class="s5 f02"><div id="s5f02"></div></td>
+				<td class="s5 f03"><div id="s5f03"></div></td>
+				<td class="s5 f04"><div id="s5f04"></div></td>
+				<td class="s5 f05"><div id="s5f05"></div></td>
+				<td class="s5 f06"><div id="s5f06"></div></td>
+				<td class="s5 f07"><div id="s5f07"></div></td>
+				<td class="s5 f08"><div id="s5f08"></div></td>
+				<td class="s5 f09"><div id="s5f09"></div></td>
+				<td class="s5 f10"><div id="s5f10"></div></td>
+				<td class="s5 f11"><div id="s5f11"></div></td>
+				<td class="s5 f12"><div id="s5f12"></div></td>
+				<td class="s5 f13"><div id="s5f13"></div></td>
+				<td class="s5 f14"><div id="s5f14"></div></td>
+				<td class="s5 f15"><div id="s5f15"></div></td>
+			</tr>
+		</table>
+		<script>
+
+			/* All elements for a given note (0-11) */
+
+			var element = [[], [], [], [],
+					       [], [], [], [],
+					       [], [], [], []];
+
+			/* Current root note and chord tone states */
+
+			var currentRoot = 0;
+			var currentTone = [ "one", undefined, undefined, undefined,
+								"three", undefined, undefined, "five",
+								undefined, undefined, undefined, undefined,
+								undefined, undefined, undefined, undefined,
+								undefined, undefined, undefined, undefined,
+								undefined, undefined ]
+
+			/* Return the note (0-11) at string s (0-5) fret f. */
+
+			function noteAtPosition(s, f) {
+				if (s == 0) { s = s + 1; f = f + 5; }
+				if (s == 1) { s = s + 1; f = f + 4; }
+				if (s == 2) { s = s + 1; f = f + 5; }
+				if (s == 3) { s = s + 1; f = f + 5; }
+				if (s == 4) { s = s + 1; f = f + 5; }
+
+				return (f + 4) % 12;
+			}
+
+			/* Return the identifier of the element at string s (0-5) fret f. */
+
+			function idAtPosition(s, f) {
+				if (f < 10) return 's' + s.toString() + 'f0' + f.toString();
+				else        return 's' + s.toString() + 'f'  + f.toString();
+			}
+
+			/* Gather all elements for each note. */
+
+			function init() {
+
+				for (var s = 0; s < 6; s++)
+					for (var f = 0; f < 16; f++) {
+						var i = noteAtPosition(s, f);
+						var n =   idAtPosition(s, f);
+
+						element[i].push(document.getElementById(n));
+					}
+
+				update();
+			}
+
+			/* Set textContent on all elements of note i (0-11). */
+
+			function setTextContent(i, s) {
+				for (var j = 0; j < element[i].length; j++)
+					if (s) {
+						// element[i][j].textContent = s;
+						element[i][j].className = s;
+					} else {
+						// element[i][j].textContent = "";
+						element[i][j].className = "";
+					}
+			}
+
+			/* Update the DOM to reflect the current state. */
+
+			function update() {
+				for (var i = 0; i < 12; i++)
+					setTextContent((currentRoot + i) % 12, currentTone[i]);
+			}
+
+			/* Select a new root note. */
+
+			function onChangeRoot(e) {
+				currentRoot = parseInt(e.target.value, 10);
+				update();
+			}
+
+			/* Toggle the inclusion of a chord tone. */
+
+			function onChangeTone(e) {
+				if (e.target.checked)
+					currentTone[e.target.value] = e.target.parentElement.id;
+				else
+					currentTone[e.target.value] = undefined;
+				update();
+			}
+
+			function size(i) {
+				return 5.0/ Math.pow(2, i / 12);
+			}
+			console.log(
+				size(0),
+				size(1),
+				size(2),
+				size(3),
+				size(4),
+				size(5),
+				size(6),
+				size(7),
+				size(8),
+				size(9),
+				size(10),
+				size(11),
+				size(12),
+				size(13),
+				size(14),
+				size(15))
+
+		</script>
+	</body>
+</html>

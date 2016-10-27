@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <meta charset="utf-8">
 
-<!-- Copyright (c) 2015 Robert Kooima
+<!-- Copyright (c) 2015-2016 Robert Kooima
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -102,36 +102,48 @@ circle.root { fill: #FFF; stroke: #000; stroke-width: 2.0;}
             <tr>
                 <td><label>Key:</label></td>
                 <td><select id="key">
-                    <option value="1">C</option>
-                    <option value="2">C&#x266f; / D&#x266d;</option>
-                    <option value="3">D</option>
-                    <option value="4">D&#x266f; / E&#x266d;</option>
-                    <option value="5">E</option>
-                    <option value="6">F</option>
-                    <option value="7">F&#x266f; / G&#x266d;</option>
-                    <option value="8">G</option>
-                    <option value="9">G&#x266f; / A&#x266d;</option>
-                    <option value="10">A</option>
-                    <option value="11">A&#x266f; / B&#x266d;</option>
-                    <option value="12">B</option>
+                    <option>C major</option>
+
+                    <option>G major</option>
+                    <option>D major</option>
+                    <option>A major</option>
+                    <option>E major</option>
+                    <option>B major</option>
+                    <option>F&sharp; major</option>
+                    <option>C&sharp; major</option>
+
+                    <option>A minor</option>
+                    <option>E minor</option>
+                    <option>B minor</option>
+                    <option>F&sharp; minor</option>
+                    <option>C&sharp; minor</option>
+                    <option>G&sharp; minor</option>
+                    <option>D&sharp; minor</option>
+                    <option>A&sharp; minor</option>
+
+                    <option>F major</option>
+                    <option>B&flat; major</option>
+                    <option>E&flat; major</option>
+                    <option>A&flat; major</option>
+                    <option>D&flat; major</option>
+                    <option>G&flat; major</option>
+                    <option>C&flat; major</option>
+
+                    <option>D minor</option>
+                    <option>G minor</option>
+                    <option>C minor</option>
+                    <option>F minor</option>
+                    <option>B&flat; minor</option>
+                    <option>E&flat; minor</option>
+                    <option>A&flat; minor</option>
                 </select></td>
             </tr>
             <tr>
                 <td><label>Scale:</label></td>
                 <td><select id="scale">
-                    <option>Major Scale</option>
-                    <option>Minor Scale</option>
-                    <option>Major Pentatonic Scale</option>
-                    <option>Minor Pentatonic Scale</option>
-                    <option>Major Chord</option>
-                    <option>Minor Chord</option>
-                    <option>Ionian Mode</option>
-                    <option>Dorian Mode</option>
-                    <option>Phrygian Mode</option>
-                    <option>Lydian Mode</option>
-                    <option>Mixolydian Mode</option>
-                    <option>Aeolian Mode</option>
-                    <option>Locrian Mode</option>
+                    <option>Diatonic</option>
+                    <option>Pentatonic</option>
+                    <option>Chord</option>
                 </select></td>
             </tr>
             <tr>
@@ -139,7 +151,7 @@ circle.root { fill: #FFF; stroke: #000; stroke-width: 2.0;}
                 <td><button type="button" onclick="createFigure()">Create</button></td>
             </tr>
         </table>
-        <p class="author">Copyright &copy; 2015 <a href="http://kooima.net">Robert Kooima</a></p>
+        <p class="author">Copyright &copy; 2015&ndash;2016 <a href="http://kooima.net">Robert Kooima</a></p>
     </fieldset>
 </form>
 <script>
@@ -176,57 +188,77 @@ function addTextNode(element, text) {
 // Instrument name, fret count, and tuning (which implies string count).
 
 var instruments = {
-    'Guitar':      { 'length': 17, 'tuning': [  5, 10,  3,  8,  12,  5 ]},
-    'Bass Guitar': { 'length': 17, 'tuning': [  5, 10,  3,  8 ]},
-    'Ukulele':     { 'length': 12, 'tuning': [  8,  1,  5, 10 ]},
+    'Guitar':      { 'length': 17, 'tuning': [  'E', 'A', 'D', 'G', 'B', 'E' ]},
+    'Bass Guitar': { 'length': 17, 'tuning': [  'E', 'A', 'D', 'G' ]},
+    'Ukulele':     { 'length': 12, 'tuning': [  'G', 'C', 'E', 'A' ]},
 }
 
-var scales = {
-    //                        [ C  C# D  Eb E  F  F# G  Ab A   Bb  B  ]
-    'Major Scale':            [ 1,    3,    5, 6,    8,    10,     12 ],
-    'Minor Scale':            [ 1,    3, 4,    6,    8, 9,     11     ],
-    'Major Pentatonic Scale': [ 1,    3,    5,       8,    10,        ],
-    'Minor Pentatonic Scale': [ 1,       4,    6,    8,        11     ],
-    'Major Chord':            [ 1,          5,       8                ],
-    'Minor Chord':            [ 1,       4,          8                ],
-    'Ionian Mode':            [ 1,    3,    5, 6,    8,    10,     12 ],
-    'Dorian Mode':            [ 1,    3, 4,    6,    8,    10, 11,    ],
-    'Phrygian Mode':          [ 1, 2,    4,    6,    8, 9,     11,    ],
-    'Lydian Mode':            [ 1,    3,    5,    7, 8,    10,     12 ],
-    'Mixolydian Mode':        [ 1,    3,    5, 6,    8,    10, 11,    ],
-    'Aeolian Mode':           [ 1,    3, 4,    6,    8, 9,     11,    ],
-    'Locrian Mode':           [ 1, 2,    4,    6, 7,    9,     11,    ],
-    'Chromatic Scale':        [ 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 ],
+var keys = {
+    'C major'       : [ 'C',       'D',       'E',       'F',       'G',       'A',       'B'       ],
+
+    'G major'       : [ 'G',       'A',       'B',       'C',       'D',       'E',       'F\u266f' ],
+    'D major'       : [ 'D',       'E',       'F\u266f', 'G',       'A',       'B',       'C\u266f' ],
+    'A major'       : [ 'A',       'B',       'C\u266f', 'D',       'E',       'F\u266f', 'G\u266f' ],
+    'E major'       : [ 'E',       'F\u266f', 'G\u266f', 'A',       'B',       'C\u266f', 'D\u266f' ],
+    'B major'       : [ 'B',       'C\u266f', 'D\u266f', 'E',       'F\u266f', 'G\u266f', 'A\u266f' ],
+    'F\u266f major' : [ 'F\u266f', 'G\u266f', 'A\u266f', 'B',       'C\u266f', 'D\u266f', 'E\u266f' ],
+    'C\u266f major' : [ 'C\u266f', 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f', 'A\u266f', 'B\u266f' ],
+
+    'A minor'       : [ 'A',       'B',       'C',       'D',       'E',       'F',       'G'       ],
+    'E minor'       : [ 'E',       'F\u266f', 'G',       'A',       'B',       'C',       'D'       ],
+    'B minor'       : [ 'B',       'C\u266f', 'D',       'E',       'F\u266f', 'G',       'A'       ],
+    'F\u266f minor' : [ 'F\u266f', 'G\u266f', 'A',       'B',       'C\u266f', 'D',       'E'       ],
+    'C\u266f minor' : [ 'C\u266f', 'D\u266f', 'E',       'F\u266f', 'G\u266f', 'A',       'B'       ],
+    'G\u266f minor' : [ 'G\u266f', 'A\u266f', 'B',       'C\u266f', 'D\u266f', 'E',       'F\u266f' ],
+    'D\u266f minor' : [ 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f', 'A\u266f', 'B',       'C\u266f' ],
+    'A\u266f minor' : [ 'A\u266f', 'B\u266f', 'C\u266f', 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f' ],
+
+    'F major'       : [ 'F',       'G',       'A',       'B\u266d', 'C',       'D',       'E'       ],
+    'B\u266d major' : [ 'B\u266d', 'C',       'D',       'E\u266d', 'F',       'G',       'A'       ],
+    'E\u266d major' : [ 'E\u266d', 'F',       'G',       'A\u266d', 'B\u266d', 'C',       'D'       ],
+    'A\u266d major' : [ 'A\u266d', 'B\u266d', 'C',       'D\u266d', 'E\u266d', 'F',       'G'       ],
+    'D\u266d major' : [ 'D\u266d', 'E\u266d', 'F',       'G\u266d', 'A\u266d', 'B\u266d', 'C'       ],
+    'G\u266d major' : [ 'G\u266d', 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d', 'E\u266d', 'F'       ],
+    'C\u266d major' : [ 'C\u266d', 'D\u266d', 'E\u266d', 'F\u266d', 'G\u266d', 'A\u266d', 'B\u266d' ],
+
+    'D minor'       : [ 'D',       'E',       'F',       'G',       'A',       'B\u266d', 'C'       ],
+    'G minor'       : [ 'G',       'A',       'B\u266d', 'C',       'D',       'E\u266d', 'F'       ],
+    'C minor'       : [ 'C',       'D',       'E\u266d', 'F',       'G',       'A\u266d', 'B\u266d' ],
+    'F minor'       : [ 'F',       'G',       'A\u266d', 'B\u266d', 'C',       'D\u266d', 'E\u266d' ],
+    'B\u266d minor' : [ 'B\u266d', 'C',       'D\u266d', 'E\u266d', 'F',       'G\u266d', 'A\u266d' ],
+    'E\u266d minor' : [ 'E\u266d', 'F',       'G\u266d', 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d' ],
+    'A\u266d minor' : [ 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d', 'E\u266d', 'F\u266d', 'G\u266d' ],
 }
 
-var labels = [
-    'C',
-    'C\u266f',
-    'D',
-    'E\u266d',
-    'E',
-    'F',
-    'F\u266f',
-    'G',
-    'A\u266d',
-    'A',
-    'B\u266d',
-    'B'
-]
+function getOffset(pitch) {
+    var d = 0;
+
+    if (pitch) {
+        if (pitch.length > 0) {
+            if      (pitch[0] == 'D') d =  2;
+            else if (pitch[0] == 'E') d =  4;
+            else if (pitch[0] == 'F') d =  5;
+            else if (pitch[0] == 'G') d =  7;
+            else if (pitch[0] == 'A') d =  9;
+            else if (pitch[0] == 'B') d = 11;
+        }
+        for (var i = 1; i < pitch.length; i++) {
+            if      (pitch[i] == '\u266d') d--;
+            else if (pitch[i] == '\u266f') d++;
+        }
+    }
+    return d;
+}
+
+//------------------------------------------------------------------------------
 
 // Fretboard diagram parameters.
 
 var fretHeight  = 4;
-var fretScale   = 1000;
+var fretScale   = 1200;
 var stringWidth = 2;
 var stringSpace = 20;
 var nutHeight   = 10;
-
-// Sum two note values giving a result in the range 1 to 12.
-
-function transpose(key, note) {
-    return (key + note - 2) % 12 + 1;
-}
 
 // Compute the X position of a given string.
 
@@ -349,18 +381,32 @@ function createFigure() {
     // Determine the fretboard configuration.
 
     var instrument = instruments[document.getElementById('instrument').value];
-    var scale      =      scales[document.getElementById('scale'     ).value];
-    var key        =    parseInt(document.getElementById('key'       ).value);
-    var label  = labels[parseInt(document.getElementById('key').value) - 1]
-                         + ' ' + document.getElementById('scale').value ;
+    var notes      =        keys[document.getElementById('key').value]
+    var key        =             document.getElementById('key').value;
+    var scale      =             document.getElementById('scale').value;
 
-    scale = scale.map(function(note) { return transpose(key, note); });
+    if (scale == 'Pentatonic') {
+        if (key.search('major') > 0) {
+            notes[3] = null;
+            notes[6] = null;
+        }
+        if (key.search('minor') > 0) {
+            notes[1] = null;
+            notes[5] = null;
+        }
+    }
 
-    var notes   = scale.length;
-    var frets   = instrument.length;
-    var strings = instrument.tuning.length;
+    if (scale == 'Chord') {
+        notes[1] = null;
+        notes[3] = null;
+        notes[5] = null;
+        notes[6] = null;
+    }
 
     // Generate an SVG of the fretboard.
+
+    var strings = instrument.tuning.length;
+    var frets   = instrument.length;
 
     var svg = newSVGElement('svg', ['width', strings * stringSpace],
                                    ['height', fretY(frets)]);
@@ -376,11 +422,11 @@ function createFigure() {
 
     for (var f = 0; f < frets; f++) {
         for (var s = 0; s < strings; s++) {
-            var i = transpose(instrument.tuning[s], f + 1);
+            var d = (f + getOffset(instrument.tuning[s])) % 12;
 
-            for (var n = 0; n < notes; n++) {
-                if (i == scale[n]) {
-                    svg.appendChild(newNote(f, s, labels[scale[n] - 1], (n == 0)));
+            for (var n = 0; n < notes.length; n++) {
+                if (notes[n] && d == getOffset(notes[n])) {
+                    svg.appendChild(newNote(f, s, notes[n], (n == 0)));
                 }
             }
         }
@@ -388,7 +434,7 @@ function createFigure() {
 
     // Add the fretboard to the page.
 
-    document.body.appendChild(newFigure(svg, label));
+    document.body.appendChild(newFigure(svg, key + ' ' + scale));
 }
 
 </script>

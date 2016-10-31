@@ -67,111 +67,135 @@
 				text-align: center;
 				vertical-align: center;
 			}
-			table.fretboard div.one           { background-image: url("img/one.svg"); }
-			table.fretboard div.flattwo       { background-image: url("img/flattwo.svg"); }
-			table.fretboard div.flatnine      { background-image: url("img/flatnine.svg"); }
-			table.fretboard div.two           { background-image: url("img/two.svg"); }
-			table.fretboard div.nine          { background-image: url("img/nine.svg"); }
-			table.fretboard div.flatthree     { background-image: url("img/flatthree.svg"); }
-			table.fretboard div.sharpnine     { background-image: url("img/sharpnine.svg"); }
-			table.fretboard div.three         { background-image: url("img/three.svg"); }
-			table.fretboard div.flateleven    { background-image: url("img/flateleven.svg"); }
-			table.fretboard div.four          { background-image: url("img/four.svg"); }
-			table.fretboard div.eleven        { background-image: url("img/eleven.svg"); }
-			table.fretboard div.flatfive      { background-image: url("img/flatfive.svg"); }
-			table.fretboard div.sharpeleven   { background-image: url("img/sharpeleven.svg"); }
-			table.fretboard div.five          { background-image: url("img/five.svg"); }
-			table.fretboard div.sharpfive     { background-image: url("img/sharpfive.svg"); }
-			table.fretboard div.flatsix       { background-image: url("img/flatsix.svg"); }
-			table.fretboard div.flatthirteen  { background-image: url("img/flatthirteen.svg"); }
-			table.fretboard div.six           { background-image: url("img/six.svg"); }
-			table.fretboard div.flatflatseven { background-image: url("img/flatflatseven.svg"); }
-			table.fretboard div.thirteen      { background-image: url("img/thirteen.svg"); }
-			table.fretboard div.flatseven     { background-image: url("img/flatseven.svg"); }
-			table.fretboard div.seven         { background-image: url("img/seven.svg"); }
+			table.fretboard div.t1   { background-image: url("img/t1.svg");   }
+			table.fretboard div.t2f  { background-image: url("img/t2f.svg");  }
+			table.fretboard div.t2   { background-image: url("img/t2.svg");   }
+			table.fretboard div.t3f  { background-image: url("img/t3f.svg");  }
+			table.fretboard div.t3   { background-image: url("img/t3.svg");   }
+			table.fretboard div.t4   { background-image: url("img/t4.svg");   }
+			table.fretboard div.t5f  { background-image: url("img/t5f.svg");  }
+			table.fretboard div.t5   { background-image: url("img/t5.svg");   }
+			table.fretboard div.t5s  { background-image: url("img/t5s.svg");  }
+			table.fretboard div.t6f  { background-image: url("img/t6f.svg");  }
+			table.fretboard div.t6   { background-image: url("img/t6.svg");   }
+			table.fretboard div.t7ff { background-image: url("img/t7ff.svg"); }
+			table.fretboard div.t7f  { background-image: url("img/t7f.svg");  }
+			table.fretboard div.t7   { background-image: url("img/t7.svg");   }
+			table.fretboard div.t9f  { background-image: url("img/t9f.svg");  }
+			table.fretboard div.t9   { background-image: url("img/t9.svg");   }
+			table.fretboard div.t9s  { background-image: url("img/t9s.svg");  }
+			table.fretboard div.t11f { background-image: url("img/t11f.svg"); }
+			table.fretboard div.t11  { background-image: url("img/t11.svg");  }
+			table.fretboard div.t11s { background-image: url("img/t11s.svg"); }
+			table.fretboard div.t13f { background-image: url("img/t13f.svg"); }
+			table.fretboard div.t13  { background-image: url("img/t13.svg");  }
 
-			table.fretboard div.marked        { content: url("img/mark.svg"); }
+			table.fretboard div.marked { content: url("img/mark.svg"); }
+
+			#diagram {
+				font-family: monospace;
+				font-size: 150%;
+				text-align: center;
+				color: gray;
+			}
 		</style>
 	</head>
 	<body onload="init()">
 		<h2>Root Note</h2>
 		<table class="equal center">
 			<tr>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="0"  checked>C</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="1"  >C&sharp; / D&flat;</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="2"  >D</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="3"  >D&sharp; / E&flat;</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="4"  >E</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="5"  >F</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="6"  >F&sharp; / G&flat;</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="7"  >G</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="8"  >G&sharp; / A&flat;</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="9"  >A</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="10" >A&sharp; / B&flat;</td>
-				<td><input type="radio" onchange="onChangeRoot(event)" name="root" value="11" >B</td>
+				<td><input type="radio" onchange="onChangeRoot('c')"  name="root" checked>C</td>
+				<td><input type="radio" onchange="onChangeRoot('g')"  name="root">G</td>
+				<td><input type="radio" onchange="onChangeRoot('d')"  name="root">D</td>
+				<td><input type="radio" onchange="onChangeRoot('a')"  name="root">A</td>
+				<td><input type="radio" onchange="onChangeRoot('e')"  name="root">E</td>
+				<td><input type="radio" onchange="onChangeRoot('b')"  name="root">B</td>
+				<td><input type="radio" onchange="onChangeRoot('fs')" name="root">F&sharp;</td>
+				<td><input type="radio" onchange="onChangeRoot('cs')" name="root">C&sharp;</td>
+				<td><input type="radio" onchange="onChangeRoot('f')"  name="root">F</td>
+				<td><input type="radio" onchange="onChangeRoot('bf')" name="root">B&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot('ef')" name="root">E&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot('af')" name="root">A&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot('df')" name="root">D&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot('gf')" name="root">G&flat;</td>
+				<td><input type="radio" onchange="onChangeRoot('cf')" name="root">C&flat;</td>
 			</tr>
 		</table>
 
 		<h2>Chord Tones</h2>
 		<table class="equal center">
 			<tr>
+				<th id="degree1">C</th>
+				<th></th>
+				<th id="degree2">D</th>
+				<th> </th>
+				<th id="degree3">E</th>
+				<th id="degree4">F</th>
+				<th></th>
+				<th id="degree5">G</th>
+				<th></th>
+				<th id="degree6">A</th>
+				<th></th>
+				<th id="degree7">B</th>
+			</tr>
+			<tr>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0">         <img src="img/none.svg"></div>
-					<div id="one">          <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0" checked> <img src="img/one.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0">         <img src="img/none.svg"></div>
+					<div id="t1">   <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0" checked> <img src="img/t1.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1" checked> <img src="img/none.svg"></div>
-					<div id="flattwo">      <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/flattwo.svg"></div>
-					<div id="flatnine">     <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/flatnine.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1" checked> <img src="img/none.svg"></div>
+					<div id="t2f">  <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/t2f.svg"></div>
+					<div id="t9f">  <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/t9f.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2" checked> <img src="img/none.svg"></div>
-					<div id="two">          <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/two.svg"></div>
-					<div id="nine">         <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/nine.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2" checked> <img src="img/none.svg"></div>
+					<div id="t2">   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/t2.svg"></div>
+					<div id="t9">   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/t9.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3" checked> <img src="img/none.svg"></div>
-					<div id="flatthree">    <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/flatthree.svg"></div>
-					<div id="sharpnine">    <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/sharpnine.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3" checked> <img src="img/none.svg"></div>
+					<div id="t3f">  <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/t3f.svg"></div>
+					<div id="t9s">  <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/t9s.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/none.svg"></div>
-					<div id="three">        <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4" checked> <img src="img/three.svg"></div>
-					<div id="flateleven">   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/flateleven.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/none.svg"></div>
+					<div id="t3">   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4" checked> <img src="img/t3.svg"></div>
+					<div id="t11f"> <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/t11f.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5" checked> <img src="img/none.svg"></div>
-					<div id="four">         <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/four.svg"></div>
-					<div id="eleven">       <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/eleven.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5" checked> <img src="img/none.svg"></div>
+					<div id="t4">   <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/t4.svg"></div>
+					<div id="t11">  <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/t11.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6" checked> <img src="img/none.svg"></div>
-					<div id="flatfive">     <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/flatfive.svg"></div>
-					<div id="sharpeleven">  <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/sharpeleven.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6" checked> <img src="img/none.svg"></div>
+					<div id="t5f">  <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/t5f.svg"></div>
+					<div id="t11s"> <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/t11s.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7">         <img src="img/none.svg"></div>
-					<div id="five">         <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7" checked> <img src="img/five.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7">         <img src="img/none.svg"></div>
+					<div id="t5">   <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7" checked> <img src="img/t5.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8" checked> <img src="img/none.svg"></div>
-					<div id="sharpfive">    <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/sharpfive.svg"></div>
-					<div id="flatsix">      <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/flatsix.svg"></div>
-					<div id="flatthirteen"> <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/flatthirteen.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8" checked> <img src="img/none.svg"></div>
+					<div id="t5s">  <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t5s.svg"></div>
+					<div id="t6f">  <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t6f.svg"></div>
+					<div id="t13f"> <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t13f.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9" checked> <img src="img/none.svg"></div>
-					<div id="six">          <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/six.svg"></div>
-					<div id="flatflatseven"><input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/flatflatseven.svg"></div>
-					<div id="thirteen">     <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/thirteen.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9" checked> <img src="img/none.svg"></div>
+					<div id="t6">   <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t6.svg"></div>
+					<div id="t7ff"> <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t7ff.svg"></div>
+					<div id="t13">  <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t13.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10" checked> <img src="img/none.svg"></div>
-					<div id="flatseven">    <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10">         <img src="img/flatseven.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10" checked> <img src="img/none.svg"></div>
+					<div id="t7f">  <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10">         <img src="img/t7f.svg"></div>
 				</td>
 				<td>
-					<div>                   <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11" checked> <img src="img/none.svg"></div>
-					<div id="seven">        <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11">         <img src="img/seven.svg"></div>
+					<div>           <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11" checked> <img src="img/none.svg"></div>
+					<div id="t7">   <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11">         <img src="img/t7.svg"></div>
 				</td>
 		</table>
 
@@ -304,64 +328,113 @@
 				<td class="s5 f15"><div onclick="onClickNote(event, 5, 15)" id="s5f15"></div></td>
 			</tr>
 		</table>
+		<p id="diagram"></p>
 		<script>
 
-			var scale = {
-				'c major'  : [ 'c',  'd',  'e',  'f',  'g',  'a',  'b'  ],
+			var maxString = 6;
+			var maxFret  = 16;
 
-				'g major'  : [ 'g',  'a',  'b',  'c',  'd',  'e',  'fs' ],
-				'd major'  : [ 'd',  'e',  'fs', 'g',  'a',  'b',  'cs' ],
-				'a major'  : [ 'a',  'b',  'cs', 'd',  'e',  'fs', 'gs' ],
-				'e major'  : [ 'e',  'fs', 'gs', 'a',  'b',  'cs', 'ds' ],
-				'b major'  : [ 'b',  'cs', 'ds', 'e',  'fs', 'gs', 'as' ],
-				'fs major' : [ 'fs', 'gs', 'as', 'b',  'cs', 'ds', 'es' ],
-				'cs major' : [ 'cs', 'ds', 'es', 'fs', 'gs', 'as', 'bs' ],
+			var pitch = {
+				'cf' : 11, 'c' :  0, 'cs' :  1,
+				'df' :  1, 'd' :  2, 'ds' :  3,
+				'ef' :  3, 'e' :  4, 'es' :  5,
+				'ff' :  4, 'f' :  5, 'fs' :  6,
+				'gf' :  6, 'g' :  7, 'gs' :  8,
+				'af' :  8, 'a' :  9, 'as' : 10,
+				'bf' : 10, 'b' : 11, 'bs' : 12,
+			};
 
-				'f major'  : [ 'f',  'g',  'a',  'bf', 'c',  'd',  'e'  ],
-				'bf major' : [ 'bf', 'c',  'd',  'ef', 'f',  'g',  'a'  ],
-				'ef major' : [ 'ef', 'f',  'g',  'af', 'bf', 'c',  'd'  ],
-				'af major' : [ 'af', 'bf', 'c',  'df', 'ef', 'f',  'g'  ],
-				'df major' : [ 'df', 'ef', 'f',  'gf', 'af', 'bf', 'c'  ],
-				'gf major' : [ 'gf', 'af', 'bf', 'cf', 'df', 'ef', 'f'  ],
-				'cf major' : [ 'cf', 'df', 'ef', 'ff', 'gf', 'af', 'bf' ],
+			var html = {
+				'cf' : "C&flat;",
+				'c'  : "C",
+				'cs' : "C&sharp;",
+				'df' : "D&flat;",
+				'd'  : "D",
+				'ds' : "D&sharp;",
+				'ef' : "E&flat;",
+				'e'  : "E",
+				'es' : "E&sharp;",
+				'ff' : "F&flat;",
+				'f'  : "F",
+				'fs' : "F&sharp;",
+				'gf' : "G&flat;",
+				'g'  : "G",
+				'gs' : "G&sharp;",
+				'af' : "A&flat;",
+				'a'  : "A",
+				'as' : "A&sharp;",
+				'bf' : "B&flat;",
+				'b'  : "B",
+				'bs' : "B&sharp;",
+			};
 
-				'a minor'  : [ 'a',  'b',  'c',  'd',  'e',  'f',  'g'  ],
-				'e minor'  : [ 'e',  'fs', 'g',  'a',  'b',  'c',  'd'  ],
-				'b minor'  : [ 'b',  'cs', 'd',  'e',  'fs', 'g',  'a'  ],
-				'fs minor' : [ 'fs', 'gs', 'a',  'b',  'cs', 'd',  'e'  ],
-				'cs minor' : [ 'cs', 'ds', 'e',  'fs', 'gs', 'a',  'b'  ],
-				'gs minor' : [ 'gs', 'as', 'b',  'cs', 'ds', 'e',  'fs' ],
-				'ds minor' : [ 'ds', 'es', 'fs', 'gs', 'as', 'b',  'cs' ],
-				'as minor' : [ 'as', 'bs', 'cs', 'ds', 'es', 'fs', 'gs' ],
+			var key = {
+				'c'  : [ 'c',  'd',  'e',  'f',  'g',  'a',  'b'  ],
 
-				'd minor'  : [ 'd',  'e',  'f',  'g',  'a',  'bf', 'c'  ],
-				'g minor'  : [ 'g',  'a',  'bf', 'c',  'd',  'ef', 'f'  ],
-				'c minor'  : [ 'c',  'd',  'ef', 'f',  'g',  'af', 'bf' ],
-				'f minor'  : [ 'f',  'g',  'af', 'bf', 'c',  'df', 'ef' ],
-				'bf minor' : [ 'bf', 'c',  'df', 'ef', 'f',  'gf', 'af' ],
-				'ef minor' : [ 'ef', 'f',  'gf', 'af', 'bf', 'cf', 'df' ],
-				'af minor' : [ 'af', 'bf', 'cf', 'df', 'ef', 'ff', 'gf' ],
+				'g'  : [ 'g',  'a',  'b',  'c',  'd',  'e',  'fs' ],
+				'd'  : [ 'd',  'e',  'fs', 'g',  'a',  'b',  'cs' ],
+				'a'  : [ 'a',  'b',  'cs', 'd',  'e',  'fs', 'gs' ],
+				'e'  : [ 'e',  'fs', 'gs', 'a',  'b',  'cs', 'ds' ],
+				'b'  : [ 'b',  'cs', 'ds', 'e',  'fs', 'gs', 'as' ],
+				'fs' : [ 'fs', 'gs', 'as', 'b',  'cs', 'ds', 'es' ],
+				'cs' : [ 'cs', 'ds', 'es', 'fs', 'gs', 'as', 'bs' ],
+
+				'f'  : [ 'f',  'g',  'a',  'bf', 'c',  'd',  'e'  ],
+				'bf' : [ 'bf', 'c',  'd',  'ef', 'f',  'g',  'a'  ],
+				'ef' : [ 'ef', 'f',  'g',  'af', 'bf', 'c',  'd'  ],
+				'af' : [ 'af', 'bf', 'c',  'df', 'ef', 'f',  'g'  ],
+				'df' : [ 'df', 'ef', 'f',  'gf', 'af', 'bf', 'c'  ],
+				'gf' : [ 'gf', 'af', 'bf', 'cf', 'df', 'ef', 'f'  ],
+				'cf' : [ 'cf', 'df', 'ef', 'ff', 'gf', 'af', 'bf' ],
+
 			}
 
-			/* All elements for a given note (0-11) */
+			var tone = {
+				't1'  : { degree: 0, offset:  0 },
+				't2f' : { degree: 1, offset: -1 },
+				't2'  : { degree: 1, offset:  0 },
+				't3f' : { degree: 2, offset: -1 },
+				't3'  : { degree: 2, offset:  0 },
+				't4'  : { degree: 3, offset:  0 },
+				't5f' : { degree: 4, offset: -1 },
+				't5'  : { degree: 4, offset:  0 },
+				't5s' : { degree: 4, offset: +1 },
+				't6f' : { degree: 5, offset: -1 },
+				't6'  : { degree: 5, offset:  0 },
+				't7ff': { degree: 6, offset: -2 },
+				't7f' : { degree: 6, offset: -1 },
+				't7'  : { degree: 6, offset:  0 },
+				't9f' : { degree: 1, offset: -1 },
+				't9'  : { degree: 1, offset:  0 },
+				't9s' : { degree: 1, offset: +1 },
+				't11f': { degree: 3, offset: -1 },
+				't11' : { degree: 3, offset:  0 },
+				't11s': { degree: 3, offset: +1 },
+				't13f': { degree: 5, offset: -1 },
+				't13' : { degree: 5, offset:  0 },
+			}
 
-			var element = [[], [], [], [],
-						   [], [], [], [],
-						   [], [], [], []];
+			var pitchElement = [[], [], [], [],
+					     		[], [], [], [],
+					     		[], [], [], []];
+			var degreeElement = [[], [], [], [], [], [], []];
+			var positionElement = [[], [], [], [], [], []];
 
 			/* Current root note and chord tone states */
 
-			var currentRoot = 0;
-			var currentTone = [ "one", undefined, undefined, undefined,
-								"three", undefined, undefined, "five",
-								undefined, undefined, undefined, undefined,
-								undefined, undefined, undefined, undefined,
-								undefined, undefined, undefined, undefined,
-								undefined, undefined ]
+			var currentRoot = 'c';
+			var currentTone = [ "t1", undefined, undefined, undefined,
+								"t3", undefined, undefined, "t5",
+						   undefined, undefined, undefined, undefined,
+						   undefined, undefined, undefined, undefined,
+						   undefined, undefined, undefined, undefined,
+						   undefined, undefined ];
+			var currentMark = [ undefined, undefined, undefined,
+								undefined, undefined, undefined ];
 
-			/* Return the note (0-11) at string s (0-5) fret f. */
+			/* Return the pitch (0-11) at string s (0-5) fret f. */
 
-			function noteAtPosition(s, f) {
+			function pitchAtPosition(s, f) {
 				if (s == 0) { s = s + 1; f = f + 5; }
 				if (s == 1) { s = s + 1; f = f + 4; }
 				if (s == 2) { s = s + 1; f = f + 5; }
@@ -380,7 +453,7 @@
 				if (s == 3) { s = s + 1; f = f + 5; }
 				if (s == 4) { s = s + 1; f = f + 5; }
 
-				return Math.floor((f - 8) / 12);
+				return 4 + Math.floor((f - 8) / 12);
 			}
 
 			/* Return the identifier of the element at string s (0-5) fret f. */
@@ -394,131 +467,151 @@
 
 			function init() {
 
-				for (var s = 0; s < 6; s++)
-					for (var f = 0; f < 16; f++) {
-						var i = noteAtPosition(s, f);
-						var n =   idAtPosition(s, f);
+				for (var s = 0; s < maxString; s++)
+					for (var f = 0; f < maxFret; f++) {
+						var i = pitchAtPosition(s, f);
+						var n =    idAtPosition(s, f);
 
-						element[i].push(document.getElementById(n));
+						positionElement[s][f] = document.getElementById(n);
+
+						pitchElement[i].push(positionElement[s][f]);
 					}
+
+				degreeElement[0] = document.getElementById('degree1');
+				degreeElement[1] = document.getElementById('degree2');
+				degreeElement[2] = document.getElementById('degree3');
+				degreeElement[3] = document.getElementById('degree4');
+				degreeElement[4] = document.getElementById('degree5');
+				degreeElement[5] = document.getElementById('degree6');
+				degreeElement[6] = document.getElementById('degree7');
 
 				update();
 			}
 
-			/* Set textContent on all elements of note i (0-11). */
+			/* Null the className on all position elements. */
 
-			function setTextContent(i, s) {
-				for (var j = 0; j < element[i].length; j++)
-					if (s) {
-						element[i][j].className = s;
-					} else {
-						element[i][j].className = "";
+			function clearClassNames() {
+				for (var s = 0; s < maxString; s++)
+					for (var f = 0; f < maxFret; f++)
+						positionElement[s][f].className = "";
+			}
+
+			/* Set the class on the marked positions. Remove invalid marks. */
+
+			function setMarks() {
+				for (var s = 0; s < maxString; s++) {
+					if (typeof currentMark[s] === 'number') {
+						if (positionElement[s][currentMark[s]].className)
+							positionElement[s][currentMark[s]].className += ' marked';
+						else
+							currentMark[s] = 'undefined';
 					}
+				}
+			}
+
+			/* Set the classes on all position elements to show the selection. */
+
+			function setPositions() {
+
+				for (var i = 0; i < 12; i++)
+				{
+					if (currentTone[i])
+					{
+						var t = currentTone[i];
+						var d = tone[t].degree;
+						var a = tone[t].offset;
+
+						var k = (pitch[key[currentRoot][d]] + a) % 12;
+
+						for (var j = 0; j < pitchElement[k].length; j++)
+							pitchElement[k][j].className = currentTone[i];
+					}
+				}
+			}
+
+			/* Compute the LilyPond diagram for the current selection. */
+
+			function setDiagram() {
+				function getOctave(o) {
+					if (o === 3) return ",";
+					if (o === 4) return "";
+					if (o === 5) return "'";
+					if (o === 6) return "''";
+				}
+				function getAccidental(a) {
+					if (a === +1) return 's';
+					if (a ===  0) return '';
+					if (a === -1) return 'f';
+					if (a === -2) return 'ff';
+				}
+				function simplify(s) {
+					if (s.match('sf')) return simplify(s.replace('sf', ''));
+					if (s.match('fs')) return simplify(s.replace('fs', ''));
+					return s;
+				}
+
+				var chord   = [];
+				var diagram = [];
+
+				for (var s = maxString - 1; s >= 0; s--) {
+					if (typeof currentMark[s] === 'number') {
+						var t = positionElement[s][currentMark[s]].className.split(' ')[0];
+						var d = tone[t].degree;
+						var a = tone[t].offset;
+						var o = octaveAtPosition(s, currentMark[s]);
+
+						var n = key[currentRoot][d][0];
+						var e = key[currentRoot][d].substring(1);
+
+						chord.push(n + simplify(e + getAccidental(a)) + getOctave(o));
+
+						if (currentMark[s] > 0)
+							diagram.push(currentMark[s] + ';');
+						else
+							diagram.push('o' + ';');
+					} else
+						diagram.push('x;');
+				}
+
+				var str = '<' + chord.join(' ') + '>1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
+
+				document.getElementById('diagram').textContent = str;
 			}
 
 			/* Update the DOM to reflect the current state. */
 
 			function update() {
-				for (var i = 0; i < 12; i++)
-					setTextContent((currentRoot + i) % 12, currentTone[i]);
+				clearClassNames();
+				setPositions();
+				setMarks();
+				setDiagram();
 			}
 
-			/* Select a new root note. */
+			/* Select a root note. */
 
-			function onChangeRoot(e) {
-				currentRoot = parseInt(e.target.value, 10);
+			function onChangeRoot(s) {
+				for (var d = 0; d < 7; d++)
+					degreeElement[d].innerHTML = html[key[s][d]];
+				currentRoot = s;
 				update();
 			}
 
-			/* Toggle the inclusion of a chord tone. */
+			/* Select a chord tone. */
 
 			function onChangeTone(e) {
-				if (e.target.checked)
-					currentTone[e.target.value] = e.target.parentElement.id;
-				else
-					currentTone[e.target.value] = undefined;
+				currentTone[e.target.value] = e.target.parentElement.id;
 				update();
 			}
 
-			function getOctave(o) {
-				if (o === -1) return ",";
-				if (o ===  1) return "'";
-				if (o ===  2) return "''";
-				return "";
-			}
-
-			/* Test element e to determine if it has class c. */
-
-			function tstClass(e, c) {
-				if (e.className.search(c) > -1)
-					return true;
-				else
-					return false;
-			}
-
-			/* Add class c to element e. Assume e does not have class c. */
-
-			function setClass(e, c) {
-				e.className += " " + c;
-			}
-
-			/* Remove class c from element e. Assume e does have class c. */
-
-			function clrClass(e, c) {
-				var a = e.className.split(' ');
-
-				a.splice(a.indexOf(c), 1);
-				e.className = a.join(' ');
-			}
+			/* Toggle the mark on a position. */
 
 			function onClickNote(e, s, f) {
-
-				if (e.target.className.length > 0) {
-					if (tstClass(e.target, 'marked'))
-						clrClass(e.target, 'marked');
-					else {
-						for (var f = 0; f < 16; f++)
-						{
-							var d = document.getElementById(idAtPosition(s, f));
-							if (tstClass(d, 'marked'))
-								clrClass(d, 'marked');
-						}
-						setClass(e.target, 'marked');
-					}
-				}
-
-				/*
-				var o = getOctave(octaveAtPosition(s, f));
-
-				var l;
-
-				if (c === "one")           l = lyScale[currentRoot[0]]        + o;
-				if (c === "flattwo")       l = lyScale[currentRoot[1]] + 'f'  + o;
-				if (c === "two")           l = lyScale[currentRoot[1]]        + o;
-				if (c === "flatthree")     l = lyScale[currentRoot[2]] + 'f'  + o;
-				if (c === "three")         l = lyScale[currentRoot[2]]        + o;
-				if (c === "four")          l = lyScale[currentRoot[3]]        + o;
-				if (c === "flatfive")      l = lyScale[currentRoot[4]] + 'f'  + o;
-				if (c === "five")          l = lyScale[currentRoot[4]]        + o;
-				if (c === "sharpfive")     l = lyScale[currentRoot[4]] + 's'  + o;
-				if (c === "flatsix")       l = lyScale[currentRoot[5]] + 'f'  + o;
-				if (c === "six")           l = lyScale[currentRoot[5]]        + o;
-				if (c === "flatflatseven") l = lyScale[currentRoot[6]] + 'ff' + o;
-				if (c === "flatseven")     l = lyScale[currentRoot[6]] + 'f'  + o;
-				if (c === "seven")         l = lyScale[currentRoot[6]]        + o;
-				if (c === "flatnine")      l = lyScale[currentRoot[1]] + 'f'  + o;
-				if (c === "nine")          l = lyScale[currentRoot[1]]        + o;
-				if (c === "sharpnine")     l = lyScale[currentRoot[1]] + 's'  + o;
-				if (c === "eleven")        l = lyScale[currentRoot[3]]        + o;
-				if (c === "flateleven")    l = lyScale[currentRoot[3]] + 'f'  + o;
-				if (c === "sharpeleven")   l = lyScale[currentRoot[3]] + 's'  + o;
-				if (c === "flatthirteen")  l = lyScale[currentRoot[5]] + 'f'  + o;
-				if (c === "thirteen")      l = lyScale[currentRoot[5]]        + o;
-
-				console.log(l);
-				*/
+				if (currentMark[s] == f)
+					currentMark[s] = undefined;
+				else
+					currentMark[s] = f;
+				update();
 			}
-
 		</script>
 	</body>
 </html>

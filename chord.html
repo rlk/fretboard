@@ -9,23 +9,31 @@
 			}
 			body {
 				margin: 3em;
+				font-family: Arial;
 			}
-			h2 {
-				text-align:center;
+
+			#configuration {
+				position: fixed;
+				width: 25%;
 			}
+			#content {
+				margin-left: 25%;
+				width: 75%;
+			}
+
 			span.control {
 				display: inline-block;
-				font-family: Arial;
-				font-size: 100%;
 				border-radius: 2px;
 				border: 1px solid #ABA;
 				background: #DED;
-				height: 1.5em;
+				height: 2em;
+				width: 2em;
 				text-align: center;
 				vertical-align: middle;
 				cursor: pointer;
 				margin: 2px;
-				padding: 0.25em 1.0em;
+				line-height: 2em;
+				font-weight: bold;
 			}
 			span.control:hover {
 				background: #DFD;
@@ -46,16 +54,6 @@
 				border: 2px solid #DDB;
 				border-radius: 4px;
 				background: #FFD;
-			}
-
-			#configuration {
-				position: fixed;
-				width: 25%;
-				height: 100%;
-			}
-			#content {
-				margin-left: 25%;
-				width: 75%;
 			}
 
 			/* Rote selection menu */
@@ -140,11 +138,7 @@
 				border-collapse: collapse;
 			}
 			table.fretboard tbody {
-				background-image: linear-gradient(to bottom, #CBA 0%, #A98 100%);
-				background-attachment:fixed
-			}
-			table.fretboard thead {
-				background-attachment:fixed
+				background-color: #A98;
 			}
 			table.fretboard td.s0 { background-image: linear-gradient(to bottom, transparent, transparent 47%, #FFF 47%, #EEE 50%, #777 53%, transparent 53%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
 			table.fretboard td.s1 { background-image: linear-gradient(to bottom, transparent, transparent 46%, #FFF 46%, #EEE 50%, #777 54%, transparent 54%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
@@ -203,15 +197,17 @@
 			.diagram {
 				font-family: monospace;
 				font-size: 150%;
+				color: #888;
+				margin-left: 1em;
+			}
+			.note {
 				text-align: center;
-				color: gray;
+				color: #CCC;
 			}
 		</style>
 	</head>
 	<body onload="selectFretboard(new Fretboard());">
 		<div id="configuration">
-			<span class="control" onclick="selectFretboard(new Fretboard());">New Fretboard</span><br>
-
 			<table class="rootmenu">
 				<tr><th>Root</th></tr>
 				<tr><td><input type="radio" onchange="changeRoot('c')"  name="root" checked>C</td></tr>
@@ -355,8 +351,10 @@
 					</td>
 				</tr>
 			</table>
+	        <p class="note">Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
 		</div>
 		<div id="content">
+			<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure the chord.</p>
 		</div>
 
 		<script>
@@ -504,20 +502,20 @@
 
 			// Construct a Fredboard.
 
-			function Fretboard() {
-				this.maxFret = 16;
+			function Fretboard(that) {
+				this.maxFret     = 16;
+				this.currentTone = [];
+				this.currentMark = [];
 
-				// Current root note and chord tone states.
+				// Initialize the current state.
 
 				this.currentRoot = 'c';
-				this.currentTone = [ undefined, undefined, undefined, undefined,
-									 undefined, undefined, undefined, undefined,
-							    	 undefined, undefined, undefined, undefined,
-							    	 undefined, undefined, undefined, undefined,
-							    	 undefined, undefined, undefined, undefined,
-							    	 undefined, undefined ];
-				this.currentMark = [ undefined, undefined, undefined,
-									 undefined, undefined, undefined ];
+
+				for (var i = 0; i < 22; i++)
+					this.currentTone[i] = undefined;
+
+				for (var i = 0; i < 6; i++)
+					this.currentMark[i] = undefined;
 
 				// Frequently accessed DOM elements.
 
@@ -539,8 +537,17 @@
 				// Initalize the DOM for this fretboard.
 
 				this.buildDocument();
+
+				// Update the DOM to reflect the current state.
+
 				this.update();
 
+				// Add the new fretboard to the document.
+
+				if (that)
+					document.getElementById("content").insertBefore(this.item, that.item.nextSibling);
+				else
+					document.getElementById("content").appendChild(this.item);
 			}
 
 			// Build the fretboard table.
@@ -553,26 +560,35 @@
 				var thead = document.createElement('thead');
 				var tbody = document.createElement('tbody');
 				var heading = document.createElement('div');
-				var remove = document.createElement('span');
+				var insert  = document.createElement('span');
 				var moveup = document.createElement('span');
 				var movedn = document.createElement('span');
+				var remove = document.createElement('span');
 				var diagram = document.createElement('span');
-
 
 				heading.appendChild(remove);
 				heading.appendChild(moveup);
 				heading.appendChild(movedn);
+				heading.appendChild(insert);
 				heading.appendChild(diagram);
 
-				remove.innerHTML = '&Cross;';
+				insert.innerHTML = '&xoplus;';
+				remove.innerHTML = '&xotime;';
 				moveup.innerHTML = '&xutri;';
 				movedn.innerHTML = '&xdtri;';
 
+				insert.title = 'Add Fretboard';
+				remove.title = 'Delete Fretboard';
+				moveup.title = 'Move Up';
+				movedn.title = 'Move Down';
+
+				insert.className = 'control';
 				remove.className = 'control';
 				moveup.className = 'control';
 				movedn.className = 'control';
 				heading.className = 'controlpanel';
 
+				insert.addEventListener('click', function () { that.insert(); });
 				remove.addEventListener('click', function () { that.remove(); });
 				moveup.addEventListener('click', function () { that.moveup(); });
 				movedn.addEventListener('click', function () { that.movedn(); });
@@ -624,8 +640,6 @@
 				this.item.addEventListener('click', function() {
 					selectFretboard(that);
 				})
-
-				document.getElementById("content").appendChild(item);
 			}
 
 			// Null the className on all position elements.
@@ -703,16 +717,29 @@
 				this.diagram.textContent = str;
 			}
 
+			Fretboard.prototype.insert = function() {
+				selectFretboard(new Fretboard(currentFretboard));
+			}
+
 			Fretboard.prototype.remove = function() {
-				console.log("remove");
+				if (document.getElementsByClassName("item").length > 1)
+					this.item.remove();
 			}
 
 			Fretboard.prototype.moveup = function() {
-				console.log("moveup");
+				var curr = this.item;
+				var prev = this.item.previousSibling;
+
+				if (prev && prev.tagName === 'DIV')
+					document.getElementById("content").insertBefore(curr, prev);
 			}
 
 			Fretboard.prototype.movedn = function() {
-				console.log("movedn");
+				var curr = this.item;
+				var next = this.item.nextSibling;
+
+				if (next && next.tagName === 'DIV')
+					document.getElementById("content").insertBefore(next, curr);
 			}
 
 			// Update the DOM to reflect the current state.

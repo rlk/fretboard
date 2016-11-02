@@ -13,6 +13,35 @@
 			h2 {
 				text-align:center;
 			}
+			span.control {
+				display: inline-block;
+				font-family: Arial;
+				font-size: 100%;
+				border-radius: 2px;
+				border: 1px solid #ABA;
+				background: #DED;
+				width: 1.5em;
+				height: 1.5em;
+				text-align: center;
+				vertical-align: middle;
+				cursor: pointer;
+				margin: 2px;
+			}
+			div.item {
+				margin-top: 1em;
+				margin-bottom: 1em;
+				padding: 8px;
+			}
+			div.unselected {
+				border: 2px solid white;
+				border-radius: 4px;
+			}
+			div.selected {
+				border: 2px solid #DDB;
+				border-radius: 4px;
+				background: #FFD;
+			}
+
 			table.equal {
 				table-layout: fixed;
 				width: 100%;
@@ -31,15 +60,13 @@
 			}
 			table.fretboard {
 				border-collapse: collapse;
+			}
+			table.fretboard tbody {
 				background-image: linear-gradient(to bottom, #CBA 0%, #A98 100%);
+				background-attachment:fixed
 			}
-			table.fretboard td {
-				border: none;
-				text-align: right;
-				background-origin: border-box;
-			}
-			table.fretboard th {
-				background-image: linear-gradient(to bottom, white, white);
+			table.fretboard thead {
+				background-attachment:fixed
 			}
 			table.fretboard td.s0 { background-image: linear-gradient(to bottom, transparent, transparent 47%, #FFF 47%, #EEE 50%, #777 53%, transparent 53%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
 			table.fretboard td.s1 { background-image: linear-gradient(to bottom, transparent, transparent 46%, #FFF 46%, #EEE 50%, #777 54%, transparent 54%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
@@ -95,7 +122,7 @@
 
 			table.fretboard div.marked { content: url("img/mark.svg"); }
 
-			#diagram {
+			.diagram {
 				font-family: monospace;
 				font-size: 150%;
 				text-align: center;
@@ -103,32 +130,30 @@
 			}
 		</style>
 	</head>
-	<body>
+	<body onload="selectFretboard(new Fretboard());">
 		<div>
-			<button onclick="currentFretboard = new Fretboard()">New Fretboard</button>
+			<button onclick="selectFretboard(new Fretboard());">New Fretboard</button>
 
-			<h2>Root Note</h2>
 			<table class="equal center">
 				<tr>
-					<td><input type="radio" onchange="onChangeRoot('c')"  name="root" checked>C</td>
-					<td><input type="radio" onchange="onChangeRoot('g')"  name="root">G</td>
-					<td><input type="radio" onchange="onChangeRoot('d')"  name="root">D</td>
-					<td><input type="radio" onchange="onChangeRoot('a')"  name="root">A</td>
-					<td><input type="radio" onchange="onChangeRoot('e')"  name="root">E</td>
-					<td><input type="radio" onchange="onChangeRoot('b')"  name="root">B</td>
-					<td><input type="radio" onchange="onChangeRoot('fs')" name="root">F&sharp;</td>
-					<td><input type="radio" onchange="onChangeRoot('cs')" name="root">C&sharp;</td>
-					<td><input type="radio" onchange="onChangeRoot('f')"  name="root">F</td>
-					<td><input type="radio" onchange="onChangeRoot('bf')" name="root">B&flat;</td>
-					<td><input type="radio" onchange="onChangeRoot('ef')" name="root">E&flat;</td>
-					<td><input type="radio" onchange="onChangeRoot('af')" name="root">A&flat;</td>
-					<td><input type="radio" onchange="onChangeRoot('df')" name="root">D&flat;</td>
-					<td><input type="radio" onchange="onChangeRoot('gf')" name="root">G&flat;</td>
-					<td><input type="radio" onchange="onChangeRoot('cf')" name="root">C&flat;</td>
+					<td><input type="radio" onchange="changeRoot('c')"  name="root" checked>C</td>
+					<td><input type="radio" onchange="changeRoot('g')"  name="root">G</td>
+					<td><input type="radio" onchange="changeRoot('d')"  name="root">D</td>
+					<td><input type="radio" onchange="changeRoot('a')"  name="root">A</td>
+					<td><input type="radio" onchange="changeRoot('e')"  name="root">E</td>
+					<td><input type="radio" onchange="changeRoot('b')"  name="root">B</td>
+					<td><input type="radio" onchange="changeRoot('fs')" name="root">F&sharp;</td>
+					<td><input type="radio" onchange="changeRoot('cs')" name="root">C&sharp;</td>
+					<td><input type="radio" onchange="changeRoot('f')"  name="root">F</td>
+					<td><input type="radio" onchange="changeRoot('bf')" name="root">B&flat;</td>
+					<td><input type="radio" onchange="changeRoot('ef')" name="root">E&flat;</td>
+					<td><input type="radio" onchange="changeRoot('af')" name="root">A&flat;</td>
+					<td><input type="radio" onchange="changeRoot('df')" name="root">D&flat;</td>
+					<td><input type="radio" onchange="changeRoot('gf')" name="root">G&flat;</td>
+					<td><input type="radio" onchange="changeRoot('cf')" name="root">C&flat;</td>
 				</tr>
 			</table>
 
-			<h2>Chord Tones</h2>
 			<table class="equal center">
 				<tr>
 					<th id="degree1">C</th>
@@ -146,202 +171,70 @@
 				</tr>
 				<tr>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0" checked> <img src="img/none.svg"></div>
-						<div id="t1">   <input type="radio" onchange="onChangeTone(event)" name="tone0" value="0">         <img src="img/t1.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone0" value="0" checked> <img src="img/none.svg"></div>
+						<div id="t1">   <input type="radio" onchange="changeTone(event)" name="tone0" value="0">         <img src="img/t1.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1" checked> <img src="img/none.svg"></div>
-						<div id="t2f">  <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/t2f.svg"></div>
-						<div id="t9f">  <input type="radio" onchange="onChangeTone(event)" name="tone1" value="1">         <img src="img/t9f.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone1" value="1" checked> <img src="img/none.svg"></div>
+						<div id="t2f">  <input type="radio" onchange="changeTone(event)" name="tone1" value="1">         <img src="img/t2f.svg"></div>
+						<div id="t9f">  <input type="radio" onchange="changeTone(event)" name="tone1" value="1">         <img src="img/t9f.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2" checked> <img src="img/none.svg"></div>
-						<div id="t2">   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/t2.svg"></div>
-						<div id="t9">   <input type="radio" onchange="onChangeTone(event)" name="tone2" value="2">         <img src="img/t9.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone2" value="2" checked> <img src="img/none.svg"></div>
+						<div id="t2">   <input type="radio" onchange="changeTone(event)" name="tone2" value="2">         <img src="img/t2.svg"></div>
+						<div id="t9">   <input type="radio" onchange="changeTone(event)" name="tone2" value="2">         <img src="img/t9.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3" checked> <img src="img/none.svg"></div>
-						<div id="t3f">  <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/t3f.svg"></div>
-						<div id="t9s">  <input type="radio" onchange="onChangeTone(event)" name="tone3" value="3">         <img src="img/t9s.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone3" value="3" checked> <img src="img/none.svg"></div>
+						<div id="t3f">  <input type="radio" onchange="changeTone(event)" name="tone3" value="3">         <img src="img/t3f.svg"></div>
+						<div id="t9s">  <input type="radio" onchange="changeTone(event)" name="tone3" value="3">         <img src="img/t9s.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4" checked> <img src="img/none.svg"></div>
-						<div id="t3">   <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/t3.svg"></div>
-						<div id="t11f"> <input type="radio" onchange="onChangeTone(event)" name="tone4" value="4">         <img src="img/t11f.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone4" value="4" checked> <img src="img/none.svg"></div>
+						<div id="t3">   <input type="radio" onchange="changeTone(event)" name="tone4" value="4">         <img src="img/t3.svg"></div>
+						<div id="t11f"> <input type="radio" onchange="changeTone(event)" name="tone4" value="4">         <img src="img/t11f.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5" checked> <img src="img/none.svg"></div>
-						<div id="t4">   <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/t4.svg"></div>
-						<div id="t11">  <input type="radio" onchange="onChangeTone(event)" name="tone5" value="5">         <img src="img/t11.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone5" value="5" checked> <img src="img/none.svg"></div>
+						<div id="t4">   <input type="radio" onchange="changeTone(event)" name="tone5" value="5">         <img src="img/t4.svg"></div>
+						<div id="t11">  <input type="radio" onchange="changeTone(event)" name="tone5" value="5">         <img src="img/t11.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6" checked> <img src="img/none.svg"></div>
-						<div id="t5f">  <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/t5f.svg"></div>
-						<div id="t11s"> <input type="radio" onchange="onChangeTone(event)" name="tone6" value="6">         <img src="img/t11s.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone6" value="6" checked> <img src="img/none.svg"></div>
+						<div id="t5f">  <input type="radio" onchange="changeTone(event)" name="tone6" value="6">         <img src="img/t5f.svg"></div>
+						<div id="t11s"> <input type="radio" onchange="changeTone(event)" name="tone6" value="6">         <img src="img/t11s.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7" checked> <img src="img/none.svg"></div>
-						<div id="t5">   <input type="radio" onchange="onChangeTone(event)" name="tone7" value="7">         <img src="img/t5.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone7" value="7" checked> <img src="img/none.svg"></div>
+						<div id="t5">   <input type="radio" onchange="changeTone(event)" name="tone7" value="7">         <img src="img/t5.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8" checked> <img src="img/none.svg"></div>
-						<div id="t5s">  <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t5s.svg"></div>
-						<div id="t6f">  <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t6f.svg"></div>
-						<div id="t13f"> <input type="radio" onchange="onChangeTone(event)" name="tone8" value="8">         <img src="img/t13f.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone8" value="8" checked> <img src="img/none.svg"></div>
+						<div id="t5s">  <input type="radio" onchange="changeTone(event)" name="tone8" value="8">         <img src="img/t5s.svg"></div>
+						<div id="t6f">  <input type="radio" onchange="changeTone(event)" name="tone8" value="8">         <img src="img/t6f.svg"></div>
+						<div id="t13f"> <input type="radio" onchange="changeTone(event)" name="tone8" value="8">         <img src="img/t13f.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9" checked> <img src="img/none.svg"></div>
-						<div id="t6">   <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t6.svg"></div>
-						<div id="t7ff"> <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t7ff.svg"></div>
-						<div id="t13">  <input type="radio" onchange="onChangeTone(event)" name="tone9" value="9">         <img src="img/t13.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone9" value="9" checked> <img src="img/none.svg"></div>
+						<div id="t6">   <input type="radio" onchange="changeTone(event)" name="tone9" value="9">         <img src="img/t6.svg"></div>
+						<div id="t7ff"> <input type="radio" onchange="changeTone(event)" name="tone9" value="9">         <img src="img/t7ff.svg"></div>
+						<div id="t13">  <input type="radio" onchange="changeTone(event)" name="tone9" value="9">         <img src="img/t13.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10" checked> <img src="img/none.svg"></div>
-						<div id="t7f">  <input type="radio" onchange="onChangeTone(event)" name="tone10" value="10">         <img src="img/t7f.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone10" value="10" checked> <img src="img/none.svg"></div>
+						<div id="t7f">  <input type="radio" onchange="changeTone(event)" name="tone10" value="10">         <img src="img/t7f.svg"></div>
 					</td>
 					<td>
-						<div>           <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11" checked> <img src="img/none.svg"></div>
-						<div id="t7">   <input type="radio" onchange="onChangeTone(event)" name="tone11" value="11">         <img src="img/t7.svg"></div>
+						<div>           <input type="radio" onchange="changeTone(event)" name="tone11" value="11" checked> <img src="img/none.svg"></div>
+						<div id="t7">   <input type="radio" onchange="changeTone(event)" name="tone11" value="11">         <img src="img/t7.svg"></div>
 					</td>
 				</tr>
 			</table>
-<!--
-			<h2>Fretboard</h2>
-			<table class="fretboard">
-				<tr>
-					<th>0</th>
-					<th>1</th>
-					<th>2</th>
-					<th>3</th>
-					<th>4</th>
-					<th>5</th>
-					<th>6</th>
-					<th>7</th>
-					<th>8</th>
-					<th>9</th>
-					<th>10</th>
-					<th>11</th>
-					<th>12</th>
-					<th>13</th>
-					<th>14</th>
-					<th>15</th>
-				</tr>
-				<tr>
-					<td class="s0 f00"><div onclick="onClickNote(event, 0, 00)" id="s0f00"></div></td>
-					<td class="s0 f01"><div onclick="onClickNote(event, 0, 01)" id="s0f01"></div></td>
-					<td class="s0 f02"><div onclick="onClickNote(event, 0, 02)" id="s0f02"></div></td>
-					<td class="s0 f03"><div onclick="onClickNote(event, 0, 03)" id="s0f03"></div></td>
-					<td class="s0 f04"><div onclick="onClickNote(event, 0, 04)" id="s0f04"></div></td>
-					<td class="s0 f05"><div onclick="onClickNote(event, 0, 05)" id="s0f05"></div></td>
-					<td class="s0 f06"><div onclick="onClickNote(event, 0, 06)" id="s0f06"></div></td>
-					<td class="s0 f07"><div onclick="onClickNote(event, 0, 07)" id="s0f07"></div></td>
-					<td class="s0 f08"><div onclick="onClickNote(event, 0, 08)" id="s0f08"></div></td>
-					<td class="s0 f09"><div onclick="onClickNote(event, 0, 09)" id="s0f09"></div></td>
-					<td class="s0 f10"><div onclick="onClickNote(event, 0, 10)" id="s0f10"></div></td>
-					<td class="s0 f11"><div onclick="onClickNote(event, 0, 11)" id="s0f11"></div></td>
-					<td class="s0 f12"><div onclick="onClickNote(event, 0, 12)" id="s0f12"></div></td>
-					<td class="s0 f13"><div onclick="onClickNote(event, 0, 13)" id="s0f13"></div></td>
-					<td class="s0 f14"><div onclick="onClickNote(event, 0, 14)" id="s0f14"></div></td>
-					<td class="s0 f15"><div onclick="onClickNote(event, 0, 15)" id="s0f15"></div></td>
-				</tr>
-				<tr>
-					<td class="s1 f00"><div onclick="onClickNote(event, 1, 00)" id="s1f00"></div></td>
-					<td class="s1 f01"><div onclick="onClickNote(event, 1, 01)" id="s1f01"></div></td>
-					<td class="s1 f02"><div onclick="onClickNote(event, 1, 02)" id="s1f02"></div></td>
-					<td class="s1 f03"><div onclick="onClickNote(event, 1, 03)" id="s1f03"></div></td>
-					<td class="s1 f04"><div onclick="onClickNote(event, 1, 04)" id="s1f04"></div></td>
-					<td class="s1 f05"><div onclick="onClickNote(event, 1, 05)" id="s1f05"></div></td>
-					<td class="s1 f06"><div onclick="onClickNote(event, 1, 06)" id="s1f06"></div></td>
-					<td class="s1 f07"><div onclick="onClickNote(event, 1, 07)" id="s1f07"></div></td>
-					<td class="s1 f08"><div onclick="onClickNote(event, 1, 08)" id="s1f08"></div></td>
-					<td class="s1 f09"><div onclick="onClickNote(event, 1, 09)" id="s1f09"></div></td>
-					<td class="s1 f10"><div onclick="onClickNote(event, 1, 10)" id="s1f10"></div></td>
-					<td class="s1 f11"><div onclick="onClickNote(event, 1, 11)" id="s1f11"></div></td>
-					<td class="s1 f12"><div onclick="onClickNote(event, 1, 12)" id="s1f12"></div></td>
-					<td class="s1 f13"><div onclick="onClickNote(event, 1, 13)" id="s1f13"></div></td>
-					<td class="s1 f14"><div onclick="onClickNote(event, 1, 14)" id="s1f14"></div></td>
-					<td class="s1 f15"><div onclick="onClickNote(event, 1, 15)" id="s1f15"></div></td>
-				</tr>
-				<tr>
-					<td class="s2 f00"><div onclick="onClickNote(event, 2, 00)" id="s2f00"></div></td>
-					<td class="s2 f01"><div onclick="onClickNote(event, 2, 01)" id="s2f01"></div></td>
-					<td class="s2 f02"><div onclick="onClickNote(event, 2, 02)" id="s2f02"></div></td>
-					<td class="s2 f03"><div onclick="onClickNote(event, 2, 03)" id="s2f03"></div></td>
-					<td class="s2 f04"><div onclick="onClickNote(event, 2, 04)" id="s2f04"></div></td>
-					<td class="s2 f05"><div onclick="onClickNote(event, 2, 05)" id="s2f05"></div></td>
-					<td class="s2 f06"><div onclick="onClickNote(event, 2, 06)" id="s2f06"></div></td>
-					<td class="s2 f07"><div onclick="onClickNote(event, 2, 07)" id="s2f07"></div></td>
-					<td class="s2 f08"><div onclick="onClickNote(event, 2, 08)" id="s2f08"></div></td>
-					<td class="s2 f09"><div onclick="onClickNote(event, 2, 09)" id="s2f09"></div></td>
-					<td class="s2 f10"><div onclick="onClickNote(event, 2, 10)" id="s2f10"></div></td>
-					<td class="s2 f11"><div onclick="onClickNote(event, 2, 11)" id="s2f11"></div></td>
-					<td class="s2 f12"><div onclick="onClickNote(event, 2, 12)" id="s2f12"></div></td>
-					<td class="s2 f13"><div onclick="onClickNote(event, 2, 13)" id="s2f13"></div></td>
-					<td class="s2 f14"><div onclick="onClickNote(event, 2, 14)" id="s2f14"></div></td>
-					<td class="s2 f15"><div onclick="onClickNote(event, 2, 15)" id="s2f15"></div></td>
-				</tr>
-				<tr>
-					<td class="s3 f00"><div onclick="onClickNote(event, 3, 00)" id="s3f00"></div></td>
-					<td class="s3 f01"><div onclick="onClickNote(event, 3, 01)" id="s3f01"></div></td>
-					<td class="s3 f02"><div onclick="onClickNote(event, 3, 02)" id="s3f02"></div></td>
-					<td class="s3 f03"><div onclick="onClickNote(event, 3, 03)" id="s3f03"></div></td>
-					<td class="s3 f04"><div onclick="onClickNote(event, 3, 04)" id="s3f04"></div></td>
-					<td class="s3 f05"><div onclick="onClickNote(event, 3, 05)" id="s3f05"></div></td>
-					<td class="s3 f06"><div onclick="onClickNote(event, 3, 06)" id="s3f06"></div></td>
-					<td class="s3 f07"><div onclick="onClickNote(event, 3, 07)" id="s3f07"></div></td>
-					<td class="s3 f08"><div onclick="onClickNote(event, 3, 08)" id="s3f08"></div></td>
-					<td class="s3 f09"><div onclick="onClickNote(event, 3, 09)" id="s3f09"></div></td>
-					<td class="s3 f10"><div onclick="onClickNote(event, 3, 10)" id="s3f10"></div></td>
-					<td class="s3 f11"><div onclick="onClickNote(event, 3, 11)" id="s3f11"></div></td>
-					<td class="s3 f12"><div onclick="onClickNote(event, 3, 12)" id="s3f12"></div></td>
-					<td class="s3 f13"><div onclick="onClickNote(event, 3, 13)" id="s3f13"></div></td>
-					<td class="s3 f14"><div onclick="onClickNote(event, 3, 14)" id="s3f14"></div></td>
-					<td class="s3 f15"><div onclick="onClickNote(event, 3, 15)" id="s3f15"></div></td>
-				</tr>
-				<tr>
-					<td class="s4 f00"><div onclick="onClickNote(event, 4, 00)" id="s4f00"></div></td>
-					<td class="s4 f01"><div onclick="onClickNote(event, 4, 01)" id="s4f01"></div></td>
-					<td class="s4 f02"><div onclick="onClickNote(event, 4, 02)" id="s4f02"></div></td>
-					<td class="s4 f03"><div onclick="onClickNote(event, 4, 03)" id="s4f03"></div></td>
-					<td class="s4 f04"><div onclick="onClickNote(event, 4, 04)" id="s4f04"></div></td>
-					<td class="s4 f05"><div onclick="onClickNote(event, 4, 05)" id="s4f05"></div></td>
-					<td class="s4 f06"><div onclick="onClickNote(event, 4, 06)" id="s4f06"></div></td>
-					<td class="s4 f07"><div onclick="onClickNote(event, 4, 07)" id="s4f07"></div></td>
-					<td class="s4 f08"><div onclick="onClickNote(event, 4, 08)" id="s4f08"></div></td>
-					<td class="s4 f09"><div onclick="onClickNote(event, 4, 09)" id="s4f09"></div></td>
-					<td class="s4 f10"><div onclick="onClickNote(event, 4, 10)" id="s4f10"></div></td>
-					<td class="s4 f11"><div onclick="onClickNote(event, 4, 11)" id="s4f11"></div></td>
-					<td class="s4 f12"><div onclick="onClickNote(event, 4, 12)" id="s4f12"></div></td>
-					<td class="s4 f13"><div onclick="onClickNote(event, 4, 13)" id="s4f13"></div></td>
-					<td class="s4 f14"><div onclick="onClickNote(event, 4, 14)" id="s4f14"></div></td>
-					<td class="s4 f15"><div onclick="onClickNote(event, 4, 15)" id="s4f15"></div></td>
-				</tr>
-				<tr>
-					<td class="s5 f00"><div onclick="onClickNote(event, 5, 00)" id="s5f00"></div></td>
-					<td class="s5 f01"><div onclick="onClickNote(event, 5, 01)" id="s5f01"></div></td>
-					<td class="s5 f02"><div onclick="onClickNote(event, 5, 02)" id="s5f02"></div></td>
-					<td class="s5 f03"><div onclick="onClickNote(event, 5, 03)" id="s5f03"></div></td>
-					<td class="s5 f04"><div onclick="onClickNote(event, 5, 04)" id="s5f04"></div></td>
-					<td class="s5 f05"><div onclick="onClickNote(event, 5, 05)" id="s5f05"></div></td>
-					<td class="s5 f06"><div onclick="onClickNote(event, 5, 06)" id="s5f06"></div></td>
-					<td class="s5 f07"><div onclick="onClickNote(event, 5, 07)" id="s5f07"></div></td>
-					<td class="s5 f08"><div onclick="onClickNote(event, 5, 08)" id="s5f08"></div></td>
-					<td class="s5 f09"><div onclick="onClickNote(event, 5, 09)" id="s5f09"></div></td>
-					<td class="s5 f10"><div onclick="onClickNote(event, 5, 10)" id="s5f10"></div></td>
-					<td class="s5 f11"><div onclick="onClickNote(event, 5, 11)" id="s5f11"></div></td>
-					<td class="s5 f12"><div onclick="onClickNote(event, 5, 12)" id="s5f12"></div></td>
-					<td class="s5 f13"><div onclick="onClickNote(event, 5, 13)" id="s5f13"></div></td>
-					<td class="s5 f14"><div onclick="onClickNote(event, 5, 14)" id="s5f14"></div></td>
-					<td class="s5 f15"><div onclick="onClickNote(event, 5, 15)" id="s5f15"></div></td>
-				</tr>
-			</table>
-			-->
-			<p id="diagram"></p>
 		</div>
 
 		<script>
 
-			currentFretboard = undefined;
+			var currentFretboard = undefined;
 
 			var pitch = {
 				'cf' : 11, 'c' :  0, 'cs' :  1,
@@ -454,12 +347,16 @@
 				else        return 's' + s.toString() + ' f'  + f.toString();
 			}
 
+			// Convert an octave number to the appropriate LilyPond syntax.
+
 			function getLilyPondOctave(o) {
 				if (o === 3) return ",";
 				if (o === 4) return "";
 				if (o === 5) return "'";
 				if (o === 6) return "''";
 			}
+
+			// Convert an accidental number to the appropriate LilyPond syntax.
 
 			function getLilyPondAccidental(a) {
 				if (a === +1) return 's';
@@ -468,6 +365,8 @@
 				if (a === -2) return 'ff';
 			}
 
+			// Simplify a LilyPond accidental string.
+
 			function simplifyLilyPondAccidental(s) {
 				if (s.match('sf'))
 					return simplifyLilyPondAccidental(s.replace('sf', ''));
@@ -475,7 +374,6 @@
 					return simplifyLilyPondAccidental(s.replace('fs', ''));
 				return s;
 			}
-
 
 			// Construct a Fredboard.
 
@@ -501,13 +399,68 @@
 				this.pitchElement    = [[], [], [], [], [], [],
 									    [], [], [], [], [], []];
 
-				// Build the fretboard table.
+				// Gather frequently used elements.
 
-				this.table = document.createElement('table');
-				var tr     = document.createElement('tr');
+				this.degreeElement[0] = document.getElementById('degree1');
+				this.degreeElement[1] = document.getElementById('degree2');
+				this.degreeElement[2] = document.getElementById('degree3');
+				this.degreeElement[3] = document.getElementById('degree4');
+				this.degreeElement[4] = document.getElementById('degree5');
+				this.degreeElement[5] = document.getElementById('degree6');
+				this.degreeElement[6] = document.getElementById('degree7');
 
-				this.table.appendChild(tr);
-				this.table.className = "fretboard";
+				// Initalize the DOM for this fretboard.
+
+				this.buildDocument();
+				this.update();
+
+			}
+
+			// Build the fretboard table.
+
+			Fretboard.prototype.buildDocument = function() {
+				var that = this;
+
+				var item  = document.createElement('div');
+				var table = document.createElement('table');
+				var thead = document.createElement('thead');
+				var tbody = document.createElement('tbody');
+				var heading = document.createElement('div');
+				var remove = document.createElement('span');
+				var moveup = document.createElement('span');
+				var movedn = document.createElement('span');
+				var diagram = document.createElement('span');
+
+
+				heading.appendChild(remove);
+				heading.appendChild(moveup);
+				heading.appendChild(movedn);
+				heading.appendChild(diagram);
+
+				remove.innerHTML = '&Cross;';
+				moveup.innerHTML = '&xutri;';
+				movedn.innerHTML = '&xdtri;';
+
+				remove.className = 'control';
+				moveup.className = 'control';
+				movedn.className = 'control';
+				heading.className = 'controlpanel';
+
+				remove.addEventListener('click', function () { that.remove(); });
+				moveup.addEventListener('click', function () { that.moveup(); });
+				movedn.addEventListener('click', function () { that.movedn(); });
+
+				item.appendChild(heading);
+				item.appendChild(table);
+				item.className = 'item';
+
+				table.className = "fretboard";
+
+				var tr = document.createElement('tr');
+
+				table.appendChild(thead);
+				table.appendChild(tbody);
+				thead.appendChild(tr);
 
 				for (var f = 0; f < this.maxFret; f++) {
 					var th = document.createElement('th');
@@ -519,7 +472,7 @@
 				{
 					var tr = document.createElement('tr');
 
-					this.table.appendChild(tr);
+					tbody.appendChild(tr);
 
 					for (var f = 0; f < this.maxFret; f++) {
 						var td  = document.createElement('td');
@@ -528,6 +481,8 @@
 						this.positionElement[s][f] = div;
 						this.pitchElement[pitchAtPosition(s, f)].push(div);
 
+						div.addEventListener('click', makeNoteToggler(this, s, f));
+
 						td.className = classAtPosition(s, f);
 
 						td.appendChild(div);
@@ -535,19 +490,15 @@
 					}
 				}
 
-				document.body.appendChild(this.table);
+				this.diagram = diagram;
+				this.diagram.className = "diagram";
 
-				// Gather other frequently used elements.
+				this.item = item;
+				this.item.addEventListener('click', function() {
+					selectFretboard(that);
+				})
 
-				this.degreeElement[0] = document.getElementById('degree1');
-				this.degreeElement[1] = document.getElementById('degree2');
-				this.degreeElement[2] = document.getElementById('degree3');
-				this.degreeElement[3] = document.getElementById('degree4');
-				this.degreeElement[4] = document.getElementById('degree5');
-				this.degreeElement[5] = document.getElementById('degree6');
-				this.degreeElement[6] = document.getElementById('degree7');
-
-				this.update();
+				document.body.appendChild(item);
 			}
 
 			// Null the className on all position elements.
@@ -622,7 +573,19 @@
 
 				var str = '<' + chord.join(' ') + '>1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
 
-				document.getElementById('diagram').textContent = str;
+				this.diagram.textContent = str;
+			}
+
+			Fretboard.prototype.remove = function() {
+				console.log("remove");
+			}
+
+			Fretboard.prototype.moveup = function() {
+				console.log("moveup");
+			}
+
+			Fretboard.prototype.movedn = function() {
+				console.log("movedn");
 			}
 
 			// Update the DOM to reflect the current state.
@@ -634,9 +597,25 @@
 				this.setDiagram();
 			}
 
+			// Toggle the mark on a position.
+
+			Fretboard.prototype.toggleNote = function(s, f) {
+				if (this.currentMark[s] == f)
+					this.currentMark[s] = undefined;
+				else
+					this.currentMark[s] = f;
+				this.update();
+			}
+
+			function makeNoteToggler(fretboard, s, f) {
+				return function (event) {
+					fretboard.toggleNote(s, f);
+				}
+			}
+
 			// Select a root note.
 
-			function onChangeRoot(s) {
+			function changeRoot(s) {
 				for (var d = 0; d < 7; d++)
 					currentFretboard.degreeElement[d].innerHTML = html[key[s][d]];
 				currentFretboard.currentRoot = s;
@@ -645,19 +624,19 @@
 
 			// Select a chord tone.
 
-			function onChangeTone(e) {
+			function changeTone(e) {
 				currentFretboard.currentTone[e.target.value] = e.target.parentElement.id;
 				currentFretboard.update();
 			}
 
-			// Toggle the mark on a position.
+			// Change the current fretboard to the given fretboard.
 
-			Fretboard.prototype.onClickNote = function(e, s, f) {
-				if (this.currentMark[s] == f)
-					this.currentMark[s] = undefined;
-				else
-					this.currentMark[s] = f;
-				this.update();
+			function selectFretboard(fb) {
+				if (currentFretboard)
+					currentFretboard.item.className = "item unselected";
+
+				currentFretboard = fb;
+				currentFretboard.item.className = "item selected";
 			}
 		</script>
 	</body>

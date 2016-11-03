@@ -26,13 +26,12 @@
 				border-radius: 2px;
 				border: 1px solid #ABA;
 				background: #DED;
-				height: 2em;
-				width: 2em;
+				width: 1.5em;
+				line-height: 1.5em;
 				text-align: center;
 				vertical-align: middle;
 				cursor: pointer;
 				margin: 2px;
-				line-height: 2em;
 				font-weight: bold;
 			}
 			span.control:hover {
@@ -196,7 +195,7 @@
 
 			.diagram {
 				font-family: monospace;
-				font-size: 150%;
+				font-size: 100%;
 				color: #888;
 				margin-left: 1em;
 			}
@@ -206,7 +205,7 @@
 			}
 		</style>
 	</head>
-	<body onload="selectFretboard(new Fretboard());">
+	<body onload="init()">
 		<div id="configuration">
 			<table class="rootmenu">
 				<tr><th>Root</th></tr>
@@ -235,119 +234,119 @@
 				<tr>
 					<td id="degree1">C</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone0" value="0" checked></span>
+						<span><input id="n0" type="radio" onchange="changeTone(event)" name="tone0" value="0" checked></span>
 					</td>
 					<td>
-						<span id="t1"><input type="radio" onchange="changeTone(event)" name="tone0" value="0"><img src="img/t1.svg"></span>
+						<span><input id="t1" type="radio" onchange="changeTone(event)" name="tone0" value="0"><img src="img/t1.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone1" value="1" checked></span>
+						<span><input id="n1" type="radio" onchange="changeTone(event)" name="tone1" value="1" checked></span>
 					</td>
 					<td>
-						<span id="t2f"><input type="radio" onchange="changeTone(event)" name="tone1" value="1"><img src="img/t2f.svg"></span>
-						<span id="t9f"><input type="radio" onchange="changeTone(event)" name="tone1" value="1"><img src="img/t9f.svg"></span>
+						<span><input id="t2f" type="radio" onchange="changeTone(event)" name="tone1" value="1"><img src="img/t2f.svg"></span>
+						<span><input id="t9f" type="radio" onchange="changeTone(event)" name="tone1" value="1"><img src="img/t9f.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree2">D</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone2" value="2" checked></span>
+						<span><input id="n2" type="radio" onchange="changeTone(event)" name="tone2" value="2" checked></span>
 					</td>
 					<td>
-						<span id="t2"><input type="radio" onchange="changeTone(event)" name="tone2" value="2"><img src="img/t2.svg"></span>
-						<span id="t9"><input type="radio" onchange="changeTone(event)" name="tone2" value="2"><img src="img/t9.svg"></span>
+						<span><input id="t2" type="radio" onchange="changeTone(event)" name="tone2" value="2"><img src="img/t2.svg"></span>
+						<span><input id="t9" type="radio" onchange="changeTone(event)" name="tone2" value="2"><img src="img/t9.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone3" value="3" checked></span>
+						<span><input id="n3" type="radio" onchange="changeTone(event)" name="tone3" value="3" checked></span>
 					</td>
 					<td>
-						<span id="t3f"><input type="radio" onchange="changeTone(event)" name="tone3" value="3"><img src="img/t3f.svg"></span>
-						<span id="t9s"><input type="radio" onchange="changeTone(event)" name="tone3" value="3"><img src="img/t9s.svg"></span>
+						<span><input id="t3f" type="radio" onchange="changeTone(event)" name="tone3" value="3"><img src="img/t3f.svg"></span>
+						<span><input id="t9s" type="radio" onchange="changeTone(event)" name="tone3" value="3"><img src="img/t9s.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree3">E</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone4" value="4" checked></span>
+						<span><input id="n4" type="radio" onchange="changeTone(event)" name="tone4" value="4" checked></span>
 					</td>
 					<td>
-						<span id="t3"><input type="radio" onchange="changeTone(event)" name="tone4" value="4"><img src="img/t3.svg"></span>
-						<span id="t11f"><input type="radio" onchange="changeTone(event)" name="tone4" value="4"><img src="img/t11f.svg"></span>
+						<span><input id="t3" type="radio" onchange="changeTone(event)" name="tone4" value="4"><img src="img/t3.svg"></span>
+						<span><input id="t11f" type="radio" onchange="changeTone(event)" name="tone4" value="4"><img src="img/t11f.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree4">F</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone5" value="5" checked></span>
+						<span><input id="n5" type="radio" onchange="changeTone(event)" name="tone5" value="5" checked></span>
 					</td>
 					<td>
-						<span id="t4"><input type="radio" onchange="changeTone(event)" name="tone5" value="5"><img src="img/t4.svg"></span>
-						<span id="t11"><input type="radio" onchange="changeTone(event)" name="tone5" value="5"><img src="img/t11.svg"></span>
+						<span><input id="t4" type="radio" onchange="changeTone(event)" name="tone5" value="5"><img src="img/t4.svg"></span>
+						<span><input id="t11" type="radio" onchange="changeTone(event)" name="tone5" value="5"><img src="img/t11.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone6" value="6" checked></span>
+						<span><input id="n6" type="radio" onchange="changeTone(event)" name="tone6" value="6" checked></span>
 					</td>
 					<td>
-						<span id="t5f"><input type="radio" onchange="changeTone(event)" name="tone6" value="6"><img src="img/t5f.svg"></span>
-						<span id="t11s"><input type="radio" onchange="changeTone(event)" name="tone6" value="6"><img src="img/t11s.svg"></span>
+						<span><input id="t5f" type="radio" onchange="changeTone(event)" name="tone6" value="6"><img src="img/t5f.svg"></span>
+						<span><input id="t11s" type="radio" onchange="changeTone(event)" name="tone6" value="6"><img src="img/t11s.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree5">G</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone7" value="7" checked></span>
+						<span><input id="n7" type="radio" onchange="changeTone(event)" name="tone7" value="7" checked></span>
 					</td>
 					<td>
-						<span id="t5"><input type="radio" onchange="changeTone(event)" name="tone7" value="7"><img src="img/t5.svg"></span>
+						<span><input id="t5" type="radio" onchange="changeTone(event)" name="tone7" value="7"><img src="img/t5.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone8" value="8" checked></span>
+						<span><input id="n8" type="radio" onchange="changeTone(event)" name="tone8" value="8" checked></span>
 					</td>
 					<td>
-						<span id="t5s"><input type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t5s.svg"></span>
-						<span id="t6f"><input type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t6f.svg"></span>
-						<span id="t13f"><input type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t13f.svg"></span>
+						<span><input id="t5s" type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t5s.svg"></span>
+						<span><input id="t6f" type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t6f.svg"></span>
+						<span><input id="t13f" type="radio" onchange="changeTone(event)" name="tone8" value="8"><img src="img/t13f.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree6">A</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone9" value="9" checked></span>
+						<span><input id="n9" type="radio" onchange="changeTone(event)" name="tone9" value="9" checked></span>
 					</td>
 					<td>
-						<span id="t6"><input type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t6.svg"></span>
-						<span id="t7ff"><input type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t7ff.svg"></span>
-						<span id="t13"><input type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t13.svg"></span>
+						<span><input id="t6" type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t6.svg"></span>
+						<span><input id="t7ff" type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t7ff.svg"></span>
+						<span><input id="t13" type="radio" onchange="changeTone(event)" name="tone9" value="9"><img src="img/t13.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td></td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone10" value="10" checked></span>
+						<span><input id="n10" type="radio" onchange="changeTone(event)" name="tone10" value="10" checked></span>
 					</td>
 					<td>
-						<span id="t7f"><input type="radio" onchange="changeTone(event)" name="tone10" value="10"><img src="img/t7f.svg"></span>
+						<span><input id="t7f" type="radio" onchange="changeTone(event)" name="tone10" value="10"><img src="img/t7f.svg"></span>
 					</td>
 				</tr>
 				<tr>
 					<td id="degree7">B</td>
 					<td>
-						<span><input type="radio" onchange="changeTone(event)" name="tone11" value="11" checked></span>
+						<span><input id="n11" type="radio" onchange="changeTone(event)" name="tone11" value="11" checked></span>
 					</td>
 					<td>
-						<span id="t7"><input type="radio" onchange="changeTone(event)" name="tone11" value="11"><img src="img/t7.svg"></span>
+						<span><input id="t7" type="radio" onchange="changeTone(event)" name="tone11" value="11"><img src="img/t7.svg"></span>
 					</td>
 				</tr>
 			</table>
@@ -441,6 +440,25 @@
 				't13' : { degree: 5, offset:  0 },
 			}
 
+			degreeElement   = [[], [], [], [], [], [], []];
+
+			function init() {
+
+				// Gather frequently used elements.
+
+				degreeElement[0] = document.getElementById('degree1');
+				degreeElement[1] = document.getElementById('degree2');
+				degreeElement[2] = document.getElementById('degree3');
+				degreeElement[3] = document.getElementById('degree4');
+				degreeElement[4] = document.getElementById('degree5');
+				degreeElement[5] = document.getElementById('degree6');
+				degreeElement[6] = document.getElementById('degree7');
+
+				// Instantiate an initial fretboard.
+
+				selectFretboard(new Fretboard());
+			}
+
 			// Return the pitch (0-11) at string s (0-5) fret f.
 
 			function pitchAtPosition(s, f) {
@@ -500,7 +518,7 @@
 				return s;
 			}
 
-			// Construct a Fredboard.
+			// Construct a fretboard.
 
 			function Fretboard(that) {
 				this.maxFret     = 16;
@@ -519,33 +537,19 @@
 
 				// Frequently accessed DOM elements.
 
-				this.degreeElement   = [[], [], [], [], [], [], []];
 				this.positionElement = [[], [], [], [], [], []];
 				this.pitchElement    = [[], [], [], [], [], [],
 									    [], [], [], [], [], []];
 
-				// Gather frequently used elements.
-
-				this.degreeElement[0] = document.getElementById('degree1');
-				this.degreeElement[1] = document.getElementById('degree2');
-				this.degreeElement[2] = document.getElementById('degree3');
-				this.degreeElement[3] = document.getElementById('degree4');
-				this.degreeElement[4] = document.getElementById('degree5');
-				this.degreeElement[5] = document.getElementById('degree6');
-				this.degreeElement[6] = document.getElementById('degree7');
-
 				// Initalize the DOM for this fretboard.
 
 				this.buildDocument();
-
-				// Update the DOM to reflect the current state.
-
 				this.update();
 
 				// Add the new fretboard to the document.
 
 				if (that)
-					document.getElementById("content").insertBefore(this.item, that.item.nextSibling);
+					document.getElementById("content").insertBefore(this.item, that);
 				else
 					document.getElementById("content").appendChild(this.item);
 			}
@@ -717,14 +721,20 @@
 				this.diagram.textContent = str;
 			}
 
+			// Insert a new fretboard after this one.
+
 			Fretboard.prototype.insert = function() {
-				selectFretboard(new Fretboard(currentFretboard));
+				selectFretboard(new Fretboard(this.item.nextSibling));
 			}
+
+			// Remove the fretboard (if it's not the only one left).
 
 			Fretboard.prototype.remove = function() {
 				if (document.getElementsByClassName("item").length > 1)
 					this.item.remove();
 			}
+
+			// Shift the fretboard up.
 
 			Fretboard.prototype.moveup = function() {
 				var curr = this.item;
@@ -733,6 +743,8 @@
 				if (prev && prev.tagName === 'DIV')
 					document.getElementById("content").insertBefore(curr, prev);
 			}
+
+			// Shift the fretboard down.
 
 			Fretboard.prototype.movedn = function() {
 				var curr = this.item;
@@ -754,12 +766,16 @@
 			// Toggle the mark on a position.
 
 			Fretboard.prototype.toggleNote = function(s, f) {
-				if (this.currentMark[s] == f)
-					this.currentMark[s] = undefined;
-				else
-					this.currentMark[s] = f;
-				this.update();
+				if (this.positionElement[s][f].className.length > 0) {
+					if (this.currentMark[s] == f)
+						this.currentMark[s] = undefined;
+					else
+						this.currentMark[s] = f;
+					this.update();
+				}
 			}
+
+			// Return an event handler closing toggleNote over its arguments.
 
 			function makeNoteToggler(fretboard, s, f) {
 				return function (event) {
@@ -771,7 +787,7 @@
 
 			function changeRoot(s) {
 				for (var d = 0; d < 7; d++)
-					currentFretboard.degreeElement[d].innerHTML = html[key[s][d]];
+					degreeElement[d].innerHTML = html[key[s][d]];
 				currentFretboard.currentRoot = s;
 				currentFretboard.update();
 			}
@@ -779,7 +795,7 @@
 			// Select a chord tone.
 
 			function changeTone(e) {
-				currentFretboard.currentTone[e.target.value] = e.target.parentElement.id;
+				currentFretboard.currentTone[e.target.value] = e.target.id;
 				currentFretboard.update();
 			}
 
@@ -791,6 +807,23 @@
 
 				currentFretboard = fb;
 				currentFretboard.item.className = "item selected";
+
+				document.getElementById("n0").checked = true;
+				document.getElementById("n1").checked = true;
+				document.getElementById("n2").checked = true;
+				document.getElementById("n3").checked = true;
+				document.getElementById("n4").checked = true;
+				document.getElementById("n5").checked = true;
+				document.getElementById("n6").checked = true;
+				document.getElementById("n7").checked = true;
+				document.getElementById("n8").checked = true;
+				document.getElementById("n9").checked = true;
+				document.getElementById("n10").checked = true;
+				document.getElementById("n11").checked = true;
+
+				for (var i = 0; i < 12; i++)
+					if (currentFretboard.currentTone[i])
+						document.getElementById(currentFretboard.currentTone[i]).checked = true;
 			}
 		</script>
 	</body>

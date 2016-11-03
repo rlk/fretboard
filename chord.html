@@ -1,12 +1,6 @@
 <html>
 	<head>
 		<style>
-			.center {
-				margin: 0 auto;
-			}
-			.hidden {
-				display: none;
-			}
 			body {
 				margin: 3em;
 				font-family: Arial;
@@ -37,6 +31,17 @@
 			span.control:hover {
 				background: #DFD;
 			}
+			span.diagram {
+				font-family: monospace;
+				font-size: 100%;
+				color: #888;
+				margin-left: 1em;
+			}
+			p.note {
+				text-align: center;
+				color: #CCC;
+			}
+
 			div.item {
 				margin-top: 1em;
 				margin-bottom: 1em;
@@ -117,22 +122,8 @@
 				vertical-align: middle;
 			}
 
-			table.equal {
-				table-layout: fixed;
-				width: 100%;
-			}
-			table.equal td {
-				border: 1px solid black;
-				width: 2%;
-				text-align: left;
-				vertical-align: top;
-			}
-			table.equal input {
-				vertical-align: middle;
-			}
-			table.equal img {
-				vertical-align: middle;
-			}
+			/* Fretboard table */
+
 			table.fretboard {
 				border-collapse: collapse;
 			}
@@ -161,6 +152,9 @@
 			table.fretboard td.f13 { width: 2.3596% }
 			table.fretboard td.f14 { width: 2.2272% }
 			table.fretboard td.f15 { width: 2.1022% }
+
+			/* Fretboard markers */
+
 			table.fretboard div {
 				float: right;
 				min-width:  20pt;
@@ -193,16 +187,6 @@
 
 			table.fretboard div.marked { content: url("img/mark.svg"); }
 
-			.diagram {
-				font-family: monospace;
-				font-size: 100%;
-				color: #888;
-				margin-left: 1em;
-			}
-			.note {
-				text-align: center;
-				color: #CCC;
-			}
 		</style>
 	</head>
 	<body onload="init()">
@@ -559,16 +543,29 @@
 			Fretboard.prototype.buildDocument = function() {
 				var that = this;
 
-				var item  = document.createElement('div');
-				var table = document.createElement('table');
-				var thead = document.createElement('thead');
-				var tbody = document.createElement('tbody');
+				var item    = document.createElement('div');
+				var table   = document.createElement('table');
+				var thead   = document.createElement('thead');
+				var tbody   = document.createElement('tbody');
 				var heading = document.createElement('div');
 				var insert  = document.createElement('span');
-				var moveup = document.createElement('span');
-				var movedn = document.createElement('span');
-				var remove = document.createElement('span');
+				var moveup  = document.createElement('span');
+				var movedn  = document.createElement('span');
+				var remove  = document.createElement('span');
 				var diagram = document.createElement('span');
+
+				item   .className = 'item';
+				table  .className = 'fretboard';
+				insert .className = 'control';
+				remove .className = 'control';
+				moveup .className = 'control';
+				movedn .className = 'control';
+				diagram.className = 'diagram';
+
+				table.appendChild(thead);
+				table.appendChild(tbody);
+
+				// Build the fretboard controls.
 
 				heading.appendChild(remove);
 				heading.appendChild(moveup);
@@ -586,27 +583,15 @@
 				moveup.title = 'Move Up';
 				movedn.title = 'Move Down';
 
-				insert.className = 'control';
-				remove.className = 'control';
-				moveup.className = 'control';
-				movedn.className = 'control';
-				heading.className = 'controlpanel';
-
 				insert.addEventListener('click', function () { that.insert(); });
 				remove.addEventListener('click', function () { that.remove(); });
 				moveup.addEventListener('click', function () { that.moveup(); });
 				movedn.addEventListener('click', function () { that.movedn(); });
 
-				item.appendChild(heading);
-				item.appendChild(table);
-				item.className = 'item';
-
-				table.className = "fretboard";
+				// Build the fret numbering.
 
 				var tr = document.createElement('tr');
 
-				table.appendChild(thead);
-				table.appendChild(tbody);
 				thead.appendChild(tr);
 
 				for (var f = 0; f < this.maxFret; f++) {
@@ -614,6 +599,8 @@
 					th.textContent = f;
 					tr.appendChild(th);
 				}
+
+				// Build the fretboard table.
 
 				for (var s = 0; s < 6; s++)
 				{
@@ -637,13 +624,12 @@
 					}
 				}
 
-				this.diagram = diagram;
-				this.diagram.className = "diagram";
+				item.appendChild(heading);
+				item.appendChild(table);
+				item.addEventListener('click', function() { selectFretboard(that); })
 
-				this.item = item;
-				this.item.addEventListener('click', function() {
-					selectFretboard(that);
-				})
+				this.diagram = diagram;
+				this.item    = item;
 			}
 
 			// Null the className on all position elements.
@@ -718,7 +704,6 @@
 				if (chord.length > 0)
 					this.diagram.textContent = '<' + chord.join(' ') + '>'
 				                             + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
-
 			}
 
 			// Insert a new fretboard after this one.
@@ -793,7 +778,6 @@
 
 				for (var d = 0; d < 7; d++)
 					degreeElement[d].innerHTML = html[key[id][d]];
-
 			}
 
 			// Select a chord tone.

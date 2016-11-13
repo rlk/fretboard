@@ -24,32 +24,42 @@ DEALINGS IN THE SOFTWARE. -->
 <html>
 	<head>
 		<style>
+			/* Top-level structure */
+
+			html {
+				height: 100%;
+			}
 			body {
-				margin: 3em;
+				height: 100%;
 				font-family: Arial;
 			}
-
+			#layout {
+				height: 100%;
+				display: flex;
+				flex-direction: row;
+				overflow: hidden;
+			}
 			#configuration {
-				position: fixed;
-				width: 25%;
+				flex-shrink: 0;
 			}
 			#content {
-				margin-left: 25%;
-				width: 75%;
+				overflow: scroll;
 			}
+
+			/* Controls */
 
 			span.control {
 				display: inline-block;
-				border-radius: 2px;
+				margin: 2px;
 				border: 1px solid #ABA;
+				border-radius: 2px;
 				background: #DED;
 				width: 1.5em;
 				line-height: 1.5em;
 				text-align: center;
+				font-weight: bold;
 				vertical-align: middle;
 				cursor: pointer;
-				margin: 2px;
-				font-weight: bold;
 			}
 			span.control:hover {
 				background: #DFD;
@@ -64,6 +74,8 @@ DEALINGS IN THE SOFTWARE. -->
 				text-align: center;
 				color: #CCC;
 			}
+
+			/* Content list items */
 
 			div.item {
 				margin-top: 1em;
@@ -83,7 +95,7 @@ DEALINGS IN THE SOFTWARE. -->
 				background: #FFD;
 			}
 
-			/* Rote selection menu */
+			/* Root selection menu */
 
 			table.rootmenu {
 				display: inline-block;
@@ -213,154 +225,156 @@ DEALINGS IN THE SOFTWARE. -->
 		</style>
 	</head>
 	<body onload="init()">
-		<div id="configuration">
-			<table class="rootmenu">
-				<tr><th>Root</th></tr>
-				<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
-				<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
-				<tr><td><input type="radio" id="d"  onchange="changeRoot('d' )" name="root">D</td></tr>
-				<tr><td><input type="radio" id="a"  onchange="changeRoot('a' )" name="root">A</td></tr>
-				<tr><td><input type="radio" id="e"  onchange="changeRoot('e' )" name="root">E</td></tr>
-				<tr><td><input type="radio" id="b"  onchange="changeRoot('b' )" name="root">B</td></tr>
-				<tr><td><input type="radio" id="fs" onchange="changeRoot('fs')" name="root">F&sharp;</td></tr>
-				<tr><td><input type="radio" id="cs" onchange="changeRoot('cs')" name="root">C&sharp;</td></tr>
-				<tr><td><input type="radio" id="f"  onchange="changeRoot('f' )" name="root">F</td></tr>
-				<tr><td><input type="radio" id="bf" onchange="changeRoot('bf')" name="root">B&flat;</td></tr>
-				<tr><td><input type="radio" id="ef" onchange="changeRoot('ef')" name="root">E&flat;</td></tr>
-				<tr><td><input type="radio" id="af" onchange="changeRoot('af')" name="root">A&flat;</td></tr>
-				<tr><td><input type="radio" id="df" onchange="changeRoot('df')" name="root">D&flat;</td></tr>
-				<tr><td><input type="radio" id="gf" onchange="changeRoot('gf')" name="root">G&flat;</td></tr>
-				<tr><td><input type="radio" id="cf" onchange="changeRoot('cf')" name="root">C&flat;</td></tr>
-			</table>
-			<table class="tonemenu">
-				<tr>
-					<th>Deg</th>
-					<th>None</th>
-					<th>Chord Tone</th>
-				</tr>
-				<tr>
-					<td id="degree1">C</td>
-					<td>
-						<span><input type="radio" id="n0"   onchange="changeTone(0, undefined)" name="tone0" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t1"   onchange="changeTone(0, 't1'   )" name="tone0"><img src="img/t1.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n1"   onchange="changeTone(1, undefined)" name="tone1" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t2f"  onchange="changeTone(1, 't2f'  )" name="tone1"><img src="img/t2f.svg"></span>
-						<span><input type="radio" id="t9f"  onchange="changeTone(1, 't9f'  )" name="tone1"><img src="img/t9f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree2">D</td>
-					<td>
-						<span><input type="radio" id="n2"   onchange="changeTone(2, undefined)" name="tone2" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t2"   onchange="changeTone(2, 't2'   )" name="tone2"><img src="img/t2.svg"></span>
-						<span><input type="radio" id="t9"   onchange="changeTone(2, 't9'   )" name="tone2"><img src="img/t9.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n3"   onchange="changeTone(3, undefined)" name="tone3" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t3f"  onchange="changeTone(3, 't3f'  )" name="tone3"><img src="img/t3f.svg"></span>
-						<span><input type="radio" id="t9s"  onchange="changeTone(3, 't9s'  )" name="tone3"><img src="img/t9s.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree3">E</td>
-					<td>
-						<span><input type="radio" id="n4"   onchange="changeTone(4, undefined)" name="tone4" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t3"   onchange="changeTone(4, 't3'   )" name="tone4"><img src="img/t3.svg"></span>
-						<span><input type="radio" id="t11f" onchange="changeTone(4, 't11f' )" name="tone4"><img src="img/t11f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree4">F</td>
-					<td>
-						<span><input type="radio" id="n5"   onchange="changeTone(5, undefined)" name="tone5" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t4"   onchange="changeTone(5, 't4'   )" name="tone5"><img src="img/t4.svg"></span>
-						<span><input type="radio" id="t11"  onchange="changeTone(5, 't11'  )" name="tone5"><img src="img/t11.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n6"   onchange="changeTone(6, undefined)" name="tone6" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5f"  onchange="changeTone(6, 't5f'  )" name="tone6"><img src="img/t5f.svg"></span>
-						<span><input type="radio" id="t11s" onchange="changeTone(6, 't11s' )" name="tone6"><img src="img/t11s.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree5">G</td>
-					<td>
-						<span><input type="radio" id="n7"   onchange="changeTone(7, undefined)" name="tone7" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5"   onchange="changeTone(7, 't5'   )" name="tone7"><img src="img/t5.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n8"   onchange="changeTone(8, undefined)" name="tone8" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5s"  onchange="changeTone(8, 't5s'  )" name="tone8"><img src="img/t5s.svg"></span>
-						<span><input type="radio" id="t6f"  onchange="changeTone(8, 't6f'  )" name="tone8"><img src="img/t6f.svg"></span>
-						<span><input type="radio" id="t13f" onchange="changeTone(8, 't13f' )" name="tone8"><img src="img/t13f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree6">A</td>
-					<td>
-						<span><input type="radio" id="n9"   onchange="changeTone(9, undefined)" name="tone9" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t6"   onchange="changeTone(9, 't6'   )" name="tone9"><img src="img/t6.svg"></span>
-						<span><input type="radio" id="t7ff" onchange="changeTone(9, 't7ff' )" name="tone9"><img src="img/t7ff.svg"></span>
-						<span><input type="radio" id="t13"  onchange="changeTone(9, 't13'  )" name="tone9"><img src="img/t13.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n10"  onchange="changeTone(10, undefined)" name="tone10" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t7f"  onchange="changeTone(10, 't7f'  )" name="tone10"><img src="img/t7f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree7">B</td>
-					<td>
-						<span><input type="radio" id="n11"  onchange="changeTone(11, undefined)" name="tone11" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t7"   onchange="changeTone(11, 't7'   )" name="tone11"><img src="img/t7.svg"></span>
-					</td>
-				</tr>
-			</table>
-			<p class="note">Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
-		</div>
-		<div id="content">
-			<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
+		<div id="layout">
+			<div id="configuration">
+				<table class="rootmenu">
+					<tr><th>Root</th></tr>
+					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
+					<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
+					<tr><td><input type="radio" id="d"  onchange="changeRoot('d' )" name="root">D</td></tr>
+					<tr><td><input type="radio" id="a"  onchange="changeRoot('a' )" name="root">A</td></tr>
+					<tr><td><input type="radio" id="e"  onchange="changeRoot('e' )" name="root">E</td></tr>
+					<tr><td><input type="radio" id="b"  onchange="changeRoot('b' )" name="root">B</td></tr>
+					<tr><td><input type="radio" id="fs" onchange="changeRoot('fs')" name="root">F&sharp;</td></tr>
+					<tr><td><input type="radio" id="cs" onchange="changeRoot('cs')" name="root">C&sharp;</td></tr>
+					<tr><td><input type="radio" id="f"  onchange="changeRoot('f' )" name="root">F</td></tr>
+					<tr><td><input type="radio" id="bf" onchange="changeRoot('bf')" name="root">B&flat;</td></tr>
+					<tr><td><input type="radio" id="ef" onchange="changeRoot('ef')" name="root">E&flat;</td></tr>
+					<tr><td><input type="radio" id="af" onchange="changeRoot('af')" name="root">A&flat;</td></tr>
+					<tr><td><input type="radio" id="df" onchange="changeRoot('df')" name="root">D&flat;</td></tr>
+					<tr><td><input type="radio" id="gf" onchange="changeRoot('gf')" name="root">G&flat;</td></tr>
+					<tr><td><input type="radio" id="cf" onchange="changeRoot('cf')" name="root">C&flat;</td></tr>
+				</table>
+				<table class="tonemenu">
+					<tr>
+						<th>Deg</th>
+						<th>None</th>
+						<th>Chord Tone</th>
+					</tr>
+					<tr>
+						<td id="degree1">C</td>
+						<td>
+							<span><input type="radio" id="n0"   onchange="changeTone(0, undefined)" name="tone0" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t1"   onchange="changeTone(0, 't1'   )" name="tone0"><img src="img/t1.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n1"   onchange="changeTone(1, undefined)" name="tone1" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t2f"  onchange="changeTone(1, 't2f'  )" name="tone1"><img src="img/t2f.svg"></span>
+							<span><input type="radio" id="t9f"  onchange="changeTone(1, 't9f'  )" name="tone1"><img src="img/t9f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree2">D</td>
+						<td>
+							<span><input type="radio" id="n2"   onchange="changeTone(2, undefined)" name="tone2" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t2"   onchange="changeTone(2, 't2'   )" name="tone2"><img src="img/t2.svg"></span>
+							<span><input type="radio" id="t9"   onchange="changeTone(2, 't9'   )" name="tone2"><img src="img/t9.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n3"   onchange="changeTone(3, undefined)" name="tone3" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t3f"  onchange="changeTone(3, 't3f'  )" name="tone3"><img src="img/t3f.svg"></span>
+							<span><input type="radio" id="t9s"  onchange="changeTone(3, 't9s'  )" name="tone3"><img src="img/t9s.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree3">E</td>
+						<td>
+							<span><input type="radio" id="n4"   onchange="changeTone(4, undefined)" name="tone4" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t3"   onchange="changeTone(4, 't3'   )" name="tone4"><img src="img/t3.svg"></span>
+							<span><input type="radio" id="t11f" onchange="changeTone(4, 't11f' )" name="tone4"><img src="img/t11f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree4">F</td>
+						<td>
+							<span><input type="radio" id="n5"   onchange="changeTone(5, undefined)" name="tone5" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t4"   onchange="changeTone(5, 't4'   )" name="tone5"><img src="img/t4.svg"></span>
+							<span><input type="radio" id="t11"  onchange="changeTone(5, 't11'  )" name="tone5"><img src="img/t11.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n6"   onchange="changeTone(6, undefined)" name="tone6" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t5f"  onchange="changeTone(6, 't5f'  )" name="tone6"><img src="img/t5f.svg"></span>
+							<span><input type="radio" id="t11s" onchange="changeTone(6, 't11s' )" name="tone6"><img src="img/t11s.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree5">G</td>
+						<td>
+							<span><input type="radio" id="n7"   onchange="changeTone(7, undefined)" name="tone7" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t5"   onchange="changeTone(7, 't5'   )" name="tone7"><img src="img/t5.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n8"   onchange="changeTone(8, undefined)" name="tone8" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t5s"  onchange="changeTone(8, 't5s'  )" name="tone8"><img src="img/t5s.svg"></span>
+							<span><input type="radio" id="t6f"  onchange="changeTone(8, 't6f'  )" name="tone8"><img src="img/t6f.svg"></span>
+							<span><input type="radio" id="t13f" onchange="changeTone(8, 't13f' )" name="tone8"><img src="img/t13f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree6">A</td>
+						<td>
+							<span><input type="radio" id="n9"   onchange="changeTone(9, undefined)" name="tone9" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t6"   onchange="changeTone(9, 't6'   )" name="tone9"><img src="img/t6.svg"></span>
+							<span><input type="radio" id="t7ff" onchange="changeTone(9, 't7ff' )" name="tone9"><img src="img/t7ff.svg"></span>
+							<span><input type="radio" id="t13"  onchange="changeTone(9, 't13'  )" name="tone9"><img src="img/t13.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n10"  onchange="changeTone(10, undefined)" name="tone10" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t7f"  onchange="changeTone(10, 't7f'  )" name="tone10"><img src="img/t7f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree7">B</td>
+						<td>
+							<span><input type="radio" id="n11"  onchange="changeTone(11, undefined)" name="tone11" checked></span>
+						</td>
+						<td>
+							<span><input type="radio" id="t7"   onchange="changeTone(11, 't7'   )" name="tone11"><img src="img/t7.svg"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div id="content">
+				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
+				<p class="note">Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
+			</div>
 		</div>
 
 		<script>
@@ -462,6 +476,11 @@ DEALINGS IN THE SOFTWARE. -->
 
 				// Instantiate an initial fretboard.
 
+				selectFretboard(new Fretboard());
+				selectFretboard(new Fretboard());
+				selectFretboard(new Fretboard());
+				selectFretboard(new Fretboard());
+				selectFretboard(new Fretboard());
 				selectFretboard(new Fretboard());
 			}
 

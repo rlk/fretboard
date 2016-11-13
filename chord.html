@@ -82,6 +82,7 @@ DEALINGS IN THE SOFTWARE. -->
 				color: #888;
 				margin-left: 1em;
 			}
+
 			/* Content list items */
 
 			div.item {
@@ -102,70 +103,49 @@ DEALINGS IN THE SOFTWARE. -->
 				background: #FFD;
 			}
 
-			/* Root selection menu */
+			/* Menu table */
 
-			table.rootmenu {
+			table.menu {
 				height: 100%;
 				vertical-align: top;
 				border-collapse: collapse;
 				margin: 0.5em;
 				padding: 0.5em;
 			}
-			table.rootmenu th {
+			table.menu th {
 				font-weight: normal;
 				height: 2em;
 			}
-
-			table.rootmenu td {
+			table.menu td {
 				border: 1px solid black;
 				padding: 3px;
+				text-align: center;
+			}
+			table.menu input {
+				vertical-align: middle;
+			}
+			table.menu img {
+				vertical-align: middle;
+				padding: 2px 2px;
 			}
 
 			/* Tone selection menu */
 
-			table.tonemenu {
-				height: 100%;
-				vertical-align: top;
-				border-collapse: collapse;
-				margin: 0.5em;
-				padding: 0.5em;
-			}
-			table.tonemenu th {
-				font-weight: normal;
-				height: 2em;
-			}
-
-			table.tonemenu tr:nth-child(2),
-			table.tonemenu tr:nth-child(4),
-			table.tonemenu tr:nth-child(6),
-			table.tonemenu tr:nth-child(7),
-			table.tonemenu tr:nth-child(9),
-			table.tonemenu tr:nth-child(11),
-			table.tonemenu tr:nth-child(13) {
+			table.piano tr:nth-child(2),
+			table.piano tr:nth-child(4),
+			table.piano tr:nth-child(6),
+			table.piano tr:nth-child(7),
+			table.piano tr:nth-child(9),
+			table.piano tr:nth-child(11),
+			table.piano tr:nth-child(13) {
 				background-color: #EEE;
 			}
-			table.tonemenu tr:nth-child(3),
-			table.tonemenu tr:nth-child(5),
-			table.tonemenu tr:nth-child(8),
-			table.tonemenu tr:nth-child(10),
-			table.tonemenu tr:nth-child(12) {
+			table.piano tr:nth-child(3),
+			table.piano tr:nth-child(5),
+			table.piano tr:nth-child(8),
+			table.piano tr:nth-child(10),
+			table.piano tr:nth-child(12) {
 				background-color: #CCC;
-			}
-			table.tonemenu td:first-child {
-				text-align: center;
-			}
-			table.tonemenu td:nth-child(2) {
-				text-align: center;
-			}
-			table.tonemenu td {
-				border: 1px solid black;
-			}
-			table.tonemenu input {
-				vertical-align: middle;
-			}
-			table.tonemenu img {
-				vertical-align: middle;
-				padding: 2px 2px;
 			}
 
 			/* Fretboard table */
@@ -233,12 +213,23 @@ DEALINGS IN THE SOFTWARE. -->
 
 			table.fretboard div.marked { content: url("img/mark.svg"); }
 
+			/* Remove the GUI elements for printing. */
+
+			@media print {
+				h1           { display: none; }
+				div.toolbar  { display: none; }
+				p.note       { display: none; }
+				div.selected { border:  none; }
+				span.control { display: none; }
+				span.diagram { display: none; }
+			}
+
 		</style>
 	</head>
 	<body onload="init()">
 		<div id="layout">
 			<div class="toolbar">
-				<table class="rootmenu">
+				<table class="menu">
 					<tr><th>Root</th></tr>
 					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
 					<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
@@ -258,7 +249,7 @@ DEALINGS IN THE SOFTWARE. -->
 				</table>
 			</div>
 			<div class="toolbar">
-				<table class="tonemenu">
+				<table class="menu piano">
 					<tr>
 						<th>Deg</th>
 						<th>None</th>
@@ -389,7 +380,7 @@ DEALINGS IN THE SOFTWARE. -->
 				<div id="fretboards">
 				</div>
 				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
-				<p class="note">Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
+				<p class="note">Fretboard Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
 			</div>
 		</div>
 

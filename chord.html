@@ -46,6 +46,7 @@ DEALINGS IN THE SOFTWARE. -->
 			}
 			div.toolbar {
 				height: 100%;
+				font-size: 75%;
 				flex-shrink: 0;
 				overflow: scroll;
 			}
@@ -88,7 +89,7 @@ DEALINGS IN THE SOFTWARE. -->
 			div.item {
 				margin-top: 1em;
 				margin-bottom: 1em;
-				padding: 8px;
+				padding: 0.5em;
 			}
 			div.unselected {
 				border: 2px solid white;
@@ -106,7 +107,6 @@ DEALINGS IN THE SOFTWARE. -->
 			/* Menu table */
 
 			table.menu {
-				height: 100%;
 				vertical-align: top;
 				border-collapse: collapse;
 				margin: 0.5em;
@@ -118,15 +118,17 @@ DEALINGS IN THE SOFTWARE. -->
 			}
 			table.menu td {
 				border: 1px solid black;
-				padding: 3px;
-				text-align: center;
+				padding: 0.5em 0.25em;
+				text-align: left;
 			}
 			table.menu input {
 				vertical-align: middle;
 			}
 			table.menu img {
 				vertical-align: middle;
-				padding: 2px 2px;
+			}
+			table.piano td:nth-child(2) {
+				text-align:center;
 			}
 
 			/* Tone selection menu */
@@ -213,13 +215,13 @@ DEALINGS IN THE SOFTWARE. -->
 
 			table.fretboard div.marked { content: url("img/mark.svg"); }
 
-			/* Remove the GUI elements for printing. */
+			/* Remove the GUI elements for printing. As of this writing, none of the major browsers correctly print background gradients. */
 
 			@media print {
 				h1           { display: none; }
 				div.toolbar  { display: none; }
 				p.note       { display: none; }
-				div.selected { border:  none; }
+				div.selected { border:  none; background: inherit; }
 				span.control { display: none; }
 				span.diagram { display: none; }
 			}
@@ -627,10 +629,10 @@ DEALINGS IN THE SOFTWARE. -->
 				heading.appendChild(insert);
 				heading.appendChild(diagram);
 
-				insert.innerHTML = '&xoplus;';
-				remove.innerHTML = '&xotime;';
-				moveup.innerHTML = '&xutri;';
-				movedn.innerHTML = '&xdtri;';
+				insert.innerHTML = '&plus;';
+				remove.innerHTML = '&times;';
+				moveup.innerHTML = '&uarr;';
+				movedn.innerHTML = '&darr;';
 
 				insert.title = 'Add Fretboard';
 				remove.title = 'Delete Fretboard';

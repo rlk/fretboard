@@ -489,6 +489,17 @@ DEALINGS IN THE SOFTWARE. -->
 				return 4 + Math.floor((f - 8) / 12);
 			}
 
+			// Apply an accidental to a pitch (0-11).
+
+			function offsetPitch(p, a) {
+				var r = p + a;
+
+				if (r <   0) return offsetPitch(r + 12, 0);
+				if (r >= 12) return offsetPitch(r - 12, 0);
+
+				return r;
+			}
+
 			// Return the className of the element at string s (0-5) fret f.
 
 			function classAtPosition(s, f) {
@@ -688,7 +699,7 @@ DEALINGS IN THE SOFTWARE. -->
 					{
 						var d = tone[t].degree;
 						var a = tone[t].offset;
-						var k = (pitch[key[this.currentRoot][d]] + a) % 12;
+						var k = offsetPitch(pitch[key[this.currentRoot][d]], a);
 
 						for (var j = 0; j < this.pitchElement[k].length; j++)
 							this.pitchElement[k][j].className = t;
@@ -780,6 +791,18 @@ DEALINGS IN THE SOFTWARE. -->
 						this.currentMark[s] = f;
 					this.update();
 				}
+			}
+
+			// Log the current state of the fretboard.
+
+			Fretboard.prototype.dump = function() {
+				var str = "";
+
+				for (var s = 0; s < 6; s++)
+					for (var f = 0; f < this.maxFret; f++)
+						str += '[' + this.positionElement[s][f].className + '] ';
+
+				console.log(str);
 			}
 
 			// Return an event handler closing toggleNote over its arguments.

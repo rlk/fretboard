@@ -1,0 +1,442 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<meta charset="utf-8">
+
+<!-- Copyright (c) 2015-2016 Robert Kooima
+
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
+DEALINGS IN THE SOFTWARE. -->
+
+<html>
+<head>
+<style>
+/* Page and form styles. */
+
+body {
+    font-family: Calibri, sans-serif;
+    margin: 3em;
+}
+td {
+    text-align: right;
+}
+select {
+    width:100%;
+}
+figure {
+    display: inline-table;
+    margin: 1em 1em;
+}
+figcaption {
+    display: table-caption;
+    text-align: center;
+}
+fieldset {
+    border-radius: 4px;
+    border: 2px solid #CCC;
+    padding: 0.5em;
+}
+p.author {
+    font-size: 60%;
+    color: #CCC;
+    margin: 0 auto;
+    text-align: center;
+}
+
+/* Remove the GUI elements for printing. */
+
+@media screen {
+    fieldset#configure {display: inline-block; }
+    span.close       {color: #BBB; margin: 0em 0.5em 0em 0em; cursor: pointer; }
+    span.close:hover {color: #F00; }
+}
+@media print {
+    fieldset#configure { display: none; }
+    span.close         { display: none; }
+}
+
+/* Fretboard style */
+
+text.note      {
+    dominant-baseline: middle;
+    text-anchor:       middle;
+    font-size: 60%;
+}
+rect.string { fill: #CCC; stroke: none; }
+rect.fret   { fill: #EEE; stroke: none; }
+rect.neck   { fill: #AAA; stroke: none; }
+rect.nut    { fill: #888; stroke: none; }
+circle.pip  { fill: #BBB; stroke: none; }
+circle.note { fill: #FFF; stroke: #000; stroke-width: 0.5;}
+circle.root { fill: #FFF; stroke: #000; stroke-width: 2.0;}
+
+</style>
+</head>
+<body>
+<form>
+    <fieldset id="configure">
+        <legend>Fretboard Diagram Generator</legend>
+
+        <table>
+            <tr>
+                <td><label>Instrument:</label></td>
+                <td><select id="instrument">
+                    <option>Guitar</option>
+                    <option>Bass Guitar</option>
+                    <option>Ukulele</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>Key:</label></td>
+                <td><select id="key">
+                    <option>C major</option>
+
+                    <option>G major</option>
+                    <option>D major</option>
+                    <option>A major</option>
+                    <option>E major</option>
+                    <option>B major</option>
+                    <option>F&sharp; major</option>
+                    <option>C&sharp; major</option>
+
+                    <option>A minor</option>
+                    <option>E minor</option>
+                    <option>B minor</option>
+                    <option>F&sharp; minor</option>
+                    <option>C&sharp; minor</option>
+                    <option>G&sharp; minor</option>
+                    <option>D&sharp; minor</option>
+                    <option>A&sharp; minor</option>
+
+                    <option>F major</option>
+                    <option>B&flat; major</option>
+                    <option>E&flat; major</option>
+                    <option>A&flat; major</option>
+                    <option>D&flat; major</option>
+                    <option>G&flat; major</option>
+                    <option>C&flat; major</option>
+
+                    <option>D minor</option>
+                    <option>G minor</option>
+                    <option>C minor</option>
+                    <option>F minor</option>
+                    <option>B&flat; minor</option>
+                    <option>E&flat; minor</option>
+                    <option>A&flat; minor</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label>Scale:</label></td>
+                <td><select id="scale">
+                    <option>Diatonic</option>
+                    <option>Pentatonic</option>
+                    <option>Chord</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td><button type="button" onclick="createFigure()">Create</button></td>
+            </tr>
+        </table>
+        <p class="author">Copyright &copy; 2015&ndash;2016 <a href="http://kooima.net">Robert Kooima</a></p>
+    </fieldset>
+</form>
+<script>
+
+// Return a new SVG element with the given tag and attributes.
+
+function newSVGElement(tag) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
+    Array.prototype.slice.call(arguments, 1).map(function (a) {
+        e.setAttribute.apply(e, a);
+    });
+    return e;
+}
+
+// Return a new SVG group with the given child elements.
+
+function newSVGGroup() {
+    var g = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    Array.prototype.slice.call(arguments, 0).map(function (e) {
+        g.appendChild(e);
+    });
+    return g;
+}
+
+// Add a text node to the given element and return the element.
+
+function addTextNode(element, text) {
+    element.appendChild(document.createTextNode(text));
+    return element;
+}
+
+//------------------------------------------------------------------------------
+
+// Instrument name, fret count, and tuning (which implies string count).
+
+var instruments = {
+    'Guitar':      { 'length': 17, 'tuning': [  'E', 'A', 'D', 'G', 'B', 'E' ]},
+    'Bass Guitar': { 'length': 17, 'tuning': [  'E', 'A', 'D', 'G' ]},
+    'Ukulele':     { 'length': 12, 'tuning': [  'G', 'C', 'E', 'A' ]},
+}
+
+var keys = {
+    'C major'       : [ 'C',       'D',       'E',       'F',       'G',       'A',       'B'       ],
+
+    'G major'       : [ 'G',       'A',       'B',       'C',       'D',       'E',       'F\u266f' ],
+    'D major'       : [ 'D',       'E',       'F\u266f', 'G',       'A',       'B',       'C\u266f' ],
+    'A major'       : [ 'A',       'B',       'C\u266f', 'D',       'E',       'F\u266f', 'G\u266f' ],
+    'E major'       : [ 'E',       'F\u266f', 'G\u266f', 'A',       'B',       'C\u266f', 'D\u266f' ],
+    'B major'       : [ 'B',       'C\u266f', 'D\u266f', 'E',       'F\u266f', 'G\u266f', 'A\u266f' ],
+    'F\u266f major' : [ 'F\u266f', 'G\u266f', 'A\u266f', 'B',       'C\u266f', 'D\u266f', 'E\u266f' ],
+    'C\u266f major' : [ 'C\u266f', 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f', 'A\u266f', 'B\u266f' ],
+
+    'A minor'       : [ 'A',       'B',       'C',       'D',       'E',       'F',       'G'       ],
+    'E minor'       : [ 'E',       'F\u266f', 'G',       'A',       'B',       'C',       'D'       ],
+    'B minor'       : [ 'B',       'C\u266f', 'D',       'E',       'F\u266f', 'G',       'A'       ],
+    'F\u266f minor' : [ 'F\u266f', 'G\u266f', 'A',       'B',       'C\u266f', 'D',       'E'       ],
+    'C\u266f minor' : [ 'C\u266f', 'D\u266f', 'E',       'F\u266f', 'G\u266f', 'A',       'B'       ],
+    'G\u266f minor' : [ 'G\u266f', 'A\u266f', 'B',       'C\u266f', 'D\u266f', 'E',       'F\u266f' ],
+    'D\u266f minor' : [ 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f', 'A\u266f', 'B',       'C\u266f' ],
+    'A\u266f minor' : [ 'A\u266f', 'B\u266f', 'C\u266f', 'D\u266f', 'E\u266f', 'F\u266f', 'G\u266f' ],
+
+    'F major'       : [ 'F',       'G',       'A',       'B\u266d', 'C',       'D',       'E'       ],
+    'B\u266d major' : [ 'B\u266d', 'C',       'D',       'E\u266d', 'F',       'G',       'A'       ],
+    'E\u266d major' : [ 'E\u266d', 'F',       'G',       'A\u266d', 'B\u266d', 'C',       'D'       ],
+    'A\u266d major' : [ 'A\u266d', 'B\u266d', 'C',       'D\u266d', 'E\u266d', 'F',       'G'       ],
+    'D\u266d major' : [ 'D\u266d', 'E\u266d', 'F',       'G\u266d', 'A\u266d', 'B\u266d', 'C'       ],
+    'G\u266d major' : [ 'G\u266d', 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d', 'E\u266d', 'F'       ],
+    'C\u266d major' : [ 'C\u266d', 'D\u266d', 'E\u266d', 'F\u266d', 'G\u266d', 'A\u266d', 'B\u266d' ],
+
+    'D minor'       : [ 'D',       'E',       'F',       'G',       'A',       'B\u266d', 'C'       ],
+    'G minor'       : [ 'G',       'A',       'B\u266d', 'C',       'D',       'E\u266d', 'F'       ],
+    'C minor'       : [ 'C',       'D',       'E\u266d', 'F',       'G',       'A\u266d', 'B\u266d' ],
+    'F minor'       : [ 'F',       'G',       'A\u266d', 'B\u266d', 'C',       'D\u266d', 'E\u266d' ],
+    'B\u266d minor' : [ 'B\u266d', 'C',       'D\u266d', 'E\u266d', 'F',       'G\u266d', 'A\u266d' ],
+    'E\u266d minor' : [ 'E\u266d', 'F',       'G\u266d', 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d' ],
+    'A\u266d minor' : [ 'A\u266d', 'B\u266d', 'C\u266d', 'D\u266d', 'E\u266d', 'F\u266d', 'G\u266d' ],
+}
+
+function getOffset(pitch) {
+    var d = 0;
+
+    if (pitch) {
+        if (pitch.length > 0) {
+            if      (pitch[0] == 'D') d =  2;
+            else if (pitch[0] == 'E') d =  4;
+            else if (pitch[0] == 'F') d =  5;
+            else if (pitch[0] == 'G') d =  7;
+            else if (pitch[0] == 'A') d =  9;
+            else if (pitch[0] == 'B') d = 11;
+        }
+        for (var i = 1; i < pitch.length; i++) {
+            if      (pitch[i] == '\u266d') d--;
+            else if (pitch[i] == '\u266f') d++;
+        }
+    }
+    return d;
+}
+
+//------------------------------------------------------------------------------
+
+// Fretboard diagram parameters.
+
+var fretHeight  = 4;
+var fretScale   = 1200;
+var stringWidth = 2;
+var stringSpace = 20;
+var nutHeight   = 10;
+
+// Compute the X position of a given string.
+
+function stringX(s) {
+    return (s + 0.5) * stringSpace;
+}
+
+// Compute the Y position of a given fret.
+
+function fretY(f) {
+    return nutHeight + fretScale - fretScale / Math.pow(2, f / 12);
+}
+
+// Computer the Y position of the finger at a given fret.
+
+function fingerY(f) {
+    if (f == 0)
+        return fretY(f);
+    else
+        return Math.max(fretY(f - 0.5), fretY(f) - fretHeight - stringSpace / 2);
+}
+
+//------------------------------------------------------------------------------
+
+function newFret(fret, strings) {
+    return newSVGElement('rect', ['class', 'fret'],
+                                 ['x',      0],
+                                 ['y',      fretY(fret) - fretHeight / 2],
+                                 ['width',  strings * stringSpace],
+                                 ['height', fretHeight]);
+}
+
+function newString(string, frets) {
+    return newSVGElement('rect', ['class', 'string'],
+                                 ['x',      stringX(string) - stringWidth / 2],
+                                 ['y',      0],
+                                 ['width',  stringWidth],
+                                 ['height', fretY(frets)]);
+}
+
+function newNeck(frets, strings) {
+    return newSVGElement('rect', ['class', 'neck'],
+                                 ['x',      0],
+                                 ['y',      nutHeight],
+                                 ['width',  strings * stringSpace],
+                                 ['height', fretY(frets)]);
+}
+
+function newNut(strings) {
+    return newSVGElement('rect', ['class', 'nut'],
+                                 ['x',      0],
+                                 ['y',      0],
+                                 ['width',  strings * stringSpace],
+                                 ['height', nutHeight]);
+}
+
+function newDot(fret, string) {
+    return newSVGElement('circle', ['class', 'pip'],
+                                   ['cx',     stringX(string)],
+                                   ['cy',     fretY(fret)],
+                                   ['r',      stringSpace / 4]);
+
+}
+
+function newPosition(fret, string, root) {
+    return newSVGElement('circle', ['class', root ? 'root' : 'note'],
+                                   ['cx',    stringX(string)],
+                                   ['cy',    fingerY(fret)],
+                                   ['r',     stringSpace / 2]);
+}
+
+function newLabel(fret, string, name) {
+    return addTextNode(newSVGElement('text', ['class', 'note'],
+                                             ['x', stringX(string)],
+                                             ['y', fingerY(fret)]), name);
+}
+
+//------------------------------------------------------------------------------
+
+function newFretboard(frets, strings, label) {
+    var x = (strings - 1) / 2;
+
+    return newSVGGroup(newNeck(frets, strings),
+                       newNut(strings),
+                       newDot( 2.5, x),
+                       newDot( 4.5, x),
+                       newDot( 6.5, x),
+                       newDot( 8.5, x),
+                       newDot(11.5, x - 1),
+                       newDot(11.5, x + 1),
+                       newDot(14.5, x));
+}
+
+function newNote(fret, string, name, root) {
+    return newSVGGroup(newPosition(fret, string, root),
+                          newLabel(fret, string, name));
+}
+
+function newFigure(image, text) {
+    var figure  = document.createElement('figure');
+    var caption = document.createElement('figcaption');
+    var button  = document.createElement('span');
+
+    figure .appendChild(image)
+    figure .appendChild(caption);
+    caption.appendChild(button);
+    caption.appendChild(document.createTextNode(text));
+    button .appendChild(document.createTextNode('\u2716'));
+
+    button.addEventListener('click', function() { figure.remove(); });
+    button.setAttribute('class', 'close');
+
+    return figure;
+}
+
+//------------------------------------------------------------------------------
+
+function createFigure() {
+
+    // Determine the fretboard configuration.
+
+    var instrument = instruments[document.getElementById('instrument').value];
+    var notes      =        keys[document.getElementById('key').value]
+    var key        =             document.getElementById('key').value;
+    var scale      =             document.getElementById('scale').value;
+
+    if (scale == 'Pentatonic') {
+        if (key.search('major') > 0) {
+            notes[3] = null;
+            notes[6] = null;
+        }
+        if (key.search('minor') > 0) {
+            notes[1] = null;
+            notes[5] = null;
+        }
+    }
+
+    if (scale == 'Chord') {
+        notes[1] = null;
+        notes[3] = null;
+        notes[5] = null;
+        notes[6] = null;
+    }
+
+    // Generate an SVG of the fretboard.
+
+    var strings = instrument.tuning.length;
+    var frets   = instrument.length;
+
+    var svg = newSVGElement('svg', ['width', strings * stringSpace],
+                                   ['height', fretY(frets)]);
+
+    svg.appendChild(newFretboard(frets, strings));
+
+    for (var f = 1; f < frets; f++) {
+        svg.appendChild(newFret(f, strings));
+    }
+    for (var s = 0; s < strings; s++) {
+        svg.appendChild(newString(s, frets));
+    }
+
+    for (var f = 0; f < frets; f++) {
+        for (var s = 0; s < strings; s++) {
+            var d = (f + getOffset(instrument.tuning[s])) % 12;
+
+            for (var n = 0; n < notes.length; n++) {
+                if (notes[n] && d == getOffset(notes[n])) {
+                    svg.appendChild(newNote(f, s, notes[n], (n == 0)));
+                }
+            }
+        }
+    }
+
+    // Add the fretboard to the page.
+
+    document.body.appendChild(newFigure(svg, key + ' ' + scale));
+}
+
+</script>
+</body>
+</html>

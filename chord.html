@@ -28,9 +28,11 @@ DEALINGS IN THE SOFTWARE. -->
 
 			html {
 				height: 100%;
+				margin: 0;
 			}
 			body {
 				height: 100%;
+				margin: 0;
 				font-family: Arial;
 			}
 			#layout {
@@ -39,11 +41,21 @@ DEALINGS IN THE SOFTWARE. -->
 				flex-direction: row;
 				overflow: hidden;
 			}
-			#configuration {
-				flex-shrink: 0;
-			}
 			#content {
 				overflow: scroll;
+			}
+			div.toolbar {
+				height: 100%;
+				flex-shrink: 0;
+				overflow: scroll;
+			}
+
+			h1 {
+				text-align: center;
+			}
+			p.note {
+				text-align: center;
+				color: #CCC;
 			}
 
 			/* Controls */
@@ -70,11 +82,6 @@ DEALINGS IN THE SOFTWARE. -->
 				color: #888;
 				margin-left: 1em;
 			}
-			p.note {
-				text-align: center;
-				color: #CCC;
-			}
-
 			/* Content list items */
 
 			div.item {
@@ -98,13 +105,15 @@ DEALINGS IN THE SOFTWARE. -->
 			/* Root selection menu */
 
 			table.rootmenu {
-				display: inline-block;
+				height: 100%;
 				vertical-align: top;
 				border-collapse: collapse;
 				margin: 0.5em;
+				padding: 0.5em;
 			}
 			table.rootmenu th {
 				font-weight: normal;
+				height: 2em;
 			}
 
 			table.rootmenu td {
@@ -115,13 +124,15 @@ DEALINGS IN THE SOFTWARE. -->
 			/* Tone selection menu */
 
 			table.tonemenu {
-				display: inline-block;
+				height: 100%;
 				vertical-align: top;
 				border-collapse: collapse;
 				margin: 0.5em;
+				padding: 0.5em;
 			}
 			table.tonemenu th {
 				font-weight: normal;
+				height: 2em;
 			}
 
 			table.tonemenu tr:nth-child(2),
@@ -148,13 +159,13 @@ DEALINGS IN THE SOFTWARE. -->
 			}
 			table.tonemenu td {
 				border: 1px solid black;
-				padding: 3px;
 			}
 			table.tonemenu input {
 				vertical-align: middle;
 			}
 			table.tonemenu img {
 				vertical-align: middle;
+				padding: 2px 2px;
 			}
 
 			/* Fretboard table */
@@ -226,7 +237,7 @@ DEALINGS IN THE SOFTWARE. -->
 	</head>
 	<body onload="init()">
 		<div id="layout">
-			<div id="configuration">
+			<div class="toolbar">
 				<table class="rootmenu">
 					<tr><th>Root</th></tr>
 					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
@@ -245,6 +256,8 @@ DEALINGS IN THE SOFTWARE. -->
 					<tr><td><input type="radio" id="gf" onchange="changeRoot('gf')" name="root">G&flat;</td></tr>
 					<tr><td><input type="radio" id="cf" onchange="changeRoot('cf')" name="root">C&flat;</td></tr>
 				</table>
+			</div>
+			<div class="toolbar">
 				<table class="tonemenu">
 					<tr>
 						<th>Deg</th>
@@ -372,6 +385,9 @@ DEALINGS IN THE SOFTWARE. -->
 				</table>
 			</div>
 			<div id="content">
+				<h1>Fretboard Explorer</h1>
+				<div id="fretboards">
+				</div>
 				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
 				<p class="note">Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
 			</div>
@@ -477,11 +493,6 @@ DEALINGS IN THE SOFTWARE. -->
 				// Instantiate an initial fretboard.
 
 				selectFretboard(new Fretboard());
-				selectFretboard(new Fretboard());
-				selectFretboard(new Fretboard());
-				selectFretboard(new Fretboard());
-				selectFretboard(new Fretboard());
-				selectFretboard(new Fretboard());
 			}
 
 			// Return the pitch (0-11) at string s (0-5) fret f.
@@ -585,9 +596,9 @@ DEALINGS IN THE SOFTWARE. -->
 				// Add the new fretboard to the document.
 
 				if (that)
-					document.getElementById("content").insertBefore(this.item, that);
+					document.getElementById("fretboards").insertBefore(this.item, that);
 				else
-					document.getElementById("content").appendChild(this.item);
+					document.getElementById("fretboards").appendChild(this.item);
 			}
 
 			// Build the fretboard table.
@@ -778,7 +789,7 @@ DEALINGS IN THE SOFTWARE. -->
 				var prev = this.item.previousSibling;
 
 				if (prev && prev.tagName === 'DIV')
-					document.getElementById("content").insertBefore(curr, prev);
+					document.getElementById("fretboards").insertBefore(curr, prev);
 			}
 
 			// Shift the fretboard down in the document order.
@@ -788,7 +799,7 @@ DEALINGS IN THE SOFTWARE. -->
 				var next = this.item.nextSibling;
 
 				if (next && next.tagName === 'DIV')
-					document.getElementById("content").insertBefore(next, curr);
+					document.getElementById("fretboards").insertBefore(next, curr);
 			}
 
 			// Update the DOM to reflect the current state.

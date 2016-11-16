@@ -469,7 +469,8 @@ DEALINGS IN THE SOFTWARE. -->
 				't13' : { degree: 5, offset:  0 },
 			}
 
-			degreeElement   = [[], [], [], [], [], [], []];
+			degreeElement   = [ undefined, undefined, undefined,
+													undefined, undefined, undefined, undefined, ];
 
 			function init() {
 
@@ -762,6 +763,13 @@ DEALINGS IN THE SOFTWARE. -->
 				                             + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
 			}
 
+			// Relabel the tone menu for the selected key.
+
+			Fretboard.prototype.setDegrees = function() {
+				for (var d = 0; d < 7; d++)
+					degreeElement[d].innerHTML = html[key[this.currentRoot][d]];
+			}
+
 			// Insert a new fretboard after this one.
 
 			Fretboard.prototype.insert = function() {
@@ -802,6 +810,7 @@ DEALINGS IN THE SOFTWARE. -->
 				this.setPositions();
 				this.setMarks();
 				this.setDiagram();
+				this.setDegrees();
 			}
 
 			// Toggle the mark on a position.
@@ -841,11 +850,6 @@ DEALINGS IN THE SOFTWARE. -->
 			function changeRoot(id) {
 				currentFretboard.currentRoot = id;
 				currentFretboard.update();
-
-				// Relabel the tone menu for the selected key.
-
-				for (var d = 0; d < 7; d++)
-					degreeElement[d].innerHTML = html[key[id][d]];
 			}
 
 			// Select a chord tone.
@@ -889,6 +893,8 @@ DEALINGS IN THE SOFTWARE. -->
 				for (var i = 0; i < 12; i++)
 					if (currentFretboard.currentTone[i])
 						document.getElementById(currentFretboard.currentTone[i]).checked = true;
+
+				currentFretboard.setDegrees();
 
 				// Set the root menu to match the new fretboard.
 

@@ -77,11 +77,15 @@ DEALINGS IN THE SOFTWARE. -->
 			span.control:hover {
 				background: #DFD;
 			}
-			span.diagram {
+			div.heading {
+				display: flex;
+			}
+			input.diagram {
 				font-family: monospace;
 				font-size: 100%;
 				color: #888;
 				margin-left: 1em;
+				flex-grow: 1;
 			}
 
 			/* Content list items */
@@ -218,12 +222,11 @@ DEALINGS IN THE SOFTWARE. -->
 			/* Remove the GUI elements for printing. As of this writing, none of the major browsers correctly print background gradients. */
 
 			@media print {
-				h1           { display: none; }
-				div.toolbar  { display: none; }
-				p.note       { display: none; }
-				div.selected { border:  none; background: inherit; }
-				span.control { display: none; }
-				span.diagram { display: none; }
+				h1            { display: none; }
+				div.toolbar   { display: none; }
+				p.note        { display: none; }
+				div.selected  { border:  none; background: inherit; }
+				div.heading   { display: none; }
 			}
 
 		</style>
@@ -609,7 +612,7 @@ DEALINGS IN THE SOFTWARE. -->
 				var moveup  = document.createElement('span');
 				var movedn  = document.createElement('span');
 				var remove  = document.createElement('span');
-				var diagram = document.createElement('span');
+				var diagram = document.createElement('input');
 
 				item   .className = 'item';
 				table  .className = 'fretboard';
@@ -617,7 +620,10 @@ DEALINGS IN THE SOFTWARE. -->
 				remove .className = 'control';
 				moveup .className = 'control';
 				movedn .className = 'control';
+				heading.className = 'heading';
 				diagram.className = 'diagram';
+
+				diagram.type = 'text';
 
 				table.appendChild(thead);
 				table.appendChild(tbody);
@@ -759,7 +765,7 @@ DEALINGS IN THE SOFTWARE. -->
 				}
 
 				if (chord.length > 0)
-					this.diagram.textContent = '<' + chord.join(' ') + '>'
+					this.diagram.value = '<' + chord.join(' ') + '>'
 				                             + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
 			}
 

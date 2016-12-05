@@ -404,6 +404,24 @@ DEALINGS IN THE SOFTWARE. -->
 						</td>
 					</tr>
 				</table>
+				Preset: <select id="preset" onchange="changePreset(event.target.value)">
+					<option>Clear</option>
+					<option>Major</option>
+					<option>Minor</option>
+					<option>6</option>
+					<option>7</option>
+					<option>9</option>
+					<option>13</option>
+					<option>Major 7</option>
+					<option>Major 9</option>
+					<option>Major 13</option>
+					<option>Minor 6</option>
+					<option>Minor 7</option>
+					<option>Minor 9</option>
+					<option>Minor 13</option>
+					<option>Diminished</option>
+					<option>Diminished 7</option>
+				</select>
 			</div>
 			<div id="content">
 				<h1>Guitar Chord Voicing Explorer</h1>
@@ -497,8 +515,7 @@ DEALINGS IN THE SOFTWARE. -->
 				't13' : { degree: 5, offset:  0 },
 			}
 
-			degreeElement   = [ undefined, undefined, undefined,
-													undefined, undefined, undefined, undefined, ];
+			degreeElement = [ ];
 
 			function init() {
 
@@ -598,7 +615,7 @@ DEALINGS IN THE SOFTWARE. -->
 
 				this.currentRoot = 'c';
 
-				for (var i = 0; i < 22; i++)
+				for (var i = 0; i < 12; i++)
 					this.currentTone[i] = undefined;
 
 				for (var i = 0; i < 6; i++)
@@ -794,6 +811,28 @@ DEALINGS IN THE SOFTWARE. -->
 				                             + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
 			}
 
+			// Set the tone menu to reflect the current fretboard state.
+
+			Fretboard.prototype.setTones = function() {
+
+				document.getElementById('n0' ).checked = true;
+				document.getElementById('n1' ).checked = true;
+				document.getElementById('n2' ).checked = true;
+				document.getElementById('n3' ).checked = true;
+				document.getElementById('n4' ).checked = true;
+				document.getElementById('n5' ).checked = true;
+				document.getElementById('n6' ).checked = true;
+				document.getElementById('n7' ).checked = true;
+				document.getElementById('n8' ).checked = true;
+				document.getElementById('n9' ).checked = true;
+				document.getElementById('n10').checked = true;
+				document.getElementById('n11').checked = true;
+
+				for (var i = 0; i < 12; i++)
+					if (this.currentTone[i])
+						document.getElementById(this.currentTone[i]).checked = true;
+			}
+
 			// Relabel the tone menu for the selected key.
 
 			Fretboard.prototype.setDegrees = function() {
@@ -890,6 +929,39 @@ DEALINGS IN THE SOFTWARE. -->
 				currentFretboard.update();
 			}
 
+			// Select a preset.
+
+			function changePreset(value) {
+				var presets = {
+					'Clear' :        { },
+					'Major' :        { 0: 't1', 4: 't3',  7: 't5'  },
+					'Minor' :        { 0: 't1', 3: 't3f', 7: 't5'  },
+					'6' :            { 0: 't1', 4: 't3',  7: 't5',  9:  't6'  },
+					'7' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f'  },
+					'9' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9' },
+					'13' :           { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
+					'Major 7' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7'  },
+					'Major 9' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7', 2: 't9' },
+					'Major 13' :     { 0: 't1', 4: 't3',  7: 't5',  11: 't7', 2: 't9', 9: 't13' },
+					'Minor 6' :      { 0: 't1', 3: 't3f', 7: 't5',  9:  't6'  },
+					'Minor 7' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f'  },
+					'Minor 9' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9' },
+					'Minor 13' :     { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
+					'Diminished' :   { 0: 't1', 3: 't3f', 6: 't5f' },
+					'Diminished 7' : { 0: 't1', 3: 't3f', 6: 't5f', 9:  't7ff' },
+				};
+
+				var d = presets[value];
+
+				if (d) {
+					for (var i = 0; i < 12; i++)
+						currentFretboard.currentTone[i] = d[i];
+
+					currentFretboard.update();
+					currentFretboard.setTones();
+				}
+			}
+
 			// Change the current fretboard to the given fretboard.
 
 			function selectFretboard(fb) {
@@ -906,25 +978,7 @@ DEALINGS IN THE SOFTWARE. -->
 
 				// Reset the tone menu.
 
-				document.getElementById('n0' ).checked = true;
-				document.getElementById('n1' ).checked = true;
-				document.getElementById('n2' ).checked = true;
-				document.getElementById('n3' ).checked = true;
-				document.getElementById('n4' ).checked = true;
-				document.getElementById('n5' ).checked = true;
-				document.getElementById('n6' ).checked = true;
-				document.getElementById('n7' ).checked = true;
-				document.getElementById('n8' ).checked = true;
-				document.getElementById('n9' ).checked = true;
-				document.getElementById('n10').checked = true;
-				document.getElementById('n11').checked = true;
-
-				// Set the tone menu to match the new fretboard.
-
-				for (var i = 0; i < 12; i++)
-					if (currentFretboard.currentTone[i])
-						document.getElementById(currentFretboard.currentTone[i]).checked = true;
-
+				currentFretboard.setTones();
 				currentFretboard.setDegrees();
 
 				// Set the root menu to match the new fretboard.

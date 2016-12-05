@@ -1,9 +1,9 @@
-# Yet Another Fretboard Diagram Generator
+# Guitar Chord Voicing Explorer
 
-Copyright &copy; 2015 [Robert Kooima](https://kooima.net)
+Copyright &copy; 2016 [Robert Kooima](https://kooima.net)
 
-This is yet another guitar fretboard diagram generator. This one outputs scalable SVG graphics that can be viewed in the browser, saved, and printed. It includes definitions for the guitar, bass guitar, and ukulele. Several diagrams may be displayed side-by-side for comparison. The configuration GUI is omitted from printed output, making for easily-printable reference material.
+The Guitar Chord Voicing Explorer presents an interactive guitar fretboard diagram. Select a root note and a set of chord tones to mark all relevant positions on the fretboard. Configure a chord by clicking to mark selected positions. This generates a <a href="http://lilypond.org">Lilypond</a> chord and fretboard diagram.
 
-[Here's a live copy.](https://rlk.github.io/fretboard)
+Fretboard controls create, delete, and reorder fretboard diagrams.
 
-It's straightforward to add additional tunings and scales, so please feel free to fork and modify as desired.
+[Available for use on Github Pages](https://rlk.github.io/fretboard).

@@ -43,6 +43,7 @@ DEALINGS IN THE SOFTWARE. -->
 			}
 			#content {
 				overflow: scroll;
+				flex-grow: 1;
 			}
 			div.toolbar {
 				height: 100%;
@@ -91,8 +92,7 @@ DEALINGS IN THE SOFTWARE. -->
 			/* Content list items */
 
 			div.item {
-				margin-top: 1em;
-				margin-bottom: 1em;
+				margin: 1em 4px;
 				padding: 0.5em;
 			}
 			div.unselected {
@@ -185,15 +185,17 @@ DEALINGS IN THE SOFTWARE. -->
 			table.fretboard td.f14 { width: 2.2272% }
 			table.fretboard td.f15 { width: 2.1022% }
 
-			/* Fretboard markers */
+			/* Fretboard positions */
 
 			table.fretboard div {
 				float: right;
 				min-width:  20pt;
 				min-height: 20pt;
 				text-align: center;
-				vertical-align: center;
 			}
+
+			/* Selected fretboard positions */
+
 			table.fretboard div.t1   { background-image: url("img/t1.svg");   }
 			table.fretboard div.t2f  { background-image: url("img/t2f.svg");  }
 			table.fretboard div.t2   { background-image: url("img/t2.svg");   }
@@ -217,7 +219,30 @@ DEALINGS IN THE SOFTWARE. -->
 			table.fretboard div.t13f { background-image: url("img/t13f.svg"); }
 			table.fretboard div.t13  { background-image: url("img/t13.svg");  }
 
-			table.fretboard div.marked { content: url("img/mark.svg"); }
+			/* Selected and marked fretboard positions */
+
+			table.fretboard div.marked.t1   { background-image: url("img/mark.svg"), url("img/t1.svg");   }
+			table.fretboard div.marked.t2f  { background-image: url("img/mark.svg"), url("img/t2f.svg");  }
+			table.fretboard div.marked.t2   { background-image: url("img/mark.svg"), url("img/t2.svg");   }
+			table.fretboard div.marked.t3f  { background-image: url("img/mark.svg"), url("img/t3f.svg");  }
+			table.fretboard div.marked.t3   { background-image: url("img/mark.svg"), url("img/t3.svg");   }
+			table.fretboard div.marked.t4   { background-image: url("img/mark.svg"), url("img/t4.svg");   }
+			table.fretboard div.marked.t5f  { background-image: url("img/mark.svg"), url("img/t5f.svg");  }
+			table.fretboard div.marked.t5   { background-image: url("img/mark.svg"), url("img/t5.svg");   }
+			table.fretboard div.marked.t5s  { background-image: url("img/mark.svg"), url("img/t5s.svg");  }
+			table.fretboard div.marked.t6f  { background-image: url("img/mark.svg"), url("img/t6f.svg");  }
+			table.fretboard div.marked.t6   { background-image: url("img/mark.svg"), url("img/t6.svg");   }
+			table.fretboard div.marked.t7ff { background-image: url("img/mark.svg"), url("img/t7ff.svg"); }
+			table.fretboard div.marked.t7f  { background-image: url("img/mark.svg"), url("img/t7f.svg");  }
+			table.fretboard div.marked.t7   { background-image: url("img/mark.svg"), url("img/t7.svg");   }
+			table.fretboard div.marked.t9f  { background-image: url("img/mark.svg"), url("img/t9f.svg");  }
+			table.fretboard div.marked.t9   { background-image: url("img/mark.svg"), url("img/t9.svg");   }
+			table.fretboard div.marked.t9s  { background-image: url("img/mark.svg"), url("img/t9s.svg");  }
+			table.fretboard div.marked.t11f { background-image: url("img/mark.svg"), url("img/t11f.svg"); }
+			table.fretboard div.marked.t11  { background-image: url("img/mark.svg"), url("img/t11.svg");  }
+			table.fretboard div.marked.t11s { background-image: url("img/mark.svg"), url("img/t11s.svg"); }
+			table.fretboard div.marked.t13f { background-image: url("img/mark.svg"), url("img/t13f.svg"); }
+			table.fretboard div.marked.t13  { background-image: url("img/mark.svg"), url("img/t13.svg");  }
 
 			/* Remove the GUI elements for printing. As of this writing, none of the major browsers correctly print background gradients. */
 
@@ -381,11 +406,11 @@ DEALINGS IN THE SOFTWARE. -->
 				</table>
 			</div>
 			<div id="content">
-				<h1>Fretboard Explorer</h1>
+				<h1>Guitar Chord Voicing Explorer</h1>
 				<div id="fretboards">
 				</div>
 				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
-				<p class="note">Fretboard Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
+				<p class="note">Guitar Chord Voicing Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a></p>
 			</div>
 		</div>
 

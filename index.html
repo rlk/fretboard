@@ -627,22 +627,28 @@ DEALINGS IN THE SOFTWARE. -->
 				return s;
 			}
 
-			// Construct a fretboard.
+			// Construct a fretboard. Clone 'that' if defined.
 
 			function Fretboard(that) {
 				this.maxFret     = 16;
-				this.currentTone = [];
-				this.currentMark = [];
 
 				// Initialize the current state.
 
-				this.currentRoot = 'c';
+				if (that) {
+					this.currentRoot = that.currentRoot;
+					this.currentTone = that.currentTone.slice();
+					this.currentMark = that.currentMark.slice();
+				} else {
+					this.currentRoot = 'c';
+					this.currentTone = [];
+					this.currentMark = [];
 
-				for (var i = 0; i < 12; i++)
-					this.currentTone[i] = undefined;
+					for (var i = 0; i < 12; i++)
+						this.currentTone[i] = undefined;
 
-				for (var i = 0; i < 6; i++)
-					this.currentMark[i] = undefined;
+					for (var i = 0; i < 6; i++)
+						this.currentMark[i] = undefined;
+				}
 
 				// Frequently accessed DOM elements.
 
@@ -658,7 +664,7 @@ DEALINGS IN THE SOFTWARE. -->
 				// Add the new fretboard to the document.
 
 				if (that)
-					document.getElementById("fretboards").insertBefore(this.item, that);
+					document.getElementById("fretboards").insertBefore(this.item, that.item.nextSibling);
 				else
 					document.getElementById("fretboards").appendChild(this.item);
 			}
@@ -754,7 +760,7 @@ DEALINGS IN THE SOFTWARE. -->
 
 				item.appendChild(heading);
 				item.appendChild(table);
-				item.addEventListener('click', function() { selectFretboard(that); })
+				item.addEventListener('mouseup', function() { selectFretboard(that); })
 
 				this.diagram = diagram;
 				this.item    = item;
@@ -866,7 +872,7 @@ DEALINGS IN THE SOFTWARE. -->
 			// Insert a new fretboard after this one.
 
 			Fretboard.prototype.insert = function() {
-				selectFretboard(new Fretboard(this.item.nextSibling));
+				selectFretboard(new Fretboard(this));
 			}
 
 			// Remove the fretboard (if it's not the only one left).

@@ -284,14 +284,14 @@ DEALINGS IN THE SOFTWARE. -->
 			<div class="toolbar">
 				<table class="menu">
 					<tr><th>Root</th></tr>
-					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
-					<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
-					<tr><td><input type="radio" id="d"  onchange="changeRoot('d' )" name="root">D</td></tr>
-					<tr><td><input type="radio" id="a"  onchange="changeRoot('a' )" name="root">A</td></tr>
-					<tr><td><input type="radio" id="e"  onchange="changeRoot('e' )" name="root">E</td></tr>
-					<tr><td><input type="radio" id="b"  onchange="changeRoot('b' )" name="root">B</td></tr>
-					<tr><td><input type="radio" id="fs" onchange="changeRoot('fs')" name="root">F&sharp;</td></tr>
 					<tr><td><input type="radio" id="cs" onchange="changeRoot('cs')" name="root">C&sharp;</td></tr>
+					<tr><td><input type="radio" id="fs" onchange="changeRoot('fs')" name="root">F&sharp;</td></tr>
+					<tr><td><input type="radio" id="b"  onchange="changeRoot('b' )" name="root">B</td></tr>
+					<tr><td><input type="radio" id="e"  onchange="changeRoot('e' )" name="root">E</td></tr>
+					<tr><td><input type="radio" id="a"  onchange="changeRoot('a' )" name="root">A</td></tr>
+					<tr><td><input type="radio" id="d"  onchange="changeRoot('d' )" name="root">D</td></tr>
+					<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
+					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
 					<tr><td><input type="radio" id="f"  onchange="changeRoot('f' )" name="root">F</td></tr>
 					<tr><td><input type="radio" id="bf" onchange="changeRoot('bf')" name="root">B&flat;</td></tr>
 					<tr><td><input type="radio" id="ef" onchange="changeRoot('ef')" name="root">E&flat;</td></tr>
@@ -442,8 +442,13 @@ DEALINGS IN THE SOFTWARE. -->
 					<option>Minor 7</option>
 					<option>Minor 9</option>
 					<option>Minor 13</option>
+					<option>Augmented</option>
+					<option>Augmented 7</option>
 					<option>Diminished</option>
 					<option>Diminished 7</option>
+					<option>Suspended</option>
+					<option>Suspended 7</option>
+					<option>Suspended 9</option>
 				</select>
 			</div>
 			<div id="content">
@@ -494,16 +499,15 @@ DEALINGS IN THE SOFTWARE. -->
 			};
 
 			var key = {
-				'c'  : [ 'c',  'd',  'e',  'f',  'g',  'a',  'b'  ],
-
-				'g'  : [ 'g',  'a',  'b',  'c',  'd',  'e',  'fs' ],
-				'd'  : [ 'd',  'e',  'fs', 'g',  'a',  'b',  'cs' ],
-				'a'  : [ 'a',  'b',  'cs', 'd',  'e',  'fs', 'gs' ],
-				'e'  : [ 'e',  'fs', 'gs', 'a',  'b',  'cs', 'ds' ],
-				'b'  : [ 'b',  'cs', 'ds', 'e',  'fs', 'gs', 'as' ],
-				'fs' : [ 'fs', 'gs', 'as', 'b',  'cs', 'ds', 'es' ],
+				// gs is omitted because it has a double sharp.
 				'cs' : [ 'cs', 'ds', 'es', 'fs', 'gs', 'as', 'bs' ],
-
+				'fs' : [ 'fs', 'gs', 'as', 'b',  'cs', 'ds', 'es' ],
+				'b'  : [ 'b',  'cs', 'ds', 'e',  'fs', 'gs', 'as' ],
+				'e'  : [ 'e',  'fs', 'gs', 'a',  'b',  'cs', 'ds' ],
+				'a'  : [ 'a',  'b',  'cs', 'd',  'e',  'fs', 'gs' ],
+				'd'  : [ 'd',  'e',  'fs', 'g',  'a',  'b',  'cs' ],
+				'g'  : [ 'g',  'a',  'b',  'c',  'd',  'e',  'fs' ],
+				'c'  : [ 'c',  'd',  'e',  'f',  'g',  'a',  'b'  ],
 				'f'  : [ 'f',  'g',  'a',  'bf', 'c',  'd',  'e'  ],
 				'bf' : [ 'bf', 'c',  'd',  'ef', 'f',  'g',  'a'  ],
 				'ef' : [ 'ef', 'f',  'g',  'af', 'bf', 'c',  'd'  ],
@@ -511,6 +515,7 @@ DEALINGS IN THE SOFTWARE. -->
 				'df' : [ 'df', 'ef', 'f',  'gf', 'af', 'bf', 'c'  ],
 				'gf' : [ 'gf', 'af', 'bf', 'cf', 'df', 'ef', 'f'  ],
 				'cf' : [ 'cf', 'df', 'ef', 'ff', 'gf', 'af', 'bf' ],
+				// ff is omitted because it has a double flat.
 			}
 
 			var tone = {
@@ -965,19 +970,24 @@ DEALINGS IN THE SOFTWARE. -->
 					'Clear' :        { },
 					'Major' :        { 0: 't1', 4: 't3',  7: 't5'  },
 					'Minor' :        { 0: 't1', 3: 't3f', 7: 't5'  },
-					'6' :            { 0: 't1', 4: 't3',  7: 't5',  9:  't6'  },
+					'6' :            { 0: 't1', 4: 't3',  7: 't5',   9: 't6'  },
 					'7' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f'  },
 					'9' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9' },
 					'13' :           { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
 					'Major 7' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7'  },
-					'Major 9' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7', 2: 't9' },
-					'Major 13' :     { 0: 't1', 4: 't3',  7: 't5',  11: 't7', 2: 't9', 9: 't13' },
-					'Minor 6' :      { 0: 't1', 3: 't3f', 7: 't5',  9:  't6'  },
+					'Major 9' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7',  2: 't9' },
+					'Major 13' :     { 0: 't1', 4: 't3',  7: 't5',  11: 't7',  2: 't9', 9: 't13' },
+					'Minor 6' :      { 0: 't1', 3: 't3f', 7: 't5',   9: 't6'  },
 					'Minor 7' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f'  },
 					'Minor 9' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9' },
 					'Minor 13' :     { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
+					'Augmented' :    { 0: 't1', 4: 't3',  8: 't5s' },
+					'Augmented 7' :  { 0: 't1', 4: 't3',  8: 't5s', 10: 't7f' },
 					'Diminished' :   { 0: 't1', 3: 't3f', 6: 't5f' },
-					'Diminished 7' : { 0: 't1', 3: 't3f', 6: 't5f', 9:  't7ff' },
+					'Diminished 7' : { 0: 't1', 3: 't3f', 6: 't5f',  9: 't7ff' },
+					'Suspended' :    { 0: 't1', 5: 't4',  7: 't5' },
+					'Suspended 7' :  { 0: 't1', 5: 't4',  7: 't5',  10: 't7f' },
+					'Suspended 9' :  { 0: 't1', 5: 't4',  7: 't5',  10: 't7f', 2: 't9' },
 				};
 
 				var d = presets[value];

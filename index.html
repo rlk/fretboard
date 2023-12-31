@@ -81,7 +81,7 @@ DEALINGS IN THE SOFTWARE. -->
 			div.heading {
 				display: flex;
 			}
-			input.diagram {
+			input.display {
 				font-family: monospace;
 				font-size: 100%;
 				color: #888;
@@ -455,7 +455,7 @@ DEALINGS IN THE SOFTWARE. -->
 				<h1>Guitar Chord Voicing Explorer</h1>
 				<div id="fretboards">
 				</div>
-				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure a <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond fret diagram</a>.</p>
+				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure Chord Grid and <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagrams</a>.</p>
 				<p class="note">Guitar Chord Voicing Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a>. <a href="https://github.com/rlk/fretboard">Fork me on Github</a>.</p>
 			</div>
 		</div>
@@ -659,7 +659,7 @@ DEALINGS IN THE SOFTWARE. -->
 
 				this.positionElement = [[], [], [], [], [], []];
 				this.pitchElement    = [[], [], [], [], [], [],
-									    [], [], [], [], [], []];
+										[], [], [], [], [], []];
 
 				// Initalize the DOM for this fretboard.
 
@@ -689,6 +689,7 @@ DEALINGS IN THE SOFTWARE. -->
 				var movedn  = document.createElement('span');
 				var remove  = document.createElement('span');
 				var diagram = document.createElement('input');
+				var grid    = document.createElement('input');
 
 				item   .className = 'item';
 				table  .className = 'fretboard';
@@ -697,8 +698,10 @@ DEALINGS IN THE SOFTWARE. -->
 				moveup .className = 'control';
 				movedn .className = 'control';
 				heading.className = 'heading';
-				diagram.className = 'diagram';
+				grid   .className = 'display';
+				diagram.className = 'display';
 
+				grid   .type = 'text';
 				diagram.type = 'text';
 
 				table.appendChild(thead);
@@ -710,6 +713,7 @@ DEALINGS IN THE SOFTWARE. -->
 				heading.appendChild(moveup);
 				heading.appendChild(movedn);
 				heading.appendChild(insert);
+				heading.appendChild(grid);
 				heading.appendChild(diagram);
 
 				insert.innerHTML = '&plus;';
@@ -768,6 +772,7 @@ DEALINGS IN THE SOFTWARE. -->
 				item.addEventListener('mouseup', function() { selectFretboard(that); })
 
 				this.diagram = diagram;
+				this.grid    = grid;
 				this.item    = item;
 			}
 
@@ -842,7 +847,46 @@ DEALINGS IN THE SOFTWARE. -->
 
 				if (chord.length > 0)
 					this.diagram.value = '<' + chord.join(' ') + '>'
-				                             + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
+											 + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
+			}
+
+			// Compute the Chord Grid for the current selection.
+
+			Fretboard.prototype.setGrid = function() {
+				var stops = [];
+				var min = this.maxFret;
+				var max = 0;
+				var ref = 0;
+
+				for (var s = 6 - 1; s >= 0; s--) {
+					if (typeof this.currentMark[s] === 'number') {
+						var e = this.positionElement[s][this.currentMark[s]];
+						var t = e.className.split(' ')[0];
+						var d = tone[t].degree;
+
+						stops.push('+:' + (s + 1) + ':' + this.currentMark[s]);
+
+						if (min > this.currentMark[s])
+							min = this.currentMark[s];
+						if (max < this.currentMark[s])
+							max = this.currentMark[s];
+						if (ref == 0 && d == 0)
+							ref = this.currentMark[s]
+					}
+				}
+
+				if (stops.length > 0) {
+					var grid = [];
+					grid.push('_:6:' + min);
+					grid.push('_:1:' + max);
+
+					if (ref > 0)
+						grid.push('F:' + ref);
+					else
+						grid.push('F:' + min);
+
+					this.grid.value = '<span class="grid">' + grid.concat(stops).join(' ') + '</span>';
+				}
 			}
 
 			// Set the tone menu to reflect the current fretboard state.
@@ -914,6 +958,7 @@ DEALINGS IN THE SOFTWARE. -->
 				this.setPositions();
 				this.setMarks();
 				this.setDiagram();
+				this.setGrid();
 				this.setDegrees();
 			}
 

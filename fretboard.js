@@ -62,8 +62,7 @@ class Fretboard {
 		var moveup = document.createElement('span');
 		var movedn = document.createElement('span');
 		var remove = document.createElement('span');
-		var diagram = document.createElement('input');
-		var grid = document.createElement('input');
+		var makelp = document.createElement('span');
 
 		item.className = 'item';
 		table.className = 'fretboard';
@@ -71,12 +70,8 @@ class Fretboard {
 		remove.className = 'control';
 		moveup.className = 'control';
 		movedn.className = 'control';
+		makelp.className = 'control';
 		heading.className = 'heading';
-		grid.className = 'display';
-		diagram.className = 'display';
-
-		grid.type = 'text';
-		diagram.type = 'text';
 
 		table.appendChild(thead);
 		table.appendChild(tbody);
@@ -86,23 +81,25 @@ class Fretboard {
 		heading.appendChild(moveup);
 		heading.appendChild(movedn);
 		heading.appendChild(insert);
-		heading.appendChild(grid);
-		heading.appendChild(diagram);
+		heading.appendChild(makelp);
 
 		insert.innerHTML = '&plus;';
 		remove.innerHTML = '&times;';
 		moveup.innerHTML = '&uarr;';
 		movedn.innerHTML = '&darr;';
+		makelp.innerHTML = '&#8466;';
 
 		insert.title = 'Add Fretboard';
 		remove.title = 'Delete Fretboard';
 		moveup.title = 'Move Up';
 		movedn.title = 'Move Down';
+		makelp.title = 'Copy LilyPond diagram';
 
 		insert.addEventListener('click', () => explorer.insert());
 		remove.addEventListener('click', () => this.remove());
 		moveup.addEventListener('click', () => this.moveup());
 		movedn.addEventListener('click', () => this.movedn());
+		makelp.addEventListener('click', () => this.makeLilyPond());
 
 		// Build the fret numbering.
 		var tr = document.createElement('tr');
@@ -141,8 +138,6 @@ class Fretboard {
 		item.appendChild(table);
 		item.addEventListener('mouseup', () => explorer.selectFretboard(this))
 
-		this.diagram = diagram;
-		this.grid = grid;
 		this.item = item;
 	}
 
@@ -153,10 +148,10 @@ class Fretboard {
 	}
 
 	// Null the className on all position elements.
-	clearMarks() {
+	clrMarks() {
 		for (var string = 0; string < 6; string++) {
 			for (var fret = 0; fret < this.maxFret; fret++) {
-				this.positionElement[string][fret].classList = "";
+				this.positionElement[string][fret].className = "";
 			}
 		}
 	}
@@ -172,23 +167,20 @@ class Fretboard {
 
 	// Set the classes on all position elements to show the selection.
 	setPositions() {
-		for (var pitch = 0; pitch < 12; pitch++) {
-			var tone = this.currentTone[pitch];
+		this.currentTone.forEach(tone => {
 			if (tone) {
 				var degree = degreeOfTone[tone];
 				var offset = offsetOfTone[tone];
 				var pitch = offsetPitch(pitchOfNote[keyOfNote[this.currentRoot][degree]], offset);
 
-				for (var i = 0; i < this.pitchElement[pitch].length; i++) {
-					this.pitchElement[pitch][i].classList.add(tone);
-				}
+				this.pitchElement[pitch].forEach(element => element.classList.add(tone));
 			}
-		}
+		});
 	}
 
 	// Update the DOM CSS classes to reflect the current state.
 	update() {
-		this.clearMarks();
+		this.clrMarks();
 		this.setPositions();
 		this.setMarks();
 	}
@@ -207,7 +199,6 @@ class Fretboard {
 	// Set the meaning of the given pitch.
 	setTone(pitch, id) {
 		this.currentTone[pitch] = id;
-		this.update();
 	}
 
 	// Get the meaning of the given pitch, or undefined if the pitch is unused.
@@ -264,33 +255,39 @@ class Fretboard {
 	}
 
 	// Compute the LilyPond diagram for the current selection.
-	getLilyPond() {
+	makeLilyPond() {
 		var chord = [];
 		var diagram = [];
 
-		for (var s = 6 - 1; s >= 0; s--) {
-			if (typeof this.currentMark[s] === 'number') {
-				var e = this.positionElement[s][this.currentMark[s]];
-				var t = e.className.split(' ')[0];
-				var d = degreeOfTone[t];
-				var a = offsetOfTone[t];
-				var o = octaveAtPosition(s, this.currentMark[s]);
+		for (var string = 6 - 1; string >= 0; string--) {
+			if (typeof this.currentMark[string] === 'number') {
+				var fret = this.currentMark[string];
+				var tone = this.positionElement[string][fret].classList[0];
 
-				var n = keyOfNote[this.currentRoot][d][0];
-				var f = keyOfNote[this.currentRoot][d].substring(1);
+				var degree = degreeOfTone[tone];
+				var offset = offsetOfTone[tone];
+				var octave = octaveAtPosition(string, fret);
 
-				chord.push(n + simplifyLilyPondAccidental(f + getLilyPondAccidental(a)) + getLilyPondOctave(o));
+				var note = keyOfNote[this.currentRoot][degree][0];
+				var flat = keyOfNote[this.currentRoot][degree].substring(1);
 
-				if (this.currentMark[s] > 0)
-					diagram.push(this.currentMark[s] + ';');
-				else
-					diagram.push('o' + ';');
-			} else
+				chord.push(note
+					+ simplifyLilyPondAccidental(flat + getLilyPondAccidental(offset))
+					+ getLilyPondOctave(octave));
+
+				if (fret > 0) {
+					diagram.push(`${fret};`);
+				} else {
+					diagram.push('o;');
+				}
+			} else {
 				diagram.push('x;');
+			}
 		}
 
-		if (chord.length > 0)
-			this.diagram.value = '<' + chord.join(' ') + '>'
-				+ '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
+		if (chord.length > 0) {
+			var lilypond = `<${chord.join(' ')}> 1^\\markup { \\fret-diagram-terse #"${diagram.join('')}" }`
+			console.log(lilypond);
+		}
 	}
 }

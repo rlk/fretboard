@@ -83,14 +83,6 @@ div.heading {
 	display: flex;
 }
 
-input.display {
-	font-family: monospace;
-	font-size: 100%;
-	color: #888;
-	margin-left: 1em;
-	flex-grow: 1;
-}
-
 /* Content list items */
 
 div.item {

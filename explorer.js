@@ -44,6 +44,7 @@ class Explorer {
 	// Assign a meaning to a pitch.
 	selectTone(pitch, id) {
 		this.currentFretboard.setTone(pitch, id)
+		this.currentFretboard.update();
 	}
 
 	// Select a preset.
@@ -74,6 +75,7 @@ class Explorer {
 			for (var i = 0; i < 12; i++) {
 				this.currentFretboard.setTone(i, d[i]);
 			}
+			this.currentFretboard.update();
 			this.setToneMenuValues();
 		}
 	}

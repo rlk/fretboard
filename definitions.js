@@ -120,72 +120,76 @@ var offsetOfTone = {
   't13': 0,
 }
 
-// Return the pitch (0-11) at string s (0-5) fret f.
-
-function pitchAtPosition(s, f) {
-  if (s == 0) { s = s + 1; f = f + 5; }
-  if (s == 1) { s = s + 1; f = f + 4; }
-  if (s == 2) { s = s + 1; f = f + 5; }
-  if (s == 3) { s = s + 1; f = f + 5; }
-  if (s == 4) { s = s + 1; f = f + 5; }
-
-  return (f + 4) % 12;
+// Return the pitch (0-11) at string (0=e 1=B 2=G 3=D 4=A 5=E) and fret.
+function pitchAtPosition(string, fret) {
+  switch (string) { // All fall through.
+    case 0: fret = fret + 5;
+    case 1: fret = fret + 4;
+    case 2: fret = fret + 5;
+    case 3: fret = fret + 5;
+    case 4: fret = fret + 5;
+  }
+  return (fret + 4) % 12;
 }
 
-// Return the octave at string s (0-5) fret f.
-
-function octaveAtPosition(s, f) {
-  if (s == 0) { s = s + 1; f = f + 5; }
-  if (s == 1) { s = s + 1; f = f + 4; }
-  if (s == 2) { s = s + 1; f = f + 5; }
-  if (s == 3) { s = s + 1; f = f + 5; }
-  if (s == 4) { s = s + 1; f = f + 5; }
-
-  return 4 + Math.floor((f - 8) / 12);
+// Return the octave at string (0=e 1=B 2=G 3=D 4=A 5=E) and fret.
+function octaveAtPosition(string, fret) {
+  switch (string) { // All fall through.
+    case 0: fret = fret + 5;
+    case 1: fret = fret + 4;
+    case 2: fret = fret + 5;
+    case 3: fret = fret + 5;
+    case 4: fret = fret + 5;
+  }
+  return 4 + Math.floor((fret - 8) / 12);
 }
 
 // Apply an accidental to a pitch (0-11).
+function offsetPitch(pitch, offset) {
+  var r = pitch + offset;
 
-function offsetPitch(p, a) {
-  var r = p + a;
-
-  if (r < 0) return offsetPitch(r + 12, 0);
-  if (r >= 12) return offsetPitch(r - 12, 0);
-
+  if (r < 0) {
+    return offsetPitch(r + 12, 0)
+  };
+  if (r >= 12) {
+    return offsetPitch(r - 12, 0)
+  };
   return r;
 }
 
-// Return the className of the element at string s (0-5) fret f.
-
-function classAtPosition(s, f) {
-  if (f < 10) return 's' + s.toString() + ' f0' + f.toString();
-  else return 's' + s.toString() + ' f' + f.toString();
+// Return the tone string of the element at string s (0-5) fret f.
+function toneAtPosition(string, fret) {
+  if (fret < 10) return 's' + string.toString() + ' f0' + fret.toString();
+  else return 's' + string.toString() + ' f' + fret.toString();
 }
 
 // Convert an octave number to the appropriate LilyPond syntax.
-
-function getLilyPondOctave(o) {
-  if (o === 3) return ",";
-  if (o === 4) return "";
-  if (o === 5) return "'";
-  if (o === 6) return "''";
+function getLilyPondOctave(octave) {
+  switch (octave) {
+    case 3: return ",";
+    case 4: return "";
+    case 5: return "'";
+    case 6: return "''";
+  }
 }
 
 // Convert an accidental number to the appropriate LilyPond syntax.
-
-function getLilyPondAccidental(a) {
-  if (a === +1) return 's';
-  if (a === 0) return '';
-  if (a === -1) return 'f';
-  if (a === -2) return 'ff';
+function getLilyPondAccidental(offset) {
+  switch (offset) {
+    case +1: return 's';
+    case +0: return '';
+    case -1: return 'f';
+    case -2: return 'ff';
+  }
 }
 
 // Simplify a LilyPond accidental string.
-
 function simplifyLilyPondAccidental(s) {
-  if (s.match('sf'))
+  if (s.match('sf')) {
     return simplifyLilyPondAccidental(s.replace('sf', ''));
-  if (s.match('fs'))
+  }
+  if (s.match('fs')) {
     return simplifyLilyPondAccidental(s.replace('fs', ''));
+  }
   return s;
 }

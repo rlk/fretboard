@@ -97,7 +97,7 @@ class Explorer {
 
 	// Insert a new fretboard after this one.
 	insert() {
-		this.selectFretboard(new Fretboard(this));
+		this.selectFretboard(new Fretboard(this, this.currentFretboard));
 	}
 
 	// Relabel the tone menu using the current fretboard root.

@@ -26,7 +26,7 @@ These `tone` and `note` strings are uniformly used as HTML element identifiers, 
 
 `positionElement` is a 6-row, 16-column, 0-indexed 2D array that holds the DOM element for each selectable position on the fretboard diagram.
 
-`pitchElement` is a 12-element, 0-indexed array of lists that hold the DOM element for each table element associated with a given pitch. For example, element 0, which is tone C, lists the element at fret 3 on the A string, fret 1 on the B string, etc.
+`pitchElement` is a 12-element, 0-indexed array of lists that hold the `positionElement`s associated with a given pitch. For example, element 0, which is tone C, lists the `positionElement`s at fret 3 on the A string, fret 1 on the B string, etc.
 
 ### Explorer
 

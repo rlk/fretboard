@@ -19,36 +19,36 @@
 // DEALINGS IN THE SOFTWARE.
 
 class Fretboard {
-	constructor(explorer) {
+	constructor(explorer, that) {
 		this.maxFret = 16;
 
 		// Initialize the current state.
 		this.currentRoot = 'c';
 		this.currentTone = [];
 		this.currentMark = [];
+		this.pitchElement = [];
+		this.positionElement = [];
 
 		for (var id = 0; id < 12; id++) {
 			this.currentTone[id] = undefined;
+			this.pitchElement[id] = [];
 		}
 
 		for (var string = 0; string < 6; string++) {
 			this.currentMark[string] = undefined;
+			this.positionElement[string] = [];
 		}
-
-		// Frequently accessed DOM elements.
-		this.positionElement = [[], [], [], [], [], []];
-		this.pitchElement = [[], [], [], [], [], [], [], [], [], [], [], []];
 
 		// Initalize the DOM for this fretboard.
 		this.buildDocument(explorer);
 		this.update();
 
 		// Add the new fretboard to the document.
-
-		// if (that)
-		// 	document.getElementById("fretboards").insertBefore(this.item, that.item.nextSibling);
-		// else
-		document.getElementById("fretboards").appendChild(this.item);
+		if (that) {
+			document.getElementById("fretboards").insertBefore(this.item, that.item.nextSibling);
+		} else {
+			document.getElementById("fretboards").appendChild(this.item);
+		}
 	}
 
 	// Build the fretboard table.
@@ -119,16 +119,16 @@ class Fretboard {
 			tbody.appendChild(tr);
 
 			for (var fret = 0; fret < this.maxFret; fret++) {
+				var pitch = pitchAtPosition(string, fret);
 				var td = document.createElement('td');
 				var div = document.createElement('div');
 
 				this.positionElement[string][fret] = div;
-				this.pitchElement[pitchAtPosition(string, fret)].push(div);
+				this.pitchElement[pitch].push(div);
 
 				div.addEventListener('click', this.makeNoteToggler(this, string, fret));
 
-				td.className = classAtPosition(string, fret);
-
+				td.className = toneAtPosition(string, fret);
 				td.appendChild(div);
 				tr.appendChild(td);
 			}

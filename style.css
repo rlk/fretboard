@@ -31,15 +31,15 @@ body {
 	font-family: Arial;
 }
 
-#layout {
+main {
 	height: 100%;
 	display: flex;
 	flex-direction: row;
-	overflow: hidden;
+	/* overflow: hidden; */
 }
 
-#content {
-	overflow: scroll;
+#fretboards {
+	/* overflow: scroll; */
 	flex-grow: 1;
 }
 
@@ -47,7 +47,7 @@ div.toolbar {
 	height: 100%;
 	font-size: 75%;
 	flex-shrink: 0;
-	overflow: scroll;
+	/* overflow: scroll; */
 }
 
 h1 {
@@ -79,15 +79,19 @@ span.control:hover {
 	background: #DFD;
 }
 
-div.heading {
-	display: flex;
-}
-
 /* Content list items */
 
 div.item {
+	display: flex;
 	margin: 1em 4px;
 	padding: 0.5em;
+	flex-direction: row;
+}
+
+div.panel {
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
 }
 
 div.unselected {
@@ -160,7 +164,8 @@ table.piano tr:nth-child(12) {
 /* Fretboard table */
 
 table.fretboard {
-	border-collapse: collapse;
+	border-collapse: collapse; /* cut */
+		flex-grow: 1;
 }
 
 table.fretboard tbody {

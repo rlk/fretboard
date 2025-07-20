@@ -54,10 +54,10 @@ class Fretboard {
 	// Build the fretboard table.
 	buildDocument(explorer) {
 		var item = document.createElement('div');
+		var panel = document.createElement('div');
 		var table = document.createElement('table');
 		var thead = document.createElement('thead');
 		var tbody = document.createElement('tbody');
-		var heading = document.createElement('div');
 		var insert = document.createElement('span');
 		var moveup = document.createElement('span');
 		var movedn = document.createElement('span');
@@ -65,23 +65,23 @@ class Fretboard {
 		var makelp = document.createElement('span');
 
 		item.className = 'item';
+		panel.className = 'panel';
 		table.className = 'fretboard';
 		insert.className = 'control';
 		remove.className = 'control';
 		moveup.className = 'control';
 		movedn.className = 'control';
 		makelp.className = 'control';
-		heading.className = 'heading';
 
 		table.appendChild(thead);
 		table.appendChild(tbody);
 
-		// Build the fretboard controls.
-		heading.appendChild(remove);
-		heading.appendChild(moveup);
-		heading.appendChild(movedn);
-		heading.appendChild(insert);
-		heading.appendChild(makelp);
+		// Build the fretboard control panel.
+		panel.appendChild(remove);
+		panel.appendChild(moveup);
+		panel.appendChild(movedn);
+		panel.appendChild(insert);
+		panel.appendChild(makelp);
 
 		insert.innerHTML = '&plus;';
 		remove.innerHTML = '&times;';
@@ -134,7 +134,7 @@ class Fretboard {
 			}
 		}
 
-		item.appendChild(heading);
+		item.appendChild(panel);
 		item.appendChild(table);
 		item.addEventListener('mouseup', () => explorer.selectFretboard(this))
 

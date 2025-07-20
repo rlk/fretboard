@@ -28,7 +28,10 @@ DEALINGS IN THE SOFTWARE. -->
 </head>
 
 <body>
-	<div id="layout">
+	<header>
+		<h1>Guitar Chord Voicing Explorer</h1>
+	</header>
+	<main>
 		<div class="toolbar">
 			<table class="menu">
 				<tr>
@@ -227,14 +230,20 @@ DEALINGS IN THE SOFTWARE. -->
 				<option>Diminished 7</option>
 			</select>
 		</div>
-		<div id="content">
-			<h1>Guitar Chord Voicing Explorer</h1>
-			<div id="fretboards">
-			</div>
-			<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure Chord Grid and <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagrams</a>.</p>
-			<p class="note">Guitar Chord Voicing Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a>. <a href="https://github.com/rlk/fretboard">Fork me on Github</a>.</p>
+		<div id="fretboards">
 		</div>
-	</div>
+	</main>
+	<footer>
+		<p class="note">Select a root note and chord tones at the left to configure the fretboard. Click to mark positions.</p>
+		<p class="note">
+			<span class="control">&plus;</span> add fretboard
+			<span class="control">&uarr;</span> move up
+			<span class="control">&darr;</span> move down
+			<span class="control">&times;</span> remove fretboard
+			<span class="control">&#8466;</span> copy <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagram
+		</p>
+		<p class="note"><a href="https://github.com/rlk/fretboard">Guitar Chord Voicing Explorer</a> &mdash; Copyright &copy; 2016, 2025 <a href="http://kooima.net">Robert Kooima</a></p>
+	</footer>
 	<script src="definitions.js" type="text/javascript"></script>
 	<script src="fretboard.js" type="text/javascript"></script>
 	<script src="explorer.js" type="text/javascript"></script>

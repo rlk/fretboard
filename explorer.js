@@ -34,55 +34,50 @@ class Explorer {
 		this.degreeElement[6] = document.getElementById('degree7');
 
 		// Instantiate an initial fretboard.
-		this.selectFretboard(new Fretboard());
+		this.selectFretboard(new Fretboard(this));
 	}
 
 	// Select a root note.
-	changeRoot(id) {
-		this.currentFretboard.currentRoot = id;
-		this.currentFretboard.update();
+	selectRoot(id) {
+		this.currentFretboard.setRoot(id);
+		this.setToneMenuLabels(this.currentFretboard.currentRoot);
 	}
 
-	// Select a chord tone.
-	changeTone(i, id) {
-		this.currentFretboard.currentTone[i] = id;
-		this.currentFretboard.update();
+	// Assign a meaning to a pitch.
+	selectTone(pitch, id) {
+		this.currentFretboard.setTone(pitch, id)
 	}
 
 	// Select a preset.
 	changePreset(value) {
 		var presets = {
 			'Clear': {},
-			'Major': { 0: 't1', 4: 't3', 7: 't5' },
 			'Minor': { 0: 't1', 3: 't3f', 7: 't5' },
-			'6': { 0: 't1', 4: 't3', 7: 't5', 9: 't6' },
-			'7': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f' },
-			'9': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f', 2: 't9' },
-			'13': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f', 2: 't9', 9: 't13' },
-			'Major 7': { 0: 't1', 4: 't3', 7: 't5', 11: 't7' },
-			'Major 9': { 0: 't1', 4: 't3', 7: 't5', 11: 't7', 2: 't9' },
-			'Major 13': { 0: 't1', 4: 't3', 7: 't5', 11: 't7', 2: 't9', 9: 't13' },
-			'Minor 6': { 0: 't1', 3: 't3f', 7: 't5', 9: 't6' },
+			'Major': { 0: 't1', 4: 't3', 7: 't5' },
+			'Suspended': { 0: 't1', 5: 't4', 7: 't5' },
+			'Dominant 7': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f' },
+			'Dominant 9': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f', 2: 't9' },
+			'Dominant 13': { 0: 't1', 4: 't3', 7: 't5', 10: 't7f', 2: 't9', 9: 't13' },
 			'Minor 7': { 0: 't1', 3: 't3f', 7: 't5', 10: 't7f' },
 			'Minor 9': { 0: 't1', 3: 't3f', 7: 't5', 10: 't7f', 2: 't9' },
 			'Minor 13': { 0: 't1', 3: 't3f', 7: 't5', 10: 't7f', 2: 't9', 9: 't13' },
+			'Major 7': { 0: 't1', 4: 't3', 7: 't5', 11: 't7' },
+			'Major 9': { 0: 't1', 4: 't3', 7: 't5', 11: 't7', 2: 't9' },
+			'Major 13': { 0: 't1', 4: 't3', 7: 't5', 11: 't7', 2: 't9', 9: 't13' },
 			'Augmented': { 0: 't1', 4: 't3', 8: 't5s' },
 			'Augmented 7': { 0: 't1', 4: 't3', 8: 't5s', 10: 't7f' },
 			'Diminished': { 0: 't1', 3: 't3f', 6: 't5f' },
 			'Diminished 7': { 0: 't1', 3: 't3f', 6: 't5f', 9: 't7ff' },
-			'Suspended': { 0: 't1', 5: 't4', 7: 't5' },
-			'Suspended 7': { 0: 't1', 5: 't4', 7: 't5', 10: 't7f' },
-			'Suspended 9': { 0: 't1', 5: 't4', 7: 't5', 10: 't7f', 2: 't9' },
 		};
 
 		var d = presets[value];
 
 		if (d) {
-			for (var i = 0; i < 12; i++)
-				this.currentFretboard.currentTone[i] = d[i];
+			for (var i = 0; i < 12; i++) {
+				this.currentFretboard.setTone(i, d[i]);
+			}
 
-			this.currentFretboard.update();
-			this.currentFretboard.setTones();
+			this.currentFretboard.setToneMenuValues();
 		}
 	}
 
@@ -98,8 +93,8 @@ class Explorer {
 		this.currentFretboard.item.className = "item selected";
 
 		// Reset the tone menu.
-		this.currentFretboard.setTones();
-		this.setDegrees(this.currentFretboard.currentRoot);
+		this.currentFretboard.setToneMenuValues();
+		this.setToneMenuLabels(this.currentFretboard.currentRoot);
 
 		// Set the root menu to match the new fretboard.
 		document.getElementById(this.currentFretboard.currentRoot).checked = true;
@@ -111,10 +106,10 @@ class Explorer {
 	}
 
 	// Relabel the tone menu for the selected key.
-	setDegrees(currentRoot) {
+	setToneMenuLabels(currentRoot) {
 		for (var d = 0; d < 7; d++)
 			this.degreeElement[d].innerHTML = html[key[currentRoot][d]];
 	}
 }
 
-var explorer = new Explorer();
+var currentExplorer = new Explorer();

@@ -19,7 +19,7 @@
 // DEALINGS IN THE SOFTWARE.
 
 class Fretboard {
-	constructor() {
+	constructor(explorer) {
 		this.maxFret = 16;
 
 		// Initialize the current state.
@@ -38,7 +38,7 @@ class Fretboard {
 		this.pitchElement = [[], [], [], [], [], [], [], [], [], [], [], []];
 
 		// Initalize the DOM for this fretboard.
-		this.buildDocument();
+		this.buildDocument(explorer);
 		this.update();
 
 		// Add the new fretboard to the document.
@@ -50,7 +50,7 @@ class Fretboard {
 	}
 
 	// Build the fretboard table.
-	buildDocument() {
+	buildDocument(explorer) {
 		var item = document.createElement('div');
 		var table = document.createElement('table');
 		var thead = document.createElement('thead');
@@ -255,48 +255,24 @@ class Fretboard {
 		}
 	}
 
-	// Set the tone menu to reflect the current fretboard state.
-	setTones() {
-		document.getElementById('n0').checked = true;
-		document.getElementById('n1').checked = true;
-		document.getElementById('n2').checked = true;
-		document.getElementById('n3').checked = true;
-		document.getElementById('n4').checked = true;
-		document.getElementById('n5').checked = true;
-		document.getElementById('n6').checked = true;
-		document.getElementById('n7').checked = true;
-		document.getElementById('n8').checked = true;
-		document.getElementById('n9').checked = true;
-		document.getElementById('n10').checked = true;
-		document.getElementById('n11').checked = true;
-
+	// Select the tone menu radio buttons to reflect the current fretboard state.
+	setToneMenuValues() {
 		for (var i = 0; i < 12; i++)
-			if (this.currentTone[i])
+			if (this.currentTone[i]) {
 				document.getElementById(this.currentTone[i]).checked = true;
+			} else {
+				document.getElementById(`n${i}`).checked = true;
+			}
 	}
 
-	// Remove the fretboard (if it's not the only one left).
-	remove() {
-		if (document.getElementsByClassName("item").length > 1)
-			this.item.remove();
+	setRoot(id) {
+		this.currentRoot = id;
+		this.update();
 	}
 
-	// Shift the fretboard up in the document order.
-	moveup() {
-		var curr = this.item;
-		var prev = this.item.previousSibling;
-
-		if (prev && prev.tagName === 'DIV')
-			document.getElementById("fretboards").insertBefore(curr, prev);
-	}
-
-	// Shift the fretboard down in the document order.
-	movedn() {
-		var curr = this.item;
-		var next = this.item.nextSibling;
-
-		if (next && next.tagName === 'DIV')
-			document.getElementById("fretboards").insertBefore(next, curr);
+	setTone(pitch, id) {
+		this.currentTone[pitch] = id;
+		this.update();
 	}
 
 	// Update the DOM to reflect the current state.
@@ -306,7 +282,6 @@ class Fretboard {
 		this.setMarks();
 		this.setDiagram();
 		this.setGrid();
-		// this.setDegrees();
 	}
 
 	// Toggle the mark on a position.
@@ -320,14 +295,27 @@ class Fretboard {
 		}
 	}
 
-	// Log the current state of the fretboard.
-	dump() {
-		var str = "";
+	// Remove this item (if it's not the only one left).
+	remove() {
+		if (document.getElementsByClassName("item").length > 1)
+			this.item.remove();
+	}
 
-		for (var s = 0; s < 6; s++)
-			for (var f = 0; f < this.maxFret; f++)
-				str += '[' + this.positionElement[s][f].className + '] ';
+	// Shift this item up in the document order.
+	moveup() {
+		var curr = this.item;
+		var prev = this.item.previousSibling;
 
-		console.log(str);
+		if (prev && prev.tagName === 'DIV')
+			document.getElementById("fretboards").insertBefore(curr, prev);
+	}
+
+	// Shift this item down in the document order.
+	movedn() {
+		var curr = this.item;
+		var next = this.item.nextSibling;
+
+		if (next && next.tagName === 'DIV')
+			document.getElementById("fretboards").insertBefore(next, curr);
 	}
 }

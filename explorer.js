@@ -36,8 +36,8 @@ class Explorer {
 	}
 
 	// Select a root note.
-	selectRoot(id) {
-		this.currentFretboard.setRoot(id);
+	selectRoot(note) {
+		this.currentFretboard.setRoot(note);
 		this.setToneMenuLabels();
 	}
 
@@ -102,7 +102,7 @@ class Explorer {
 	setToneMenuLabels() {
 		for (var degree = 0; degree < 7; degree++)
 			this.degreeElement[degree].innerHTML
-				= html[key[this.currentFretboard.getRoot()][degree]];
+				= htmlOfNote[keyOfNote[this.currentFretboard.getRoot()][degree]];
 	}
 
 	// Select the tone menu radio buttons to reflect the current fretboard state.

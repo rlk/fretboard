@@ -10,6 +10,12 @@ Fretboard controls create, delete, and reorder fretboard diagrams.
 
 ## Internals
 
+A `tone` is a string that gives a scale degree and alteration. For example, `t6`, `t13`, and `t7ff` might all refer to the same pitch.
+
+A `note` is a string that gives a note name and alteration. For example, `c`, `cs`, or `df`.
+
+These `tone` and `note` strings are uniformly used as HTML element identifiers, CSS classes, image file names, and internal state representations.
+
 ### Fretboard
 
 `currentRoot` selects the root of current chord on a fretboard.

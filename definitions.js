@@ -18,7 +18,7 @@
 // FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 // DEALINGS IN THE SOFTWARE.
 
-var pitch = {
+var pitchOfNote = {
   'cf': 11, 'c': 0, 'cs': 1,
   'df': 1, 'd': 2, 'ds': 3,
   'ef': 3, 'e': 4, 'es': 5,
@@ -28,7 +28,7 @@ var pitch = {
   'bf': 10, 'b': 11, 'bs': 12,
 };
 
-var html = {
+var htmlOfNote = {
   'cf': "C&flat;",
   'c': "C",
   'cs': "C&sharp;",
@@ -52,7 +52,7 @@ var html = {
   'bs': "B&sharp;",
 };
 
-var key = {
+var keyOfNote = {
   'cs': ['cs', 'ds', 'es', 'fs', 'gs', 'as', 'bs'],
   'fs': ['fs', 'gs', 'as', 'b', 'cs', 'ds', 'es'],
   'b': ['b', 'cs', 'ds', 'e', 'fs', 'gs', 'as'],
@@ -70,29 +70,54 @@ var key = {
   'cf': ['cf', 'df', 'ef', 'ff', 'gf', 'af', 'bf'],
 }
 
-var tone = {
-  't1': { degree: 0, offset: 0 },
-  't2f': { degree: 1, offset: -1 },
-  't2': { degree: 1, offset: 0 },
-  't3f': { degree: 2, offset: -1 },
-  't3': { degree: 2, offset: 0 },
-  't4': { degree: 3, offset: 0 },
-  't5f': { degree: 4, offset: -1 },
-  't5': { degree: 4, offset: 0 },
-  't5s': { degree: 4, offset: +1 },
-  't6f': { degree: 5, offset: -1 },
-  't6': { degree: 5, offset: 0 },
-  't7ff': { degree: 6, offset: -2 },
-  't7f': { degree: 6, offset: -1 },
-  't7': { degree: 6, offset: 0 },
-  't9f': { degree: 1, offset: -1 },
-  't9': { degree: 1, offset: 0 },
-  't9s': { degree: 1, offset: +1 },
-  't11f': { degree: 3, offset: -1 },
-  't11': { degree: 3, offset: 0 },
-  't11s': { degree: 3, offset: +1 },
-  't13f': { degree: 5, offset: -1 },
-  't13': { degree: 5, offset: 0 },
+var degreeOfTone = {
+  't1': 0,
+  't2f': 1,
+  't2': 1,
+  't3f': 2,
+  't3': 2,
+  't4': 3,
+  't5f': 4,
+  't5': 4,
+  't5s': 4,
+  't6f': 5,
+  't6': 5,
+  't7ff': 6,
+  't7f': 6,
+  't7': 6,
+  't9f': 1,
+  't9': 1,
+  't9s': 1,
+  't11f': 3,
+  't11': 3,
+  't11s': 3,
+  't13f': 5,
+  't13': 5,
+}
+
+var offsetOfTone = {
+  't1': 0,
+  't2f': -1,
+  't2': 0,
+  't3f': -1,
+  't3': 0,
+  't4': 0,
+  't5f': -1,
+  't5': 0,
+  't5s': +1,
+  't6f': -1,
+  't6': 0,
+  't7ff': -2,
+  't7f': -1,
+  't7': 0,
+  't9f': -1,
+  't9': 0,
+  't9s': +1,
+  't11f': -1,
+  't11': 0,
+  't11s': +1,
+  't13f': -1,
+  't13': 0,
 }
 
 // Return the pitch (0-11) at string s (0-5) fret f.

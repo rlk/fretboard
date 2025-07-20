@@ -1,7 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <meta charset="utf-8">
 
-<!-- Copyright (c) 2016 Robert Kooima
+<!-- Copyright (c) 2016, 2025 Robert Kooima
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the "Software"),
@@ -22,1053 +22,227 @@ FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE. -->
 
 <html>
-	<head>
-		<style>
-			/* Top-level structure */
 
-			html {
-				height: 100%;
-				margin: 0;
-			}
-			body {
-				height: 100%;
-				margin: 0;
-				font-family: Arial;
-			}
-			#layout {
-				height: 100%;
-				display: flex;
-				flex-direction: row;
-				overflow: hidden;
-			}
-			#content {
-				overflow: scroll;
-				flex-grow: 1;
-			}
-			div.toolbar {
-				height: 100%;
-				font-size: 75%;
-				flex-shrink: 0;
-				overflow: scroll;
-			}
+<head>
+	<link href="style.css" type="text/css" rel="stylesheet">
+</head>
 
-			h1 {
-				text-align: center;
-			}
-			p.note {
-				text-align: center;
-				color: #CCC;
-			}
-
-			/* Controls */
-
-			span.control {
-				display: inline-block;
-				margin: 2px;
-				border: 1px solid #ABA;
-				border-radius: 2px;
-				background: #DED;
-				width: 1.5em;
-				line-height: 1.5em;
-				text-align: center;
-				font-weight: bold;
-				vertical-align: middle;
-				cursor: pointer;
-			}
-			span.control:hover {
-				background: #DFD;
-			}
-			div.heading {
-				display: flex;
-			}
-			input.display {
-				font-family: monospace;
-				font-size: 100%;
-				color: #888;
-				margin-left: 1em;
-				flex-grow: 1;
-			}
-
-			/* Content list items */
-
-			div.item {
-				margin: 1em 4px;
-				padding: 0.5em;
-			}
-			div.unselected {
-				border: 2px solid white;
-				border-radius: 4px;
-			}
-			div.unselected:hover {
-				background: #FFE;
-			}
-			div.selected {
-				border: 2px solid #DDB;
-				border-radius: 4px;
-				background: #FFD;
-			}
-
-			/* Menu table */
-
-			table.menu {
-				vertical-align: top;
-				border-collapse: collapse;
-				margin: 0.5em;
-				padding: 0.5em;
-			}
-			table.menu th {
-				font-weight: normal;
-				height: 2em;
-			}
-			table.menu td {
-				border: 1px solid black;
-				padding: 0.5em 0.25em;
-				text-align: left;
-			}
-			table.menu input {
-				vertical-align: middle;
-			}
-			table.menu img {
-				vertical-align: middle;
-			}
-			table.piano td:nth-child(2) {
-				text-align:center;
-			}
-
-			/* Tone selection menu */
-
-			table.piano tr:nth-child(2),
-			table.piano tr:nth-child(4),
-			table.piano tr:nth-child(6),
-			table.piano tr:nth-child(7),
-			table.piano tr:nth-child(9),
-			table.piano tr:nth-child(11),
-			table.piano tr:nth-child(13) {
-				background-color: #EEE;
-			}
-			table.piano tr:nth-child(3),
-			table.piano tr:nth-child(5),
-			table.piano tr:nth-child(8),
-			table.piano tr:nth-child(10),
-			table.piano tr:nth-child(12) {
-				background-color: #CCC;
-			}
-
-			/* Fretboard table */
-
-			table.fretboard {
-				border-collapse: collapse;
-			}
-			table.fretboard tbody {
-				background-color: #A98;
-			}
-			table.fretboard td.s0 { background-image: linear-gradient(to bottom, transparent, transparent 47%, #FFF 47%, #EEE 50%, #777 53%, transparent 53%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.s1 { background-image: linear-gradient(to bottom, transparent, transparent 46%, #FFF 46%, #EEE 50%, #777 54%, transparent 54%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.s2 { background-image: linear-gradient(to bottom, transparent, transparent 45%, #FFF 45%, #EEE 50%, #777 55%, transparent 55%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.s3 { background-image: linear-gradient(to bottom, transparent, transparent 44%, #FFF 44%, #EEE 50%, #777 56%, transparent 56%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.s4 { background-image: linear-gradient(to bottom, transparent, transparent 43%, #FFF 43%, #EEE 50%, #777 57%, transparent 57%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.s5 { background-image: linear-gradient(to bottom, transparent, transparent 42%, #FFF 42%, #EEE 50%, #777 58%, transparent 58%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px) }
-			table.fretboard td.f00 { width: 0.5%; background-color: #DDD; background-image: none; }
-			table.fretboard td.f01 { width: 4.7193% }
-			table.fretboard td.f02 { width: 4.4544% }
-			table.fretboard td.f03 { width: 4.2044% }
-			table.fretboard td.f04 { width: 3.9685% }
-			table.fretboard td.f05 { width: 3.7457% }
-			table.fretboard td.f06 { width: 3.5355% }
-			table.fretboard td.f07 { width: 3.3370% }
-			table.fretboard td.f08 { width: 3.1498% }
-			table.fretboard td.f09 { width: 2.9730% }
-			table.fretboard td.f10 { width: 2.8061% }
-			table.fretboard td.f11 { width: 2.6486% }
-			table.fretboard td.f12 { width: 2.5000% }
-			table.fretboard td.f13 { width: 2.3596% }
-			table.fretboard td.f14 { width: 2.2272% }
-			table.fretboard td.f15 { width: 2.1022% }
-
-			/* Fretboard positions */
-
-			table.fretboard div {
-				float: right;
-				min-width:  20pt;
-				min-height: 20pt;
-				text-align: center;
-			}
-
-			table.fretboard div.t1:hover   { background-color: yellow; }
-			table.fretboard div.t2f:hover  { background-color: yellow; }
-			table.fretboard div.t2:hover   { background-color: yellow; }
-			table.fretboard div.t3f:hover  { background-color: yellow; }
-			table.fretboard div.t3:hover   { background-color: yellow; }
-			table.fretboard div.t4:hover   { background-color: yellow; }
-			table.fretboard div.t5f:hover  { background-color: yellow; }
-			table.fretboard div.t5:hover   { background-color: yellow; }
-			table.fretboard div.t5s:hover  { background-color: yellow; }
-			table.fretboard div.t6f:hover  { background-color: yellow; }
-			table.fretboard div.t6:hover   { background-color: yellow; }
-			table.fretboard div.t7ff:hover { background-color: yellow; }
-			table.fretboard div.t7f:hover  { background-color: yellow; }
-			table.fretboard div.t7:hover   { background-color: yellow; }
-			table.fretboard div.t9f:hover  { background-color: yellow; }
-			table.fretboard div.t9:hover   { background-color: yellow; }
-			table.fretboard div.t9s:hover  { background-color: yellow; }
-			table.fretboard div.t11f:hover { background-color: yellow; }
-			table.fretboard div.t11:hover  { background-color: yellow; }
-			table.fretboard div.t11s:hover { background-color: yellow; }
-			table.fretboard div.t13f:hover { background-color: yellow; }
-			table.fretboard div.t13:hover  { background-color: yellow; }
-
-			/* Selected fretboard positions */
-
-			table.fretboard div.t1   { background-image: url("img/t1.svg");   }
-			table.fretboard div.t2f  { background-image: url("img/t2f.svg");  }
-			table.fretboard div.t2   { background-image: url("img/t2.svg");   }
-			table.fretboard div.t3f  { background-image: url("img/t3f.svg");  }
-			table.fretboard div.t3   { background-image: url("img/t3.svg");   }
-			table.fretboard div.t4   { background-image: url("img/t4.svg");   }
-			table.fretboard div.t5f  { background-image: url("img/t5f.svg");  }
-			table.fretboard div.t5   { background-image: url("img/t5.svg");   }
-			table.fretboard div.t5s  { background-image: url("img/t5s.svg");  }
-			table.fretboard div.t6f  { background-image: url("img/t6f.svg");  }
-			table.fretboard div.t6   { background-image: url("img/t6.svg");   }
-			table.fretboard div.t7ff { background-image: url("img/t7ff.svg"); }
-			table.fretboard div.t7f  { background-image: url("img/t7f.svg");  }
-			table.fretboard div.t7   { background-image: url("img/t7.svg");   }
-			table.fretboard div.t9f  { background-image: url("img/t9f.svg");  }
-			table.fretboard div.t9   { background-image: url("img/t9.svg");   }
-			table.fretboard div.t9s  { background-image: url("img/t9s.svg");  }
-			table.fretboard div.t11f { background-image: url("img/t11f.svg"); }
-			table.fretboard div.t11  { background-image: url("img/t11.svg");  }
-			table.fretboard div.t11s { background-image: url("img/t11s.svg"); }
-			table.fretboard div.t13f { background-image: url("img/t13f.svg"); }
-			table.fretboard div.t13  { background-image: url("img/t13.svg");  }
-
-			/* Selected and marked fretboard positions */
-
-			table.fretboard div.marked.t1   { background-image: url("img/mark.svg"), url("img/t1.svg");   }
-			table.fretboard div.marked.t2f  { background-image: url("img/mark.svg"), url("img/t2f.svg");  }
-			table.fretboard div.marked.t2   { background-image: url("img/mark.svg"), url("img/t2.svg");   }
-			table.fretboard div.marked.t3f  { background-image: url("img/mark.svg"), url("img/t3f.svg");  }
-			table.fretboard div.marked.t3   { background-image: url("img/mark.svg"), url("img/t3.svg");   }
-			table.fretboard div.marked.t4   { background-image: url("img/mark.svg"), url("img/t4.svg");   }
-			table.fretboard div.marked.t5f  { background-image: url("img/mark.svg"), url("img/t5f.svg");  }
-			table.fretboard div.marked.t5   { background-image: url("img/mark.svg"), url("img/t5.svg");   }
-			table.fretboard div.marked.t5s  { background-image: url("img/mark.svg"), url("img/t5s.svg");  }
-			table.fretboard div.marked.t6f  { background-image: url("img/mark.svg"), url("img/t6f.svg");  }
-			table.fretboard div.marked.t6   { background-image: url("img/mark.svg"), url("img/t6.svg");   }
-			table.fretboard div.marked.t7ff { background-image: url("img/mark.svg"), url("img/t7ff.svg"); }
-			table.fretboard div.marked.t7f  { background-image: url("img/mark.svg"), url("img/t7f.svg");  }
-			table.fretboard div.marked.t7   { background-image: url("img/mark.svg"), url("img/t7.svg");   }
-			table.fretboard div.marked.t9f  { background-image: url("img/mark.svg"), url("img/t9f.svg");  }
-			table.fretboard div.marked.t9   { background-image: url("img/mark.svg"), url("img/t9.svg");   }
-			table.fretboard div.marked.t9s  { background-image: url("img/mark.svg"), url("img/t9s.svg");  }
-			table.fretboard div.marked.t11f { background-image: url("img/mark.svg"), url("img/t11f.svg"); }
-			table.fretboard div.marked.t11  { background-image: url("img/mark.svg"), url("img/t11.svg");  }
-			table.fretboard div.marked.t11s { background-image: url("img/mark.svg"), url("img/t11s.svg"); }
-			table.fretboard div.marked.t13f { background-image: url("img/mark.svg"), url("img/t13f.svg"); }
-			table.fretboard div.marked.t13  { background-image: url("img/mark.svg"), url("img/t13.svg");  }
-
-			/* Remove the GUI elements for printing. As of this writing, none of the major browsers correctly print background gradients. */
-
-			@media print {
-				h1            { display: none; }
-				div.toolbar   { display: none; }
-				p.note        { display: none; }
-				div.selected  { border:  none; background: inherit; }
-				div.heading   { display: none; }
-			}
-
-		</style>
-	</head>
-	<body onload="init()">
-		<div id="layout">
-			<div class="toolbar">
-				<table class="menu">
-					<tr><th>Root</th></tr>
-					<tr><td><input type="radio" id="cs" onchange="changeRoot('cs')" name="root">C&sharp;</td></tr>
-					<tr><td><input type="radio" id="fs" onchange="changeRoot('fs')" name="root">F&sharp;</td></tr>
-					<tr><td><input type="radio" id="b"  onchange="changeRoot('b' )" name="root">B</td></tr>
-					<tr><td><input type="radio" id="e"  onchange="changeRoot('e' )" name="root">E</td></tr>
-					<tr><td><input type="radio" id="a"  onchange="changeRoot('a' )" name="root">A</td></tr>
-					<tr><td><input type="radio" id="d"  onchange="changeRoot('d' )" name="root">D</td></tr>
-					<tr><td><input type="radio" id="g"  onchange="changeRoot('g' )" name="root">G</td></tr>
-					<tr><td><input type="radio" id="c"  onchange="changeRoot('c' )" name="root" checked>C</td></tr>
-					<tr><td><input type="radio" id="f"  onchange="changeRoot('f' )" name="root">F</td></tr>
-					<tr><td><input type="radio" id="bf" onchange="changeRoot('bf')" name="root">B&flat;</td></tr>
-					<tr><td><input type="radio" id="ef" onchange="changeRoot('ef')" name="root">E&flat;</td></tr>
-					<tr><td><input type="radio" id="af" onchange="changeRoot('af')" name="root">A&flat;</td></tr>
-					<tr><td><input type="radio" id="df" onchange="changeRoot('df')" name="root">D&flat;</td></tr>
-					<tr><td><input type="radio" id="gf" onchange="changeRoot('gf')" name="root">G&flat;</td></tr>
-					<tr><td><input type="radio" id="cf" onchange="changeRoot('cf')" name="root">C&flat;</td></tr>
-				</table>
-			</div>
-			<div class="toolbar">
-				<table class="menu piano">
-					<tr>
-						<th>Deg</th>
-						<th>None</th>
-						<th>Chord Tone</th>
-					</tr>
-					<tr>
-						<td id="degree1">C</td>
-						<td>
-							<span><input type="radio" id="n0"   onchange="changeTone(0, undefined)" name="tone0" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t1"   onchange="changeTone(0, 't1'   )" name="tone0"><img src="img/t1.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<span><input type="radio" id="n1"   onchange="changeTone(1, undefined)" name="tone1" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t2f"  onchange="changeTone(1, 't2f'  )" name="tone1"><img src="img/t2f.svg"></span>
-							<span><input type="radio" id="t9f"  onchange="changeTone(1, 't9f'  )" name="tone1"><img src="img/t9f.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree2">D</td>
-						<td>
-							<span><input type="radio" id="n2"   onchange="changeTone(2, undefined)" name="tone2" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t2"   onchange="changeTone(2, 't2'   )" name="tone2"><img src="img/t2.svg"></span>
-							<span><input type="radio" id="t9"   onchange="changeTone(2, 't9'   )" name="tone2"><img src="img/t9.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<span><input type="radio" id="n3"   onchange="changeTone(3, undefined)" name="tone3" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t3f"  onchange="changeTone(3, 't3f'  )" name="tone3"><img src="img/t3f.svg"></span>
-							<span><input type="radio" id="t9s"  onchange="changeTone(3, 't9s'  )" name="tone3"><img src="img/t9s.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree3">E</td>
-						<td>
-							<span><input type="radio" id="n4"   onchange="changeTone(4, undefined)" name="tone4" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t3"   onchange="changeTone(4, 't3'   )" name="tone4"><img src="img/t3.svg"></span>
-							<span><input type="radio" id="t11f" onchange="changeTone(4, 't11f' )" name="tone4"><img src="img/t11f.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree4">F</td>
-						<td>
-							<span><input type="radio" id="n5"   onchange="changeTone(5, undefined)" name="tone5" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t4"   onchange="changeTone(5, 't4'   )" name="tone5"><img src="img/t4.svg"></span>
-							<span><input type="radio" id="t11"  onchange="changeTone(5, 't11'  )" name="tone5"><img src="img/t11.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<span><input type="radio" id="n6"   onchange="changeTone(6, undefined)" name="tone6" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t5f"  onchange="changeTone(6, 't5f'  )" name="tone6"><img src="img/t5f.svg"></span>
-							<span><input type="radio" id="t11s" onchange="changeTone(6, 't11s' )" name="tone6"><img src="img/t11s.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree5">G</td>
-						<td>
-							<span><input type="radio" id="n7"   onchange="changeTone(7, undefined)" name="tone7" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t5"   onchange="changeTone(7, 't5'   )" name="tone7"><img src="img/t5.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<span><input type="radio" id="n8"   onchange="changeTone(8, undefined)" name="tone8" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t5s"  onchange="changeTone(8, 't5s'  )" name="tone8"><img src="img/t5s.svg"></span>
-							<span><input type="radio" id="t6f"  onchange="changeTone(8, 't6f'  )" name="tone8"><img src="img/t6f.svg"></span>
-							<span><input type="radio" id="t13f" onchange="changeTone(8, 't13f' )" name="tone8"><img src="img/t13f.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree6">A</td>
-						<td>
-							<span><input type="radio" id="n9"   onchange="changeTone(9, undefined)" name="tone9" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t6"   onchange="changeTone(9, 't6'   )" name="tone9"><img src="img/t6.svg"></span>
-							<span><input type="radio" id="t7ff" onchange="changeTone(9, 't7ff' )" name="tone9"><img src="img/t7ff.svg"></span>
-							<span><input type="radio" id="t13"  onchange="changeTone(9, 't13'  )" name="tone9"><img src="img/t13.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td></td>
-						<td>
-							<span><input type="radio" id="n10"  onchange="changeTone(10, undefined)" name="tone10" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t7f"  onchange="changeTone(10, 't7f'  )" name="tone10"><img src="img/t7f.svg"></span>
-						</td>
-					</tr>
-					<tr>
-						<td id="degree7">B</td>
-						<td>
-							<span><input type="radio" id="n11"  onchange="changeTone(11, undefined)" name="tone11" checked></span>
-						</td>
-						<td>
-							<span><input type="radio" id="t7"   onchange="changeTone(11, 't7'   )" name="tone11"><img src="img/t7.svg"></span>
-						</td>
-					</tr>
-				</table>
-				Preset: <select id="preset" onchange="changePreset(event.target.value)">
-					<option>Clear</option>
-					<option>Major</option>
-					<option>Minor</option>
-					<option>6</option>
-					<option>7</option>
-					<option>9</option>
-					<option>13</option>
-					<option>Major 7</option>
-					<option>Major 9</option>
-					<option>Major 13</option>
-					<option>Minor 6</option>
-					<option>Minor 7</option>
-					<option>Minor 9</option>
-					<option>Minor 13</option>
-					<option>Augmented</option>
-					<option>Augmented 7</option>
-					<option>Diminished</option>
-					<option>Diminished 7</option>
-					<option>Suspended</option>
-					<option>Suspended 7</option>
-					<option>Suspended 9</option>
-				</select>
-			</div>
-			<div id="content">
-				<h1>Guitar Chord Voicing Explorer</h1>
-				<div id="fretboards">
-				</div>
-				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure Chord Grid and <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagrams</a>.</p>
-				<p class="note">Guitar Chord Voicing Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a>. <a href="https://github.com/rlk/fretboard">Fork me on Github</a>.</p>
-			</div>
+<body>
+	<div id="layout">
+		<div class="toolbar">
+			<table class="menu">
+				<tr>
+					<th>Root</th>
+				</tr>
+				<tr>
+					<td><input type="radio" id="cs" onchange="explorer.changeRoot('cs')" name="root">C&sharp;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="fs" onchange="explorer.changeRoot('fs')" name="root">F&sharp;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="b" onchange="explorer.changeRoot('b' )" name="root">B</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="e" onchange="explorer.changeRoot('e' )" name="root">E</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="a" onchange="explorer.changeRoot('a' )" name="root">A</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="d" onchange="explorer.changeRoot('d' )" name="root">D</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="g" onchange="explorer.changeRoot('g' )" name="root">G</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="c" onchange="explorer.changeRoot('c' )" name="root" checked>C</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="f" onchange="explorer.changeRoot('f' )" name="root">F</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="bf" onchange="explorer.changeRoot('bf')" name="root">B&flat;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="ef" onchange="explorer.changeRoot('ef')" name="root">E&flat;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="af" onchange="explorer.changeRoot('af')" name="root">A&flat;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="df" onchange="explorer.changeRoot('df')" name="root">D&flat;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="gf" onchange="explorer.changeRoot('gf')" name="root">G&flat;</td>
+				</tr>
+				<tr>
+					<td><input type="radio" id="cf" onchange="explorer.changeRoot('cf')" name="root">C&flat;</td>
+				</tr>
+			</table>
 		</div>
+		<div class="toolbar">
+			<table class="menu piano">
+				<tr>
+					<th>Deg</th>
+					<th>None</th>
+					<th>Chord Tone</th>
+				</tr>
+				<tr>
+					<td id="degree1">C</td>
+					<td>
+						<span><input type="radio" id="n0" onchange="explorer.changeTone(0, undefined)" name="tone0" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t1" onchange="explorer.changeTone(0, 't1'   )" name="tone0"><img src="img/t1.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span><input type="radio" id="n1" onchange="explorer.changeTone(1, undefined)" name="tone1" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t2f" onchange="explorer.changeTone(1, 't2f'  )" name="tone1"><img src="img/t2f.svg"></span>
+						<span><input type="radio" id="t9f" onchange="explorer.changeTone(1, 't9f'  )" name="tone1"><img src="img/t9f.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree2">D</td>
+					<td>
+						<span><input type="radio" id="n2" onchange="explorer.changeTone(2, undefined)" name="tone2" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t2" onchange="explorer.changeTone(2, 't2'   )" name="tone2"><img src="img/t2.svg"></span>
+						<span><input type="radio" id="t9" onchange="explorer.changeTone(2, 't9'   )" name="tone2"><img src="img/t9.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span><input type="radio" id="n3" onchange="explorer.changeTone(3, undefined)" name="tone3" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t3f" onchange="explorer.changeTone(3, 't3f'  )" name="tone3"><img src="img/t3f.svg"></span>
+						<span><input type="radio" id="t9s" onchange="explorer.changeTone(3, 't9s'  )" name="tone3"><img src="img/t9s.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree3">E</td>
+					<td>
+						<span><input type="radio" id="n4" onchange="explorer.changeTone(4, undefined)" name="tone4" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t3" onchange="explorer.changeTone(4, 't3'   )" name="tone4"><img src="img/t3.svg"></span>
+						<span><input type="radio" id="t11f" onchange="explorer.changeTone(4, 't11f' )" name="tone4"><img src="img/t11f.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree4">F</td>
+					<td>
+						<span><input type="radio" id="n5" onchange="explorer.changeTone(5, undefined)" name="tone5" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t4" onchange="explorer.changeTone(5, 't4'   )" name="tone5"><img src="img/t4.svg"></span>
+						<span><input type="radio" id="t11" onchange="explorer.changeTone(5, 't11'  )" name="tone5"><img src="img/t11.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span><input type="radio" id="n6" onchange="explorer.changeTone(6, undefined)" name="tone6" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t5f" onchange="explorer.changeTone(6, 't5f'  )" name="tone6"><img src="img/t5f.svg"></span>
+						<span><input type="radio" id="t11s" onchange="explorer.changeTone(6, 't11s' )" name="tone6"><img src="img/t11s.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree5">G</td>
+					<td>
+						<span><input type="radio" id="n7" onchange="explorer.changeTone(7, undefined)" name="tone7" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t5" onchange="explorer.changeTone(7, 't5'   )" name="tone7"><img src="img/t5.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span><input type="radio" id="n8" onchange="explorer.changeTone(8, undefined)" name="tone8" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t5s" onchange="explorer.changeTone(8, 't5s'  )" name="tone8"><img src="img/t5s.svg"></span>
+						<span><input type="radio" id="t6f" onchange="explorer.changeTone(8, 't6f'  )" name="tone8"><img src="img/t6f.svg"></span>
+						<span><input type="radio" id="t13f" onchange="explorer.changeTone(8, 't13f' )" name="tone8"><img src="img/t13f.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree6">A</td>
+					<td>
+						<span><input type="radio" id="n9" onchange="explorer.changeTone(9, undefined)" name="tone9" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t6" onchange="explorer.changeTone(9, 't6'   )" name="tone9"><img src="img/t6.svg"></span>
+						<span><input type="radio" id="t7ff" onchange="explorer.changeTone(9, 't7ff' )" name="tone9"><img src="img/t7ff.svg"></span>
+						<span><input type="radio" id="t13" onchange="explorer.changeTone(9, 't13'  )" name="tone9"><img src="img/t13.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<span><input type="radio" id="n10" onchange="explorer.changeTone(10, undefined)" name="tone10" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t7f" onchange="explorer.changeTone(10, 't7f'  )" name="tone10"><img src="img/t7f.svg"></span>
+					</td>
+				</tr>
+				<tr>
+					<td id="degree7">B</td>
+					<td>
+						<span><input type="radio" id="n11" onchange="explorer.changeTone(11, undefined)" name="tone11" checked></span>
+					</td>
+					<td>
+						<span><input type="radio" id="t7" onchange="explorer.changeTone(11, 't7'   )" name="tone11"><img src="img/t7.svg"></span>
+					</td>
+				</tr>
+			</table>
+			Preset: <select id="preset" onchange="explorer.changePreset(event.target.value)">
+				<option>Clear</option>
+				<option>Major</option>
+				<option>Minor</option>
+				<option>6</option>
+				<option>7</option>
+				<option>9</option>
+				<option>13</option>
+				<option>Major 7</option>
+				<option>Major 9</option>
+				<option>Major 13</option>
+				<option>Minor 6</option>
+				<option>Minor 7</option>
+				<option>Minor 9</option>
+				<option>Minor 13</option>
+				<option>Augmented</option>
+				<option>Augmented 7</option>
+				<option>Diminished</option>
+				<option>Diminished 7</option>
+				<option>Suspended</option>
+				<option>Suspended 7</option>
+				<option>Suspended 9</option>
+			</select>
+		</div>
+		<div id="content">
+			<h1>Guitar Chord Voicing Explorer</h1>
+			<div id="fretboards">
+			</div>
+			<p class="note">Select a root note and chord tones at the left to configure the fretboard. Select marked positions to configure Chord Grid and <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagrams</a>.</p>
+			<p class="note">Guitar Chord Voicing Explorer &mdash; Copyright &copy; 2016 <a href="http://kooima.net">Robert Kooima</a>. <a href="https://github.com/rlk/fretboard">Fork me on Github</a>.</p>
+		</div>
+	</div>
+	<script src="definitions.js" type="text/javascript"></script>
+	<script src="fretboard.js" type="text/javascript"></script>
+	<script src="explorer.js" type="text/javascript"></script>
+
+</body>
 
-		<script>
-
-			var currentFretboard = undefined;
-
-			var pitch = {
-				'cf' : 11, 'c' :  0, 'cs' :  1,
-				'df' :  1, 'd' :  2, 'ds' :  3,
-				'ef' :  3, 'e' :  4, 'es' :  5,
-				'ff' :  4, 'f' :  5, 'fs' :  6,
-				'gf' :  6, 'g' :  7, 'gs' :  8,
-				'af' :  8, 'a' :  9, 'as' : 10,
-				'bf' : 10, 'b' : 11, 'bs' : 12,
-			};
-
-			var html = {
-				'cf' : "C&flat;",
-				'c'  : "C",
-				'cs' : "C&sharp;",
-				'df' : "D&flat;",
-				'd'  : "D",
-				'ds' : "D&sharp;",
-				'ef' : "E&flat;",
-				'e'  : "E",
-				'es' : "E&sharp;",
-				'ff' : "F&flat;",
-				'f'  : "F",
-				'fs' : "F&sharp;",
-				'gf' : "G&flat;",
-				'g'  : "G",
-				'gs' : "G&sharp;",
-				'af' : "A&flat;",
-				'a'  : "A",
-				'as' : "A&sharp;",
-				'bf' : "B&flat;",
-				'b'  : "B",
-				'bs' : "B&sharp;",
-			};
-
-			var key = {
-				// gs is omitted because it has a double sharp.
-				'cs' : [ 'cs', 'ds', 'es', 'fs', 'gs', 'as', 'bs' ],
-				'fs' : [ 'fs', 'gs', 'as', 'b',  'cs', 'ds', 'es' ],
-				'b'  : [ 'b',  'cs', 'ds', 'e',  'fs', 'gs', 'as' ],
-				'e'  : [ 'e',  'fs', 'gs', 'a',  'b',  'cs', 'ds' ],
-				'a'  : [ 'a',  'b',  'cs', 'd',  'e',  'fs', 'gs' ],
-				'd'  : [ 'd',  'e',  'fs', 'g',  'a',  'b',  'cs' ],
-				'g'  : [ 'g',  'a',  'b',  'c',  'd',  'e',  'fs' ],
-				'c'  : [ 'c',  'd',  'e',  'f',  'g',  'a',  'b'  ],
-				'f'  : [ 'f',  'g',  'a',  'bf', 'c',  'd',  'e'  ],
-				'bf' : [ 'bf', 'c',  'd',  'ef', 'f',  'g',  'a'  ],
-				'ef' : [ 'ef', 'f',  'g',  'af', 'bf', 'c',  'd'  ],
-				'af' : [ 'af', 'bf', 'c',  'df', 'ef', 'f',  'g'  ],
-				'df' : [ 'df', 'ef', 'f',  'gf', 'af', 'bf', 'c'  ],
-				'gf' : [ 'gf', 'af', 'bf', 'cf', 'df', 'ef', 'f'  ],
-				'cf' : [ 'cf', 'df', 'ef', 'ff', 'gf', 'af', 'bf' ],
-				// ff is omitted because it has a double flat.
-			}
-
-			var tone = {
-				't1'  : { degree: 0, offset:  0 },
-				't2f' : { degree: 1, offset: -1 },
-				't2'  : { degree: 1, offset:  0 },
-				't3f' : { degree: 2, offset: -1 },
-				't3'  : { degree: 2, offset:  0 },
-				't4'  : { degree: 3, offset:  0 },
-				't5f' : { degree: 4, offset: -1 },
-				't5'  : { degree: 4, offset:  0 },
-				't5s' : { degree: 4, offset: +1 },
-				't6f' : { degree: 5, offset: -1 },
-				't6'  : { degree: 5, offset:  0 },
-				't7ff': { degree: 6, offset: -2 },
-				't7f' : { degree: 6, offset: -1 },
-				't7'  : { degree: 6, offset:  0 },
-				't9f' : { degree: 1, offset: -1 },
-				't9'  : { degree: 1, offset:  0 },
-				't9s' : { degree: 1, offset: +1 },
-				't11f': { degree: 3, offset: -1 },
-				't11' : { degree: 3, offset:  0 },
-				't11s': { degree: 3, offset: +1 },
-				't13f': { degree: 5, offset: -1 },
-				't13' : { degree: 5, offset:  0 },
-			}
-
-			degreeElement = [ ];
-
-			function init() {
-
-				// Gather frequently used elements.
-
-				degreeElement[0] = document.getElementById('degree1');
-				degreeElement[1] = document.getElementById('degree2');
-				degreeElement[2] = document.getElementById('degree3');
-				degreeElement[3] = document.getElementById('degree4');
-				degreeElement[4] = document.getElementById('degree5');
-				degreeElement[5] = document.getElementById('degree6');
-				degreeElement[6] = document.getElementById('degree7');
-
-				// Instantiate an initial fretboard.
-
-				selectFretboard(new Fretboard());
-			}
-
-			// Return the pitch (0-11) at string s (0-5) fret f.
-
-			function pitchAtPosition(s, f) {
-				if (s == 0) { s = s + 1; f = f + 5; }
-				if (s == 1) { s = s + 1; f = f + 4; }
-				if (s == 2) { s = s + 1; f = f + 5; }
-				if (s == 3) { s = s + 1; f = f + 5; }
-				if (s == 4) { s = s + 1; f = f + 5; }
-
-				return (f + 4) % 12;
-			}
-
-			// Return the octave at string s (0-5) fret f.
-
-			function octaveAtPosition(s, f) {
-				if (s == 0) { s = s + 1; f = f + 5; }
-				if (s == 1) { s = s + 1; f = f + 4; }
-				if (s == 2) { s = s + 1; f = f + 5; }
-				if (s == 3) { s = s + 1; f = f + 5; }
-				if (s == 4) { s = s + 1; f = f + 5; }
-
-				return 4 + Math.floor((f - 8) / 12);
-			}
-
-			// Apply an accidental to a pitch (0-11).
-
-			function offsetPitch(p, a) {
-				var r = p + a;
-
-				if (r <   0) return offsetPitch(r + 12, 0);
-				if (r >= 12) return offsetPitch(r - 12, 0);
-
-				return r;
-			}
-
-			// Return the className of the element at string s (0-5) fret f.
-
-			function classAtPosition(s, f) {
-				if (f < 10) return 's' + s.toString() + ' f0' + f.toString();
-				else        return 's' + s.toString() + ' f'  + f.toString();
-			}
-
-			// Convert an octave number to the appropriate LilyPond syntax.
-
-			function getLilyPondOctave(o) {
-				if (o === 3) return ",";
-				if (o === 4) return "";
-				if (o === 5) return "'";
-				if (o === 6) return "''";
-			}
-
-			// Convert an accidental number to the appropriate LilyPond syntax.
-
-			function getLilyPondAccidental(a) {
-				if (a === +1) return 's';
-				if (a ===  0) return '';
-				if (a === -1) return 'f';
-				if (a === -2) return 'ff';
-			}
-
-			// Simplify a LilyPond accidental string.
-
-			function simplifyLilyPondAccidental(s) {
-				if (s.match('sf'))
-					return simplifyLilyPondAccidental(s.replace('sf', ''));
-				if (s.match('fs'))
-					return simplifyLilyPondAccidental(s.replace('fs', ''));
-				return s;
-			}
-
-			// Construct a fretboard. Clone 'that' if defined.
-
-			function Fretboard(that) {
-				this.maxFret     = 16;
-
-				// Initialize the current state.
-
-				if (that) {
-					this.currentRoot = that.currentRoot;
-					this.currentTone = that.currentTone.slice();
-					this.currentMark = that.currentMark.slice();
-				} else {
-					this.currentRoot = 'c';
-					this.currentTone = [];
-					this.currentMark = [];
-
-					for (var i = 0; i < 12; i++)
-						this.currentTone[i] = undefined;
-
-					for (var i = 0; i < 6; i++)
-						this.currentMark[i] = undefined;
-				}
-
-				// Frequently accessed DOM elements.
-
-				this.positionElement = [[], [], [], [], [], []];
-				this.pitchElement    = [[], [], [], [], [], [],
-										[], [], [], [], [], []];
-
-				// Initalize the DOM for this fretboard.
-
-				this.buildDocument();
-				this.update();
-
-				// Add the new fretboard to the document.
-
-				if (that)
-					document.getElementById("fretboards").insertBefore(this.item, that.item.nextSibling);
-				else
-					document.getElementById("fretboards").appendChild(this.item);
-			}
-
-			// Build the fretboard table.
-
-			Fretboard.prototype.buildDocument = function() {
-				var that = this;
-
-				var item    = document.createElement('div');
-				var table   = document.createElement('table');
-				var thead   = document.createElement('thead');
-				var tbody   = document.createElement('tbody');
-				var heading = document.createElement('div');
-				var insert  = document.createElement('span');
-				var moveup  = document.createElement('span');
-				var movedn  = document.createElement('span');
-				var remove  = document.createElement('span');
-				var diagram = document.createElement('input');
-				var grid    = document.createElement('input');
-
-				item   .className = 'item';
-				table  .className = 'fretboard';
-				insert .className = 'control';
-				remove .className = 'control';
-				moveup .className = 'control';
-				movedn .className = 'control';
-				heading.className = 'heading';
-				grid   .className = 'display';
-				diagram.className = 'display';
-
-				grid   .type = 'text';
-				diagram.type = 'text';
-
-				table.appendChild(thead);
-				table.appendChild(tbody);
-
-				// Build the fretboard controls.
-
-				heading.appendChild(remove);
-				heading.appendChild(moveup);
-				heading.appendChild(movedn);
-				heading.appendChild(insert);
-				heading.appendChild(grid);
-				heading.appendChild(diagram);
-
-				insert.innerHTML = '&plus;';
-				remove.innerHTML = '&times;';
-				moveup.innerHTML = '&uarr;';
-				movedn.innerHTML = '&darr;';
-
-				insert.title = 'Add Fretboard';
-				remove.title = 'Delete Fretboard';
-				moveup.title = 'Move Up';
-				movedn.title = 'Move Down';
-
-				insert.addEventListener('click', function () { that.insert(); });
-				remove.addEventListener('click', function () { that.remove(); });
-				moveup.addEventListener('click', function () { that.moveup(); });
-				movedn.addEventListener('click', function () { that.movedn(); });
-
-				// Build the fret numbering.
-
-				var tr = document.createElement('tr');
-
-				thead.appendChild(tr);
-
-				for (var f = 0; f < this.maxFret; f++) {
-					var th = document.createElement('th');
-					th.textContent = f;
-					tr.appendChild(th);
-				}
-
-				// Build the fretboard table.
-
-				for (var s = 0; s < 6; s++)
-				{
-					var tr = document.createElement('tr');
-
-					tbody.appendChild(tr);
-
-					for (var f = 0; f < this.maxFret; f++) {
-						var td  = document.createElement('td');
-						var div = document.createElement('div');
-
-						this.positionElement[s][f] = div;
-						this.pitchElement[pitchAtPosition(s, f)].push(div);
-
-						div.addEventListener('click', makeNoteToggler(this, s, f));
-
-						td.className = classAtPosition(s, f);
-
-						td.appendChild(div);
-						tr.appendChild(td);
-					}
-				}
-
-				item.appendChild(heading);
-				item.appendChild(table);
-				item.addEventListener('mouseup', function() { selectFretboard(that); })
-
-				this.diagram = diagram;
-				this.grid    = grid;
-				this.item    = item;
-			}
-
-			// Null the className on all position elements.
-
-			Fretboard.prototype.clearClassNames = function() {
-				for (var s = 0; s < 6; s++)
-					for (var f = 0; f < this.maxFret; f++)
-						this.positionElement[s][f].className = "";
-			}
-
-			// Set the class on the marked positions. Remove invalid marks.
-
-			Fretboard.prototype.setMarks = function() {
-				for (var s = 0; s < 6; s++) {
-					if (typeof this.currentMark[s] === 'number') {
-						var e = this.positionElement[s][this.currentMark[s]];
-
-						if (e.className)
-							e.className += ' marked';
-						else
-							this.currentMark[s] = 'undefined';
-					}
-				}
-			}
-
-			// Set the classes on all position elements to show the selection.
-
-			Fretboard.prototype.setPositions = function() {
-
-				for (var i = 0; i < 12; i++)
-				{
-					var t = this.currentTone[i];
-					if (t)
-					{
-						var d = tone[t].degree;
-						var a = tone[t].offset;
-						var k = offsetPitch(pitch[key[this.currentRoot][d]], a);
-
-						for (var j = 0; j < this.pitchElement[k].length; j++)
-							this.pitchElement[k][j].className = t;
-					}
-				}
-			}
-
-			// Compute the LilyPond diagram for the current selection.
-
-			Fretboard.prototype.setDiagram = function() {
-				var chord   = [];
-				var diagram = [];
-
-				for (var s = 6 - 1; s >= 0; s--) {
-					if (typeof this.currentMark[s] === 'number') {
-						var e = this.positionElement[s][this.currentMark[s]];
-						var t = e.className.split(' ')[0];
-						var d = tone[t].degree;
-						var a = tone[t].offset;
-						var o = octaveAtPosition(s, this.currentMark[s]);
-
-						var n = key[this.currentRoot][d][0];
-						var f = key[this.currentRoot][d].substring(1);
-
-						chord.push(n + simplifyLilyPondAccidental(f + getLilyPondAccidental(a)) + getLilyPondOctave(o));
-
-						if (this.currentMark[s] > 0)
-							diagram.push(this.currentMark[s] + ';');
-						else
-							diagram.push('o' + ';');
-					} else
-						diagram.push('x;');
-				}
-
-				if (chord.length > 0)
-					this.diagram.value = '<' + chord.join(' ') + '>'
-											 + '1^\\markup { \\fret-diagram-terse #"' + diagram.join('') + '" }'
-			}
-
-			// Compute the Chord Grid for the current selection.
-
-			Fretboard.prototype.setGrid = function() {
-				var stops = [];
-				var min = this.maxFret;
-				var max = 0;
-				var ref = 0;
-
-				for (var s = 6 - 1; s >= 0; s--) {
-					if (typeof this.currentMark[s] === 'number') {
-						var e = this.positionElement[s][this.currentMark[s]];
-						var t = e.className.split(' ')[0];
-						var d = tone[t].degree;
-
-						stops.push('+:' + (s + 1) + ':' + this.currentMark[s]);
-
-						if (min > this.currentMark[s])
-							min = this.currentMark[s];
-						if (max < this.currentMark[s])
-							max = this.currentMark[s];
-						if (ref == 0 && d == 0)
-							ref = this.currentMark[s]
-					}
-				}
-
-				if (stops.length > 0) {
-					var grid = [];
-					grid.push('_:6:' + min);
-					grid.push('_:1:' + max);
-
-					if (ref > 0)
-						grid.push('F:' + ref);
-					else
-						grid.push('F:' + min);
-
-					this.grid.value = '<span class="grid">' + grid.concat(stops).join(' ') + '</span>';
-				}
-			}
-
-			// Set the tone menu to reflect the current fretboard state.
-
-			Fretboard.prototype.setTones = function() {
-
-				document.getElementById('n0' ).checked = true;
-				document.getElementById('n1' ).checked = true;
-				document.getElementById('n2' ).checked = true;
-				document.getElementById('n3' ).checked = true;
-				document.getElementById('n4' ).checked = true;
-				document.getElementById('n5' ).checked = true;
-				document.getElementById('n6' ).checked = true;
-				document.getElementById('n7' ).checked = true;
-				document.getElementById('n8' ).checked = true;
-				document.getElementById('n9' ).checked = true;
-				document.getElementById('n10').checked = true;
-				document.getElementById('n11').checked = true;
-
-				for (var i = 0; i < 12; i++)
-					if (this.currentTone[i])
-						document.getElementById(this.currentTone[i]).checked = true;
-			}
-
-			// Relabel the tone menu for the selected key.
-
-			Fretboard.prototype.setDegrees = function() {
-				for (var d = 0; d < 7; d++)
-					degreeElement[d].innerHTML = html[key[this.currentRoot][d]];
-			}
-
-			// Insert a new fretboard after this one.
-
-			Fretboard.prototype.insert = function() {
-				selectFretboard(new Fretboard(this));
-			}
-
-			// Remove the fretboard (if it's not the only one left).
-
-			Fretboard.prototype.remove = function() {
-				if (document.getElementsByClassName("item").length > 1)
-					this.item.remove();
-			}
-
-			// Shift the fretboard up in the document order.
-
-			Fretboard.prototype.moveup = function() {
-				var curr = this.item;
-				var prev = this.item.previousSibling;
-
-				if (prev && prev.tagName === 'DIV')
-					document.getElementById("fretboards").insertBefore(curr, prev);
-			}
-
-			// Shift the fretboard down in the document order.
-
-			Fretboard.prototype.movedn = function() {
-				var curr = this.item;
-				var next = this.item.nextSibling;
-
-				if (next && next.tagName === 'DIV')
-					document.getElementById("fretboards").insertBefore(next, curr);
-			}
-
-			// Update the DOM to reflect the current state.
-
-			Fretboard.prototype.update = function() {
-				this.clearClassNames();
-				this.setPositions();
-				this.setMarks();
-				this.setDiagram();
-				this.setGrid();
-				this.setDegrees();
-			}
-
-			// Toggle the mark on a position.
-
-			Fretboard.prototype.toggleNote = function(s, f) {
-				if (this.positionElement[s][f].className.length > 0) {
-					if (this.currentMark[s] == f)
-						this.currentMark[s] = undefined;
-					else
-						this.currentMark[s] = f;
-					this.update();
-				}
-			}
-
-			// Log the current state of the fretboard.
-
-			Fretboard.prototype.dump = function() {
-				var str = "";
-
-				for (var s = 0; s < 6; s++)
-					for (var f = 0; f < this.maxFret; f++)
-						str += '[' + this.positionElement[s][f].className + '] ';
-
-				console.log(str);
-			}
-
-			// Return an event handler closing toggleNote over its arguments.
-
-			function makeNoteToggler(fretboard, s, f) {
-				return function (event) {
-					fretboard.toggleNote(s, f);
-				}
-			}
-
-			// Select a root note.
-
-			function changeRoot(id) {
-				currentFretboard.currentRoot = id;
-				currentFretboard.update();
-			}
-
-			// Select a chord tone.
-
-			function changeTone(i, id) {
-				currentFretboard.currentTone[i] = id;
-				currentFretboard.update();
-			}
-
-			// Select a preset.
-
-			function changePreset(value) {
-				var presets = {
-					'Clear' :        { },
-					'Major' :        { 0: 't1', 4: 't3',  7: 't5'  },
-					'Minor' :        { 0: 't1', 3: 't3f', 7: 't5'  },
-					'6' :            { 0: 't1', 4: 't3',  7: 't5',   9: 't6'  },
-					'7' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f'  },
-					'9' :            { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9' },
-					'13' :           { 0: 't1', 4: 't3',  7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
-					'Major 7' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7'  },
-					'Major 9' :      { 0: 't1', 4: 't3',  7: 't5',  11: 't7',  2: 't9' },
-					'Major 13' :     { 0: 't1', 4: 't3',  7: 't5',  11: 't7',  2: 't9', 9: 't13' },
-					'Minor 6' :      { 0: 't1', 3: 't3f', 7: 't5',   9: 't6'  },
-					'Minor 7' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f'  },
-					'Minor 9' :      { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9' },
-					'Minor 13' :     { 0: 't1', 3: 't3f', 7: 't5',  10: 't7f', 2: 't9', 9: 't13' },
-					'Augmented' :    { 0: 't1', 4: 't3',  8: 't5s' },
-					'Augmented 7' :  { 0: 't1', 4: 't3',  8: 't5s', 10: 't7f' },
-					'Diminished' :   { 0: 't1', 3: 't3f', 6: 't5f' },
-					'Diminished 7' : { 0: 't1', 3: 't3f', 6: 't5f',  9: 't7ff' },
-					'Suspended' :    { 0: 't1', 5: 't4',  7: 't5' },
-					'Suspended 7' :  { 0: 't1', 5: 't4',  7: 't5',  10: 't7f' },
-					'Suspended 9' :  { 0: 't1', 5: 't4',  7: 't5',  10: 't7f', 2: 't9' },
-				};
-
-				var d = presets[value];
-
-				if (d) {
-					for (var i = 0; i < 12; i++)
-						currentFretboard.currentTone[i] = d[i];
-
-					currentFretboard.update();
-					currentFretboard.setTones();
-				}
-			}
-
-			// Change the current fretboard to the given fretboard.
-
-			function selectFretboard(fb) {
-
-				// Add the current fretboard to the unselected class.
-
-				if (currentFretboard)
-					currentFretboard.item.className = "item unselected";
-
-				// Add the new fretboard to the selected class.
-
-				currentFretboard = fb;
-				currentFretboard.item.className = "item selected";
-
-				// Reset the tone menu.
-
-				currentFretboard.setTones();
-				currentFretboard.setDegrees();
-
-				// Set the root menu to match the new fretboard.
-
-				document.getElementById(currentFretboard.currentRoot).checked = true;
-			}
-		</script>
-	</body>
 </html>

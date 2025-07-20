@@ -157,6 +157,15 @@ class Fretboard {
 				this.positionElement[s][f].className = "";
 	}
 
+	// Select or deselect this fretboard.
+	setSelected(selected) {
+		if (selected) {
+			this.item.className = "item selected";
+		} else {
+			this.item.className = "item unselected";
+		}
+	}
+
 	// Set the class on the marked positions. Remove invalid marks.
 	setMarks() {
 		for (var s = 0; s < 6; s++) {
@@ -255,24 +264,26 @@ class Fretboard {
 		}
 	}
 
-	// Select the tone menu radio buttons to reflect the current fretboard state.
-	setToneMenuValues() {
-		for (var i = 0; i < 12; i++)
-			if (this.currentTone[i]) {
-				document.getElementById(this.currentTone[i]).checked = true;
-			} else {
-				document.getElementById(`n${i}`).checked = true;
-			}
-	}
-
+	// Set the current root id.
 	setRoot(id) {
 		this.currentRoot = id;
 		this.update();
 	}
 
+	// Get the current root id.
+	getRoot() {
+		return this.currentRoot;
+	}
+
+	// Set the meaning of the given pitch.
 	setTone(pitch, id) {
 		this.currentTone[pitch] = id;
 		this.update();
+	}
+
+	// Get the meaning of the given pitch, or undefined if the pitch is unused.
+	getTone(pitch) {
+		return this.currentTone[pitch];
 	}
 
 	// Update the DOM to reflect the current state.

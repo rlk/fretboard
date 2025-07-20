@@ -20,8 +20,6 @@
 
 class Explorer {
 	constructor() {
-		this.currentFretboard = undefined;
-
 		this.degreeElement = [];
 
 		// Gather frequently used elements.
@@ -40,7 +38,7 @@ class Explorer {
 	// Select a root note.
 	selectRoot(id) {
 		this.currentFretboard.setRoot(id);
-		this.setToneMenuLabels(this.currentFretboard.currentRoot);
+		this.setToneMenuLabels();
 	}
 
 	// Assign a meaning to a pitch.
@@ -76,28 +74,23 @@ class Explorer {
 			for (var i = 0; i < 12; i++) {
 				this.currentFretboard.setTone(i, d[i]);
 			}
-
-			this.currentFretboard.setToneMenuValues();
+			this.setToneMenuValues();
 		}
 	}
 
 	// Change the current fretboard to the given fretboard.
 	selectFretboard(fb) {
 
-		// Add the current fretboard to the unselected class.
-		if (this.currentFretboard)
-			this.currentFretboard.item.className = "item unselected";
-
-		// Add the new fretboard to the selected class.
+		this.currentFretboard?.setSelected(false);
 		this.currentFretboard = fb;
-		this.currentFretboard.item.className = "item selected";
+		this.currentFretboard?.setSelected(true);
 
 		// Reset the tone menu.
-		this.currentFretboard.setToneMenuValues();
-		this.setToneMenuLabels(this.currentFretboard.currentRoot);
+		this.setToneMenuValues();
+		this.setToneMenuLabels();
 
 		// Set the root menu to match the new fretboard.
-		document.getElementById(this.currentFretboard.currentRoot).checked = true;
+		document.getElementById(this.currentFretboard.getRoot()).checked = true;
 	}
 
 	// Insert a new fretboard after this one.
@@ -105,10 +98,23 @@ class Explorer {
 		this.selectFretboard(new Fretboard(this));
 	}
 
-	// Relabel the tone menu for the selected key.
-	setToneMenuLabels(currentRoot) {
-		for (var d = 0; d < 7; d++)
-			this.degreeElement[d].innerHTML = html[key[currentRoot][d]];
+	// Relabel the tone menu using the current fretboard root.
+	setToneMenuLabels() {
+		for (var degree = 0; degree < 7; degree++)
+			this.degreeElement[degree].innerHTML
+				= html[key[this.currentFretboard.getRoot()][degree]];
+	}
+
+	// Select the tone menu radio buttons to reflect the current fretboard state.
+	setToneMenuValues() {
+		for (var pitch = 0; pitch < 12; pitch++) {
+			var id = this.currentFretboard.getTone(pitch);
+			if (id) {
+				document.getElementById(id).checked = true;
+			} else {
+				document.getElementById(`n${pitch}`).checked = true;
+			}
+		}
 	}
 }
 

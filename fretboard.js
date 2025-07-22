@@ -115,6 +115,7 @@ class Fretboard {
 		// Build the fretboard table.
 		for (var string = 0; string < 6; string++) {
 			var tr = document.createElement('tr');
+			tr.className = `s${string}`;
 
 			tbody.appendChild(tr);
 

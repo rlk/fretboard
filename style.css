@@ -20,38 +20,29 @@ DEALINGS IN THE SOFTWARE. */
 
 /* Top-level structure */
 
-html {
-	height: 100%;
-	margin: 0;
-}
-
 body {
 	height: 100%;
 	margin: 0;
-	font-family: Arial;
+	font-family: "Noto Sans", sans-serif;
 }
 
 main {
-	height: 100%;
 	display: flex;
 	flex-direction: row;
-	/* overflow: hidden; */
+	height: 100vh;
+	overflow: hidden;
 }
 
-#fretboards {
-	/* overflow: scroll; */
-	flex-grow: 1;
+#toolbar {
+	overflow-y: auto;
+	display: flex;
+	flex-direction: row;
+	align-items: start;
 }
 
-div.toolbar {
-	height: 100%;
-	font-size: 75%;
-	flex-shrink: 0;
-	/* overflow: scroll; */
-}
-
-h1 {
-	text-align: center;
+#content {
+	flex: 1;
+	overflow-y: auto;
 }
 
 p.note {
@@ -137,11 +128,11 @@ table.menu img {
 	vertical-align: middle;
 }
 
+/* Tone selection menu */
+
 table.piano td:nth-child(2) {
 	text-align: center;
 }
-
-/* Tone selection menu */
 
 table.piano tr:nth-child(2),
 table.piano tr:nth-child(4),
@@ -164,36 +155,46 @@ table.piano tr:nth-child(12) {
 /* Fretboard table */
 
 table.fretboard {
-	border-collapse: collapse; /* cut */
-		flex-grow: 1;
+	border-collapse: collapse;
+	flex-grow: 1;
 }
 
 table.fretboard tbody {
-	background-color: #A98;
+	background-color: #FFF;
 }
 
-table.fretboard td.s0 {
-	background-image: linear-gradient(to bottom, transparent, transparent 47%, #FFF 47%, #EEE 50%, #777 53%, transparent 53%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard td {
+	border-right: 4px solid #777;
 }
 
-table.fretboard td.s1 {
-	background-image: linear-gradient(to bottom, transparent, transparent 46%, #FFF 46%, #EEE 50%, #777 54%, transparent 54%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard tr {
+	border: 0;
+	background-repeat: repeat-x;
+	background-position: center;
 }
 
-table.fretboard td.s2 {
-	background-image: linear-gradient(to bottom, transparent, transparent 45%, #FFF 45%, #EEE 50%, #777 55%, transparent 55%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard tr.s0 {
+	background-image: url("img/s0.svg");
 }
 
-table.fretboard td.s3 {
-	background-image: linear-gradient(to bottom, transparent, transparent 44%, #FFF 44%, #EEE 50%, #777 56%, transparent 56%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard tr.s1 {
+	background-image: url("img/s1.svg");
 }
 
-table.fretboard td.s4 {
-	background-image: linear-gradient(to bottom, transparent, transparent 43%, #FFF 43%, #EEE 50%, #777 57%, transparent 57%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard tr.s2 {
+	background-image: url("img/s2.svg");
 }
 
-table.fretboard td.s5 {
-	background-image: linear-gradient(to bottom, transparent, transparent 42%, #FFF 42%, #EEE 50%, #777 58%, transparent 58%), linear-gradient(to left, #FFF 0px, #CCC 2px, #CCC 4px, #777 6px, transparent 6px)
+table.fretboard tr.s3 {
+	background-image: url("img/s3.svg");
+}
+
+table.fretboard tr.s4 {
+	background-image: url("img/s4.svg");
+}
+
+table.fretboard tr.s5 {
+	background-image: url("img/s5.svg");
 }
 
 table.fretboard td.f00 {
@@ -539,14 +540,10 @@ table.fretboard div.marked.t13 {
 	background-image: url("img/mark.svg"), url("img/t13.svg");
 }
 
-/* Remove the GUI elements for printing. As of this writing, none of the major browsers correctly print background gradients. */
+/* Remove the GUI elements for printing. */
 
 @media print {
-	h1 {
-		display: none;
-	}
-
-	div.toolbar {
+	#toolbar {
 		display: none;
 	}
 
@@ -554,12 +551,12 @@ table.fretboard div.marked.t13 {
 		display: none;
 	}
 
+	div.panel {
+		display: none;
+	}
+
 	div.selected {
 		border: none;
 		background: inherit;
-	}
-
-	div.heading {
-		display: none;
 	}
 }

@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<meta charset="utf-8">
+<!DOCTYPE html>
 
 <!-- Copyright (c) 2016, 2025 Robert Kooima
 
@@ -24,15 +23,17 @@ DEALINGS IN THE SOFTWARE. -->
 <html>
 
 <head>
-	<link href="style.css" type="text/css" rel="stylesheet">
+	<meta charset="UTF-8">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap">
+	<link rel="stylesheet" type="text/css" href="style.css" />
+	<title>Guitar Chord Voicing Explorer</title>
 </head>
 
 <body>
-	<header>
-		<h1>Guitar Chord Voicing Explorer</h1>
-	</header>
 	<main>
-		<div class="toolbar">
+		<section id="toolbar">
 			<table class="menu">
 				<tr>
 					<th>Root</th>
@@ -83,8 +84,6 @@ DEALINGS IN THE SOFTWARE. -->
 					<td><input type="radio" id="cf" onchange="currentExplorer.selectRoot('cf')" name="root">C&flat;</td>
 				</tr>
 			</table>
-		</div>
-		<div class="toolbar">
 			<table class="menu piano">
 				<tr>
 					<th>Deg</th>
@@ -209,41 +208,51 @@ DEALINGS IN THE SOFTWARE. -->
 						<span><input type="radio" id="t7" onchange="currentExplorer.selectTone(11, 't7')" name="tone11"><img src="img/t7.svg"></span>
 					</td>
 				</tr>
+				<tr>
+					<td></td>
+					<td></td>
+					<td>
+						Preset: <select id="preset" onchange="currentExplorer.changePreset(event.target.value)">
+							<option>Clear</option>
+							<option>Minor</option>
+							<option>Major</option>
+							<option>Suspended</option>
+							<option>Dominant 7</option>
+							<option>Dominant 9</option>
+							<option>Dominant 13</option>
+							<option>Minor 7</option>
+							<option>Minor 9</option>
+							<option>Minor 13</option>
+							<option>Major 7</option>
+							<option>Major 9</option>
+							<option>Major 13</option>
+							<option>Augmented</option>
+							<option>Augmented 7</option>
+							<option>Diminished</option>
+							<option>Diminished 7</option>
+						</select>
+					</td>
+				</tr>
 			</table>
-			Preset: <select id="preset" onchange="currentExplorer.changePreset(event.target.value)">
-				<option>Clear</option>
-				<option>Minor</option>
-				<option>Major</option>
-				<option>Suspended</option>
-				<option>Dominant 7</option>
-				<option>Dominant 9</option>
-				<option>Dominant 13</option>
-				<option>Minor 7</option>
-				<option>Minor 9</option>
-				<option>Minor 13</option>
-				<option>Major 7</option>
-				<option>Major 9</option>
-				<option>Major 13</option>
-				<option>Augmented</option>
-				<option>Augmented 7</option>
-				<option>Diminished</option>
-				<option>Diminished 7</option>
-			</select>
-		</div>
-		<div id="fretboards">
-		</div>
+		</section>
+		<section id="content">
+			<div id="fretboards">
+			</div>
+			<footer>
+				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Click to mark positions.</p>
+				<p class="note">
+					<span class="control">&plus;</span> add fretboard
+					<span class="control">&uarr;</span> move up
+					<span class="control">&darr;</span> move down
+					<span class="control">&times;</span> remove fretboard
+					<span class="control">&#8466;</span> copy <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagram
+				</p>
+				<p class="note"><a href="https://github.com/rlk/fretboard">Guitar Chord Voicing Explorer</a> &mdash; Copyright &copy; 2016, 2025 <a href="http://kooima.net">Robert Kooima</a></p>
+			</footer>
+		</section>
 	</main>
-	<footer>
-		<p class="note">Select a root note and chord tones at the left to configure the fretboard. Click to mark positions.</p>
-		<p class="note">
-			<span class="control">&plus;</span> add fretboard
-			<span class="control">&uarr;</span> move up
-			<span class="control">&darr;</span> move down
-			<span class="control">&times;</span> remove fretboard
-			<span class="control">&#8466;</span> copy <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagram
-		</p>
-		<p class="note"><a href="https://github.com/rlk/fretboard">Guitar Chord Voicing Explorer</a> &mdash; Copyright &copy; 2016, 2025 <a href="http://kooima.net">Robert Kooima</a></p>
-	</footer>
+	<!--
+	-->
 	<script src="definitions.js" type="text/javascript"></script>
 	<script src="fretboard.js" type="text/javascript"></script>
 	<script src="explorer.js" type="text/javascript"></script>

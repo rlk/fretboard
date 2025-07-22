@@ -63,6 +63,7 @@ class Fretboard {
 		var movedn = document.createElement('span');
 		var remove = document.createElement('span');
 		var makelp = document.createElement('span');
+		var playmd = document.createElement('span');
 
 		item.className = 'item';
 		panel.className = 'panel';
@@ -72,28 +73,26 @@ class Fretboard {
 		moveup.className = 'control';
 		movedn.className = 'control';
 		makelp.className = 'control';
+		playmd.className = 'control';
 
 		table.appendChild(thead);
 		table.appendChild(tbody);
 
-		// Build the fretboard control panel.
-		panel.appendChild(remove);
-		panel.appendChild(moveup);
-		panel.appendChild(movedn);
-		panel.appendChild(insert);
-		panel.appendChild(makelp);
+		// Build the fretboard control panel elements.
 
 		insert.innerHTML = '&plus;';
 		remove.innerHTML = '&times;';
 		moveup.innerHTML = '&uarr;';
 		movedn.innerHTML = '&darr;';
 		makelp.innerHTML = '&#8466;';
+		playmd.innerHTML = '&#9658;';
 
 		insert.title = 'Add Fretboard';
 		remove.title = 'Delete Fretboard';
 		moveup.title = 'Move Up';
 		movedn.title = 'Move Down';
 		makelp.title = 'Copy LilyPond diagram';
+		playmd.title = 'Play MIDI';
 
 		insert.addEventListener('click', () => explorer.insert());
 		remove.addEventListener('click', () => this.remove());
@@ -101,10 +100,14 @@ class Fretboard {
 		movedn.addEventListener('click', () => this.movedn());
 		makelp.addEventListener('click', () => this.makeLilyPond());
 
+		var panel = [ playmd, insert, moveup, movedn, makelp, remove ];
+
 		// Build the fret numbering.
 		var tr = document.createElement('tr');
+		var th = document.createElement('th');
 
 		thead.appendChild(tr);
+		tr.appendChild(th);
 
 		for (var fret = 0; fret < this.maxFret; fret++) {
 			var th = document.createElement('th');
@@ -115,9 +118,11 @@ class Fretboard {
 		// Build the fretboard table.
 		for (var string = 0; string < 6; string++) {
 			var tr = document.createElement('tr');
-			tr.className = `s${string}`;
+			var th = document.createElement('th');
 
-			tbody.appendChild(tr);
+			th.className = 'panel'
+			tr.appendChild(th);
+			th.appendChild(panel[string]);
 
 			for (var fret = 0; fret < this.maxFret; fret++) {
 				var pitch = pitchAtPosition(string, fret);
@@ -133,9 +138,10 @@ class Fretboard {
 				td.appendChild(div);
 				tr.appendChild(td);
 			}
+			tbody.appendChild(tr);
 		}
 
-		item.appendChild(panel);
+		// item.appendChild(panel);
 		item.appendChild(table);
 		item.addEventListener('mouseup', () => explorer.selectFretboard(this))
 

@@ -79,25 +79,19 @@ div.item {
 	flex-direction: row;
 }
 
-div.panel {
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
-}
-
 div.unselected {
 	border: 2px solid white;
-	border-radius: 4px;
+	border-radius: 8px;
 }
 
 div.unselected:hover {
-	background: #FFE;
+	border: 2px solid #DDD;
 }
 
 div.selected {
-	border: 2px solid #DDB;
-	border-radius: 4px;
-	background: #FFD;
+	border: 2px solid #777;
+	border-radius: 8px;
+	background-color: #FFD;
 }
 
 /* Menu table */
@@ -159,48 +153,50 @@ table.fretboard {
 	flex-grow: 1;
 }
 
-table.fretboard tbody {
-	background-color: #FFF;
+table.fretboard th {
+	font-weight: normal;
+	color:#777;
+	width: 0.5%;
 }
 
 table.fretboard td {
 	border-right: 4px solid #777;
-}
-
-table.fretboard tr {
-	border: 0;
+	background-color: white;
 	background-repeat: repeat-x;
 	background-position: center;
 }
 
-table.fretboard tr.s0 {
+table.fretboard td.s0 {
+	border-top: 2px solid #777;
 	background-image: url("img/s0.svg");
 }
 
-table.fretboard tr.s1 {
+table.fretboard td.s1 {
 	background-image: url("img/s1.svg");
 }
 
-table.fretboard tr.s2 {
+table.fretboard td.s2 {
 	background-image: url("img/s2.svg");
 }
 
-table.fretboard tr.s3 {
+table.fretboard td.s3 {
 	background-image: url("img/s3.svg");
 }
 
-table.fretboard tr.s4 {
+table.fretboard td.s4 {
 	background-image: url("img/s4.svg");
 }
 
-table.fretboard tr.s5 {
+table.fretboard td.s5 {
 	background-image: url("img/s5.svg");
+	border-bottom: 2px solid #777;
 }
 
 table.fretboard td.f00 {
-	width: 0.5%;
+	width: 0.25%;
 	background-color: #DDD;
-	background-image: none;
+	border-left: 2px solid #777;
+	border-right: 0;
 }
 
 table.fretboard td.f01 {
@@ -548,10 +544,6 @@ table.fretboard div.marked.t13 {
 	}
 
 	p.note {
-		display: none;
-	}
-
-	div.panel {
 		display: none;
 	}
 

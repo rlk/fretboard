@@ -33,226 +33,193 @@ DEALINGS IN THE SOFTWARE. -->
 
 <body>
 	<main>
-		<section id="toolbar">
-			<table class="menu">
-				<tr>
-					<th>Root</th>
-				</tr>
-				<tr>
-					<td><input type="radio" id="cs" onchange="currentExplorer.selectRoot('cs')" name="root">C&sharp;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="fs" onchange="currentExplorer.selectRoot('fs')" name="root">F&sharp;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="b" onchange="currentExplorer.selectRoot('b')" name="root">B</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="e" onchange="currentExplorer.selectRoot('e')" name="root">E</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="a" onchange="currentExplorer.selectRoot('a')" name="root">A</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="d" onchange="currentExplorer.selectRoot('d')" name="root">D</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="g" onchange="currentExplorer.selectRoot('g')" name="root">G</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="c" onchange="currentExplorer.selectRoot('c')" name="root" checked>C</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="f" onchange="currentExplorer.selectRoot('f')" name="root">F</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="bf" onchange="currentExplorer.selectRoot('bf')" name="root">B&flat;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="ef" onchange="currentExplorer.selectRoot('ef')" name="root">E&flat;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="af" onchange="currentExplorer.selectRoot('af')" name="root">A&flat;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="df" onchange="currentExplorer.selectRoot('df')" name="root">D&flat;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="gf" onchange="currentExplorer.selectRoot('gf')" name="root">G&flat;</td>
-				</tr>
-				<tr>
-					<td><input type="radio" id="cf" onchange="currentExplorer.selectRoot('cf')" name="root">C&flat;</td>
-				</tr>
-			</table>
-			<table class="menu piano">
-				<tr>
-					<th>Deg</th>
-					<th>None</th>
-					<th>Chord Tone</th>
-				</tr>
-				<tr>
-					<td id="degree1">C</td>
-					<td>
-						<span><input type="radio" id="n0" onchange="currentExplorer.selectTone(0, undefined)" name="tone0" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t1" onchange="currentExplorer.selectTone(0, 't1')" name="tone0"><img src="img/t1.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n1" onchange="currentExplorer.selectTone(1, undefined)" name="tone1" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t2f" onchange="currentExplorer.selectTone(1, 't2f')" name="tone1"><img src="img/t2f.svg"></span>
-						<span><input type="radio" id="t9f" onchange="currentExplorer.selectTone(1, 't9f')" name="tone1"><img src="img/t9f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree2">D</td>
-					<td>
-						<span><input type="radio" id="n2" onchange="currentExplorer.selectTone(2, undefined)" name="tone2" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t2" onchange="currentExplorer.selectTone(2, 't2')" name="tone2"><img src="img/t2.svg"></span>
-						<span><input type="radio" id="t9" onchange="currentExplorer.selectTone(2, 't9')" name="tone2"><img src="img/t9.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n3" onchange="currentExplorer.selectTone(3, undefined)" name="tone3" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t3f" onchange="currentExplorer.selectTone(3, 't3f')" name="tone3"><img src="img/t3f.svg"></span>
-						<span><input type="radio" id="t9s" onchange="currentExplorer.selectTone(3, 't9s')" name="tone3"><img src="img/t9s.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree3">E</td>
-					<td>
-						<span><input type="radio" id="n4" onchange="currentExplorer.selectTone(4, undefined)" name="tone4" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t3" onchange="currentExplorer.selectTone(4, 't3')" name="tone4"><img src="img/t3.svg"></span>
-						<span><input type="radio" id="t11f" onchange="currentExplorer.selectTone(4, 't11f')" name="tone4"><img src="img/t11f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree4">F</td>
-					<td>
-						<span><input type="radio" id="n5" onchange="currentExplorer.selectTone(5, undefined)" name="tone5" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t4" onchange="currentExplorer.selectTone(5, 't4')" name="tone5"><img src="img/t4.svg"></span>
-						<span><input type="radio" id="t11" onchange="currentExplorer.selectTone(5, 't11')" name="tone5"><img src="img/t11.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n6" onchange="currentExplorer.selectTone(6, undefined)" name="tone6" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5f" onchange="currentExplorer.selectTone(6, 't5f')" name="tone6"><img src="img/t5f.svg"></span>
-						<span><input type="radio" id="t11s" onchange="currentExplorer.selectTone(6, 't11s')" name="tone6"><img src="img/t11s.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree5">G</td>
-					<td>
-						<span><input type="radio" id="n7" onchange="currentExplorer.selectTone(7, undefined)" name="tone7" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5" onchange="currentExplorer.selectTone(7, 't5')" name="tone7"><img src="img/t5.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n8" onchange="currentExplorer.selectTone(8, undefined)" name="tone8" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t5s" onchange="currentExplorer.selectTone(8, 't5s')" name="tone8"><img src="img/t5s.svg"></span>
-						<span><input type="radio" id="t6f" onchange="currentExplorer.selectTone(8, 't6f')" name="tone8"><img src="img/t6f.svg"></span>
-						<span><input type="radio" id="t13f" onchange="currentExplorer.selectTone(8, 't13f')" name="tone8"><img src="img/t13f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree6">A</td>
-					<td>
-						<span><input type="radio" id="n9" onchange="currentExplorer.selectTone(9, undefined)" name="tone9" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t6" onchange="currentExplorer.selectTone(9, 't6')" name="tone9"><img src="img/t6.svg"></span>
-						<span><input type="radio" id="t7ff" onchange="currentExplorer.selectTone(9, 't7ff')" name="tone9"><img src="img/t7ff.svg"></span>
-						<span><input type="radio" id="t13" onchange="currentExplorer.selectTone(9, 't13')" name="tone9"><img src="img/t13.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td>
-						<span><input type="radio" id="n10" onchange="currentExplorer.selectTone(10, undefined)" name="tone10" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t7f" onchange="currentExplorer.selectTone(10, 't7f')" name="tone10"><img src="img/t7f.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td id="degree7">B</td>
-					<td>
-						<span><input type="radio" id="n11" onchange="currentExplorer.selectTone(11, undefined)" name="tone11" checked></span>
-					</td>
-					<td>
-						<span><input type="radio" id="t7" onchange="currentExplorer.selectTone(11, 't7')" name="tone11"><img src="img/t7.svg"></span>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td>
-						Preset: <select id="preset" onchange="currentExplorer.changePreset(event.target.value)">
-							<option>Clear</option>
-							<option>Minor</option>
-							<option>Major</option>
-							<option>Suspended</option>
-							<option>Dominant 7</option>
-							<option>Dominant 9</option>
-							<option>Dominant 13</option>
-							<option>Minor 7</option>
-							<option>Minor 9</option>
-							<option>Minor 13</option>
-							<option>Major 7</option>
-							<option>Major 9</option>
-							<option>Major 13</option>
-							<option>Augmented</option>
-							<option>Augmented 7</option>
-							<option>Diminished</option>
-							<option>Diminished 7</option>
-						</select>
-					</td>
-				</tr>
-			</table>
+		<section id="left">
+			<div id="toolbar">
+				<table class="menu">
+					<tr>
+						<th>Root</th>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="cs" onchange="currentExplorer.selectRoot('cs')" name="root">C&sharp;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="fs" onchange="currentExplorer.selectRoot('fs')" name="root">F&sharp;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="b" onchange="currentExplorer.selectRoot('b')" name="root">B</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="e" onchange="currentExplorer.selectRoot('e')" name="root">E</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="a" onchange="currentExplorer.selectRoot('a')" name="root">A</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="d" onchange="currentExplorer.selectRoot('d')" name="root">D</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="g" onchange="currentExplorer.selectRoot('g')" name="root">G</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="c" onchange="currentExplorer.selectRoot('c')" name="root" checked>C</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="f" onchange="currentExplorer.selectRoot('f')" name="root">F</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="bf" onchange="currentExplorer.selectRoot('bf')" name="root">B&flat;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="ef" onchange="currentExplorer.selectRoot('ef')" name="root">E&flat;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="af" onchange="currentExplorer.selectRoot('af')" name="root">A&flat;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="df" onchange="currentExplorer.selectRoot('df')" name="root">D&flat;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="gf" onchange="currentExplorer.selectRoot('gf')" name="root">G&flat;</label></td>
+					</tr>
+					<tr>
+						<td><label><input type="radio" id="cf" onchange="currentExplorer.selectRoot('cf')" name="root">C&flat;</label></td>
+					</tr>
+				</table>
+				<table class="menu piano">
+					<tr>
+						<th></th>
+						<th>Chord Tone</th>
+					</tr>
+					<tr>
+						<td id="degree1">C</td>
+						<td>
+							<span><input type="radio" id="n0" onchange="currentExplorer.selectTone(0, undefined)" name="tone0" checked></span>
+							<span><input type="radio" id="t1" onchange="currentExplorer.selectTone(0, 't1')" name="tone0"><img src="img/t1.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+								<span><input type="radio" id="n1" onchange="currentExplorer.selectTone(1, undefined)" name="tone1" checked></span>
+								<span><input type="radio" id="t2f" onchange="currentExplorer.selectTone(1, 't2f')" name="tone1"><img src="img/t2f.svg"></span>
+								<span><input type="radio" id="t9f" onchange="currentExplorer.selectTone(1, 't9f')" name="tone1"><img src="img/t9f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree2">D</td>
+						<td>
+							<span><input type="radio" id="n2" onchange="currentExplorer.selectTone(2, undefined)" name="tone2" checked></span>
+							<span><input type="radio" id="t2" onchange="currentExplorer.selectTone(2, 't2')" name="tone2"><img src="img/t2.svg"></span>
+							<span><input type="radio" id="t9" onchange="currentExplorer.selectTone(2, 't9')" name="tone2"><img src="img/t9.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n3" onchange="currentExplorer.selectTone(3, undefined)" name="tone3" checked></span>
+							<span><input type="radio" id="t3f" onchange="currentExplorer.selectTone(3, 't3f')" name="tone3"><img src="img/t3f.svg"></span>
+							<span><input type="radio" id="t9s" onchange="currentExplorer.selectTone(3, 't9s')" name="tone3"><img src="img/t9s.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree3">E</td>
+						<td>
+							<span><input type="radio" id="n4" onchange="currentExplorer.selectTone(4, undefined)" name="tone4" checked></span>
+							<span><input type="radio" id="t3" onchange="currentExplorer.selectTone(4, 't3')" name="tone4"><img src="img/t3.svg"></span>
+							<span><input type="radio" id="t11f" onchange="currentExplorer.selectTone(4, 't11f')" name="tone4"><img src="img/t11f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree4">F</td>
+						<td>
+							<span><input type="radio" id="n5" onchange="currentExplorer.selectTone(5, undefined)" name="tone5" checked></span>
+							<span><input type="radio" id="t4" onchange="currentExplorer.selectTone(5, 't4')" name="tone5"><img src="img/t4.svg"></span>
+							<span><input type="radio" id="t11" onchange="currentExplorer.selectTone(5, 't11')" name="tone5"><img src="img/t11.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n6" onchange="currentExplorer.selectTone(6, undefined)" name="tone6" checked></span>
+							<span><input type="radio" id="t5f" onchange="currentExplorer.selectTone(6, 't5f')" name="tone6"><img src="img/t5f.svg"></span>
+							<span><input type="radio" id="t11s" onchange="currentExplorer.selectTone(6, 't11s')" name="tone6"><img src="img/t11s.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree5">G</td>
+						<td>
+							<span><input type="radio" id="n7" onchange="currentExplorer.selectTone(7, undefined)" name="tone7" checked></span>
+							<span><input type="radio" id="t5" onchange="currentExplorer.selectTone(7, 't5')" name="tone7"><img src="img/t5.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n8" onchange="currentExplorer.selectTone(8, undefined)" name="tone8" checked></span>
+							<span><input type="radio" id="t5s" onchange="currentExplorer.selectTone(8, 't5s')" name="tone8"><img src="img/t5s.svg"></span>
+							<span><input type="radio" id="t6f" onchange="currentExplorer.selectTone(8, 't6f')" name="tone8"><img src="img/t6f.svg"></span>
+							<span><input type="radio" id="t13f" onchange="currentExplorer.selectTone(8, 't13f')" name="tone8"><img src="img/t13f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree6">A</td>
+						<td>
+							<span><input type="radio" id="n9" onchange="currentExplorer.selectTone(9, undefined)" name="tone9" checked></span>
+							<span><input type="radio" id="t6" onchange="currentExplorer.selectTone(9, 't6')" name="tone9"><img src="img/t6.svg"></span>
+							<span><input type="radio" id="t7ff" onchange="currentExplorer.selectTone(9, 't7ff')" name="tone9"><img src="img/t7ff.svg"></span>
+							<span><input type="radio" id="t13" onchange="currentExplorer.selectTone(9, 't13')" name="tone9"><img src="img/t13.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							<span><input type="radio" id="n10" onchange="currentExplorer.selectTone(10, undefined)" name="tone10" checked></span>
+							<span><input type="radio" id="t7f" onchange="currentExplorer.selectTone(10, 't7f')" name="tone10"><img src="img/t7f.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td id="degree7">B</td>
+						<td>
+							<span><input type="radio" id="n11" onchange="currentExplorer.selectTone(11, undefined)" name="tone11" checked></span>
+							<span><input type="radio" id="t7" onchange="currentExplorer.selectTone(11, 't7')" name="tone11"><img src="img/t7.svg"></span>
+						</td>
+					</tr>
+					<tr>
+						<td></td>
+						<td>
+							Preset: <select id="preset" onchange="currentExplorer.changePreset(event.target.value)">
+								<option>Clear</option>
+								<option>Minor</option>
+								<option>Major</option>
+								<option>Suspended</option>
+								<option>Dominant 7</option>
+								<option>Dominant 9</option>
+								<option>Dominant 13</option>
+								<option>Minor 7</option>
+								<option>Minor 9</option>
+								<option>Minor 13</option>
+								<option>Major 7</option>
+								<option>Major 9</option>
+								<option>Major 13</option>
+								<option>Augmented</option>
+								<option>Augmented 7</option>
+								<option>Diminished</option>
+								<option>Diminished 7</option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
 		</section>
-		<section id="content">
+		<section id="right">
 			<div id="fretboards">
 			</div>
 			<footer>
 				<p class="note">Select a root note and chord tones at the left to configure the fretboard. Click to mark positions.</p>
-				<p class="note">
-					<span class="control">&plus;</span> add fretboard
-					<span class="control">&uarr;</span> move up
-					<span class="control">&darr;</span> move down
-					<span class="control">&times;</span> remove fretboard
-					<span class="control">&#8466;</span> copy <a href="http://lilypond.org/doc/v2.19/Documentation/notation/common-notation-for-fretted-strings#fret-diagram-markups">LilyPond</a> diagram
-				</p>
 				<p class="note"><a href="https://github.com/rlk/fretboard">Guitar Chord Voicing Explorer</a> &mdash; Copyright &copy; 2016, 2025 <a href="http://kooima.net">Robert Kooima</a></p>
 			</footer>
 		</section>
 	</main>
-	<!--
-	-->
 	<script src="definitions.js" type="text/javascript"></script>
 	<script src="fretboard.js" type="text/javascript"></script>
 	<script src="explorer.js" type="text/javascript"></script>

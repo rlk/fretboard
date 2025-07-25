@@ -98,7 +98,7 @@ class Fretboard {
 		remove.addEventListener('click', () => this.remove());
 		moveup.addEventListener('click', () => this.moveup());
 		movedn.addEventListener('click', () => this.movedn());
-		makelp.addEventListener('click', () => this.makeLilyPond());
+		makelp.addEventListener('click', () => explorer.copy(this.makeLilyPond()));
 
 		var panel = [ playmd, insert, moveup, movedn, makelp, remove ];
 
@@ -293,8 +293,9 @@ class Fretboard {
 		}
 
 		if (chord.length > 0) {
-			var lilypond = `<${chord.join(' ')}> 1^\\markup { \\fret-diagram-terse #"${diagram.join('')}" }`
-			console.log(lilypond);
+			return `<${chord.join(' ')}> 1^\\markup { \\fret-diagram-terse #"${diagram.join('')}" }`
+		} else {
+			return undefined;
 		}
 	}
 }

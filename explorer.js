@@ -33,6 +33,7 @@ class Explorer {
 
 		// Instantiate an initial fretboard.
 		this.selectFretboard(new Fretboard(this));
+		this.changePreset('Major');
 	}
 
 	// Select a root note.
@@ -117,6 +118,17 @@ class Explorer {
 				document.getElementById(`n${pitch}`).checked = true;
 			}
 		}
+	}
+
+	// Copy the given text to the clipboard.
+	copy(text) {
+		navigator.clipboard
+			.writeText(text)
+			.then(() => {
+				if (text) {
+					window.alert(`Copied: ${text}`);
+				}
+			});
 	}
 }
 

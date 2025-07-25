@@ -145,6 +145,8 @@ class Explorer {
 				output.send(noteOn);
 				output.send(noteOff, window.performance.now() + 1000.0);
 			});
+		} else {
+			window.alert('MIDI access was not granted.')
 		}
 	}
 }

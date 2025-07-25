@@ -34,6 +34,10 @@ class Explorer {
 		// Instantiate an initial fretboard.
 		this.selectFretboard(new Fretboard(this));
 		this.changePreset('Major');
+
+		navigator.requestMIDIAccess().then(
+			midi => this.midi = midi,
+			message => console.log(`Failed to get MIDI access: ${message}`));
 	}
 
 	// Select a root note.
@@ -129,6 +133,19 @@ class Explorer {
 					window.alert(`Copied LilyPond source to the clipboard:\n${text}`);
 				}
 			});
+	}
+
+	// Play the given MIDI notes.
+	play(notes) {
+		var noteOn = notes.map(note => [0x90, note, 0x7F]).flat();
+		var noteOff = notes.map(note => [0x80, note, 0x7F]).flat();
+
+		if (this.midi) {
+			this.midi.outputs.forEach((output, port) => {
+				output.send(noteOn);
+				output.send(noteOff, window.performance.now() + 1000.0);
+			});
+		}
 	}
 }
 

@@ -144,6 +144,18 @@ function octaveAtPosition(string, fret) {
   return 4 + Math.floor((fret - 8) / 12);
 }
 
+// Return the MIDI note (0-127) at string (0=e 1=B 2=G 3=D 4=A 5=E) and fret.
+function noteAtPosition(string, fret) {
+  switch (string) { // All fall through.
+    case 0: fret = fret + 5;
+    case 1: fret = fret + 4;
+    case 2: fret = fret + 5;
+    case 3: fret = fret + 5;
+    case 4: fret = fret + 5;
+  }
+  return fret + 40;
+}
+
 // Apply an accidental to a pitch (0-11).
 function offsetPitch(pitch, offset) {
   var r = pitch + offset;

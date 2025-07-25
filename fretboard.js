@@ -99,6 +99,7 @@ class Fretboard {
 		moveup.addEventListener('click', () => this.moveup());
 		movedn.addEventListener('click', () => this.movedn());
 		makelp.addEventListener('click', () => explorer.copy(this.makeLilyPond()));
+		playmd.addEventListener('click', () => explorer.play(this.makeMidi()));
 
 		var panel = [ playmd, insert, moveup, movedn, makelp, remove ];
 
@@ -297,5 +298,18 @@ class Fretboard {
 		} else {
 			return undefined;
 		}
+	}
+
+	// Compute the MIDI notes for the current selection.
+	makeMidi() {
+		var notes = [];
+
+		for (var string = 6 - 1; string >= 0; string--) {
+			if (typeof this.currentMark[string] === 'number') {
+				notes.push(noteAtPosition(string, this.currentMark[string]));
+			}
+		}
+
+		return notes;
 	}
 }

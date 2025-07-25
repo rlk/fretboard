@@ -126,7 +126,7 @@ class Explorer {
 			.writeText(text)
 			.then(() => {
 				if (text) {
-					window.alert(`Copied: ${text}`);
+					window.alert(`Copied LilyPond source to the clipboard:\n${text}`);
 				}
 			});
 	}

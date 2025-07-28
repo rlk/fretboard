@@ -156,19 +156,10 @@ class Fretboard {
 	}
 
 	// Null the className on all position elements.
-	clrMarks() {
+	clearClasses() {
 		for (var string = 0; string < 6; string++) {
 			for (var fret = 0; fret < this.maxFret; fret++) {
 				this.positionElement[string][fret].className = "";
-			}
-		}
-	}
-
-	// Set the class on the marked positions. Remove invalid marks.
-	setMarks() {
-		for (var string = 0; string < 6; string++) {
-			if (typeof this.currentMark[string] === 'number') {
-				this.positionElement[string][this.currentMark[string]].classList.add('marked');
 			}
 		}
 	}
@@ -186,9 +177,22 @@ class Fretboard {
 		});
 	}
 
+	// Set the class on the marked positions. Remove invalid marks.
+	setMarks() {
+		for (var string = 0; string < 6; string++) {
+			if (typeof this.currentMark[string] === 'number') {
+				if (this.positionElement[string][this.currentMark[string]].classList.length > 0) {
+					this.positionElement[string][this.currentMark[string]].classList.add('marked');
+				} else {
+					this.currentMark[string] = undefined;
+				}
+			}
+		}
+	}
+
 	// Update the DOM CSS classes to reflect the current state.
 	update() {
-		this.clrMarks();
+		this.clearClasses();
 		this.setPositions();
 		this.setMarks();
 	}
